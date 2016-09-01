@@ -1,0 +1,32 @@
+﻿@model MigrationTool.Models.Application
+@using MigrationTool.ViewModels
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<!-- Header and breadcrumbs -->
+@Html.Partial("_Breadcrumb", new Breadcrumb(ViewBag.Title, new BreadcrumbItem { LinkText = "Applications", ControllerName = "Application" }))
+<h2>@ViewBag.Title</h2>
+
+<!-- Application details -->
+<h3>Are you sure you want to delete this Application?</h3>
+<dl>
+    <dt>@Html.DisplayNameFor(model => model.Name)</dt>
+    <dd>@Html.DisplayFor(model => model.Name)</dd>
+
+    @*<dt>@Html.DisplayNameFor(model => model.ApplicationGroup.Name)</dt>
+    <dd>@Html.DisplayFor(model => model.ApplicationGroup.Name)</dd>*@
+
+    <dt>@Html.DisplayNameFor(model => model.Complexity.Name)</dt>
+    <dd>@Html.DisplayFor(model => model.Complexity.Name)</dd>
+
+    <dt>@Html.DisplayNameFor(model => model.BinariesVerified)</dt>
+    <dd>@Html.DisplayFor(model => model.BinariesVerified)</dd>
+</dl>
+
+
+@using (Html.BeginForm()) {
+    <button type="submit" class="btn btn-danger">Delete</button>
+    @Html.ActionLink("Cancel", "Details", new { Id = Model.Id }, new { @class = "btn btn-default" })
+}

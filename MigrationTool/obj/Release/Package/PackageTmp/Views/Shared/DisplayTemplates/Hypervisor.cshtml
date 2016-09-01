@@ -1,0 +1,12 @@
+﻿@model MigrationTool.Models.Hypervisor
+@if (Model != null)
+{
+    if (Model.Inactive)
+    {
+        <s>@Html.ActionLink(Model.Name, "Details", "Hypervisor", new { Id = Model.Id }, null)</s>
+    }
+    else
+    {
+        @Html.ActionLink(Model.Name, "Details", "Hypervisor", new { Id = Model.Id }, null)
+    }
+}

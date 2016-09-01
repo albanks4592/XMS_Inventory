@@ -1,0 +1,133 @@
+﻿@model MigrationTool.ViewModels.CapacityRuleDetailsViewModel
+
+<dl class="dl-horizontal">
+    <dt>@Html.DisplayNameFor(model => model.Name)</dt>
+    <dd>@Html.DisplayFor(model => model.Name)</dd>
+
+    <dt>@Html.DisplayNameFor(model => model.RuleTypeName)</dt>
+    <dd>@Html.DisplayFor(model => model.RuleTypeName)</dd>
+
+    @switch (Model.RuleType)
+    {
+        // Maximum VMs per entity rule.
+        case 0:
+            <dt>@Html.DisplayNameFor(model => model.MaximumVms)</dt>
+            <dd>@Html.DisplayFor(model => model.MaximumVms)</dd>
+            break;
+
+        // Compute rule.
+        case 1:
+            // vCPUs Per VM.
+            <dt>@Html.DisplayNameFor(model => model.ComputeVcpuCountTypeName)</dt>
+            if (Model.ComputeVcpuCountType == 0)
+            {
+                <dd>@Html.DisplayFor(model => model.ComputeVcpusPerVm)</dd>
+            }
+            else
+            {
+                <dd>@Html.DisplayFor(model => model.ComputeVcpuCountTypeName)</dd>
+            }
+
+            // Overcommit ratio.
+            <dt>@MigrationTool.Strings.CapacityRule_ComputeOvercommitRatio</dt>
+            <dd>@Html.DisplayFor(model => model.ComputeOvercommitAntecedent):@Html.DisplayFor(model => model.ComputeOvercommitConsequent)</dd>
+            break;
+
+        // Memory rule.
+        case 2:
+            // Memory Per VM.
+            <dt>@Html.DisplayNameFor(model => model.MemoryPerVmTypeName)</dt>
+            if (Model.MemoryPerVmType == 0)
+            {
+                <dd>@Html.DisplayFor(model => model.MemoryPerVmBytes)</dd>
+            }
+            else
+            {
+                <dd>@Html.DisplayFor(model => model.MemoryPerVmTypeName)</dd>
+            }
+            break;
+
+            // Per VM Overhead.
+            <dt>@Html.DisplayNameFor(model => model.MemoryVmOverheadType)</dt>
+            switch (Model.MemoryVmOverheadType)
+            {
+                case 0:
+                    <dd>@MigrationTool.Strings.CapacityRule_None</dd>
+                    break;
+
+                case 1:
+                <dd>@Html.DisplayFor(model => model.MemoryVmOverheadBytes)</dd>
+                    break;
+
+                case 2:
+                <dd>@Html.DisplayFor(model => model.MemoryVmOverheadPercent)</dd>
+                    break;
+            }
+
+            // Per Host Overhead.
+            <dt>@Html.DisplayNameFor(model => model.MemoryHostOverheadType)</dt>
+            switch (Model.MemoryHostOverheadType)
+            {
+                case 0:
+                    <dd>@MigrationTool.Strings.CapacityRule_None</dd>
+                    break;
+
+                case 1:
+                <dd>@Html.DisplayFor(model => model.MemoryHostOverheadBytes)</dd>
+                    break;
+
+                case 2:
+                <dd>@Html.DisplayFor(model => model.MemoryHostOverheadPercent)</dd>
+                    break;
+            }
+
+        // Storage rule.
+        case 3:
+            // Storage per VM.
+            <dt>@Html.DisplayNameFor(model => model.StorageVmSizeTypeName)</dt>
+            if (Model.StorageVmSizeType == 0)
+            {
+                <dd>@Html.DisplayFor(model => model.StorageVmSizeBytes)</dd>
+            }
+            else
+            {
+                <dd>@Html.DisplayFor(model => model.StorageVmSizeTypeName)</dd>
+            }
+
+            // Per VM Overhead.
+            <dt>@Html.DisplayNameFor(model => model.StorageVmOverheadType)</dt>
+            switch (Model.StorageVmOverheadType)
+            {
+                case 0:
+                    <dd>@MigrationTool.Strings.CapacityRule_None</dd>
+                    break;
+
+                case 1:
+                <dd>@Html.DisplayFor(model => model.StorageVmOverheadBytes)</dd>
+                    break;
+
+                case 2:
+                <dd>@Html.DisplayFor(model => model.StorageVmOverheadPercent)</dd>
+                    break;
+            }
+
+            // Per Data Store Overhead.
+            <dt>@Html.DisplayNameFor(model => model.StorageDataStoreOverheadType)</dt>
+            switch (Model.StorageDataStoreOverheadType)
+            {
+                case 0:
+                    <dd>@MigrationTool.Strings.CapacityRule_None</dd>
+                    break;
+
+                case 1:
+                <dd>@Html.DisplayFor(model => model.StorageDataStoreOverheadBytes)</dd>
+                    break;
+
+                case 2:
+                <dd>@Html.DisplayFor(model => model.StorageDataStoreOverheadPercent)</dd>
+                    break;
+            }
+
+            break;
+    }
+</dl>

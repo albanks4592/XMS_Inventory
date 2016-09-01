@@ -1,0 +1,96 @@
+﻿<#@ template language="C#" HostSpecific="True" #>
+<#@ output extension=".cshtml" #>
+<#
+MvcTextTemplateHost mvcHost = (MvcTextTemplateHost)(Host);
+if(!String.IsNullOrEmpty(mvcHost.ViewDataTypeName)) {
+#>
+@using MigrationTool.ViewModels
+@model IEnumerable<<#= mvcHost.ViewDataType.Name #>ListIndexViewModel>
+
+<#
+}
+
+// The following chained if-statement outputs the file header code and markup for a partial view, a content page, or a regular view.
+if(mvcHost.IsPartialView) {
+#>
+<#
+} else if(mvcHost.IsContentPage) {
+#>
+@{
+    ViewBag.Title = MigrationTool.Strings.IndexAction;
+<#
+if (!String.IsNullOrEmpty(mvcHost.MasterPageFile)) {
+#>
+    Layout = "<#= mvcHost.MasterPageFile#>";
+<#
+}
+#>
+}
+
+@Html.Partial("_Breadcrumb", new Breadcrumb(MigrationTool.Strings._________))
+
+<h2>@string.Format(MigrationTool.Strings.IndexOf_P0, MigrationTool.Strings._________Plural)</h2>
+
+@using (Ajax.BeginForm("FilterIndex", "<#= mvcHost.ViewDataType.Name #>", new AjaxOptions 
+{
+    InsertionMode = InsertionMode.Replace,
+    UpdateTargetId = "<#= mvcHost.ViewDataType.Name #>List",
+    LoadingElementId = "<#= mvcHost.ViewDataType.Name #>Loader",
+    OnBegin = "$(\"#<#= mvcHost.ViewDataType.Name #>Loader .spinner\").spin();",
+    OnComplete = "$(\"#<#= mvcHost.ViewDataType.Name #>Loader .spinner\").spin(false);"
+})) 
+{
+    @Html.Partial("_StandardFilter")
+}
+
+<p></p>
+@if (User.IsInRole(MigrationTool.Roles.Edit) || User.IsInRole(MigrationTool.Roles.Admin))
+{
+    @Html.ActionLink(MigrationTool.Strings.CreateNew, "Create", null, new { @class = "btn btn-default" })
+    <p></p>
+}
+@Html.Partial("_Loader", "<#= mvcHost.ViewDataType.Name #>Loader")
+<div id="<#= mvcHost.ViewDataType.Name #>List">
+    @Html.Partial("_ListIndex", Model)
+    @if (Model == null)
+    {
+        @Html.Partial("_SearchFirst")
+    }
+</div>
+<#
+} else {
+#>
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title><#= mvcHost.ViewName #></title>
+</head>
+<body>
+<#
+    PushIndent("    ");
+}
+#>
+<#
+if(!mvcHost.IsPartialView && !mvcHost.IsContentPage) {
+#>
+<div>
+    
+</div>
+<#
+}
+#>
+<#
+if(!mvcHost.IsPartialView && !mvcHost.IsContentPage) {
+    ClearIndent();
+#>
+</body>
+</html>
+<#
+}
+#>

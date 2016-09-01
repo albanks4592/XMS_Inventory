@@ -1,0 +1,37 @@
+﻿@using MigrationTool.ViewModels
+@model IEnumerable<CapacityRuleListIndexViewModel>
+
+@{
+    ViewBag.Title = MigrationTool.Strings.IndexAction;
+}
+
+@Html.Partial("_Breadcrumb", new Breadcrumb(MigrationTool.Strings.CapacityRulePlural))
+
+<h2>@string.Format(MigrationTool.Strings.IndexOf_P0, MigrationTool.Strings.CapacityRulePlural)</h2>
+
+@using (Ajax.BeginForm("FilterIndex", "CapacityRule", new AjaxOptions
+{
+    InsertionMode = InsertionMode.Replace,
+    UpdateTargetId = "CapacityRuleList",
+    LoadingElementId = "CapacityRuleListLoader",
+    OnBegin = "$('#CapacityRuleListLoader .spinner').spin(true);",
+    OnComplete = "$('#CapacityRuleListLoader .spinner').spin(false);"
+}))
+{
+    @Html.Partial("_StandardFilterNoActive")
+}
+
+<p></p>
+@if (User.IsInRole(MigrationTool.Roles.Edit) || User.IsInRole(MigrationTool.Roles.Admin))
+{
+    @Html.ActionLink(MigrationTool.Strings.CreateAction, "Create", null, new { @class = "btn btn-default" })
+}
+
+@Html.Partial("_Loader", "CapacityRuleListLoader")
+<div id="CapacityRuleList">
+    @Html.Partial("_ListIndex", Model)
+    @if (Model == null)
+    {
+        @Html.Partial("_SearchFirst")
+    }
+</div>

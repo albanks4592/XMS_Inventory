@@ -1,0 +1,532 @@
+﻿@model MigrationTool.Models.Application
+
+@using MigrationTool.ViewModels
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<!-- Header and breadcrumbs -->
+@Html.Partial("_Breadcrumb", new Breadcrumb(ViewBag.Title, new BreadcrumbItem { LinkText = "Applications", ControllerName = "Application" }))
+@if (User.IsInRole(MigrationTool.Roles.Edit) || User.IsInRole(MigrationTool.Roles.Admin))
+{
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }, new { @class = "btn btn-default btn-lg pull-right" })
+}
+<h2>@ViewBag.Title</h2>
+
+<!-- Detail Display -->
+<dl class="dl-horizontal">
+    <dt>@Html.DisplayNameFor(model => model.Name)</dt>
+    <dd>@Html.DisplayFor(model => model.Name)</dd>
+
+    @*<dt>@Html.DisplayNameFor(model => model.ApplicationGroup.Name)</dt>
+    <dd>@Html.DisplayFor(model => model.ApplicationGroup)</dd>*@
+
+    <dt>@Html.DisplayNameFor(model => model.Complexity.Name)</dt>
+    <dd>@Html.DisplayFor(model => model.Complexity.Name)</dd>
+
+    <dt>@Html.DisplayNameFor(model => model.BinariesVerified)</dt>
+    <dd>@Html.DisplayFor(model => model.BinariesVerified)</dd>
+</dl>
+
+<h2>Clarity Entry</h2>
+<div id="linkedClarityEntryContainer">
+    @Html.Partial("_LinkedClarityEntry", Model)
+</div>
+
+<div class="modal fade" id="linkClarityEntryDialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span>&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title">Link Clarity Entry</h4>
+            </div>
+            <div class="modal-body">
+                @using (Ajax.BeginForm("SearchClarityEntrySingleSelect", "ClarityEntry", null, new AjaxOptions
+                {
+                    InsertionMode = InsertionMode.Replace,
+                    UpdateTargetId = "clarityEntrySearchResults",
+                    LoadingElementId = "clarityEntrySearchLoader",
+                    OnBegin = "$(\"#clarityEntrySearchLoader .spinner\").spin();",
+                    OnComplete = "$(\"#clarityEntrySearchLoader .spinner\").spin(false);"
+                }, new { id = "clarityEntrySearchForm" }))
+                {
+                    string search = "";
+                    <div class="input-group">
+                        @Html.TextBoxFor(model => search, new { @class = "form-control", id="clarityEntrySearchBox" })
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" type="submit">Search</button>
+                        </span>
+                    </div>
+                    <p></p>
+                    @Html.Partial("_Loader", "clarityEntrySearchLoader")
+                    <div id="clarityEntrySearchResults"></div>
+                }    
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" id="linkClarityEntryButton">Link</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="newClarityEntryDialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span>&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title">New Clarity Entry</h4>
+            </div>
+            <div class="modal-body">
+                @using (Ajax.BeginForm("NewClarityEntry", null, new AjaxOptions
+                {
+                    InsertionMode = InsertionMode.Replace,
+                    UpdateTargetId = "linkedClarityEntryContainer",
+                    LoadingElementId = "newClarityEntryLoader",
+                    OnBegin = "$(\"#newClarityEntryLoader .spinner\").spin();",
+                    OnComplete = "$(\"#newClarityEntryLoader .spinner\").spin(false);"
+                }, new { id = "newClarityEntryForm" }))
+                {
+                    @Html.Partial("../ClarityEntry/_Create", new MigrationTool.Models.ClarityEntry())
+                    @Html.Hidden("applicationId", Model.Id)
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Create</button>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="removeClarityEntryLinkConfirmDialog">
+    @using (Ajax.BeginForm("RemoveClarityEntryLink", null, new AjaxOptions
+    {
+        InsertionMode = InsertionMode.Replace,
+        UpdateTargetId = "linkedClarityEntryContainer",
+    }, new { id = "removeClarityEntryLinkForm" }))
+    {
+        @Html.Hidden("applicationId", Model.Id)
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span>&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title">Confirm</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to remove this Clarity Entry link?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+                    <button type="submit" class="btn btn-primary">Yes</button>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<!-- Application Versions -->
+<h2>Versions</h2>
+<div class="row">
+    <div class="col-md-6">
+        <h3>Newest Vendor Version</h3>
+        <dl class="dl-horizontal">
+            <dt>@Html.DisplayNameFor(model => model.NewestVendorVersion.Name)</dt>
+            <dd>@Html.DisplayFor(model => model.NewestVendorVersion)</dd>
+
+            <dt>@Html.DisplayNameFor(model => model.NewestVendorVersion.EndOfLifeDate)</dt>
+            <dd>@Html.DisplayFor(model => model.NewestVendorVersion.EndOfLifeDate)</dd>
+        </dl>
+    </div>
+    <div class="col-md-6">
+        <h3>Newest Organization Version</h3>
+        <dl class="dl-horizontal">
+            <dt>@Html.DisplayNameFor(model => model.NewestOrganizationVersion.Name)</dt>
+            <dd>@Html.DisplayFor(model => model.NewestOrganizationVersion)</dd>
+
+            <dt>@Html.DisplayNameFor(model => model.NewestOrganizationVersion.EndOfLifeDate)</dt>
+            <dd>@Html.DisplayFor(model => model.NewestOrganizationVersion.EndOfLifeDate)</dd>
+        </dl>
+    </div>
+</div>
+
+<div>
+    <h3 style="float: left;">All Versions</h3>  
+    <button type="button" class="btn btn-default" style="float: right;position: relative;top: 10px; right: 10px;" data-toggle="modal" data-target="#newApplicationVersionDialog">New Version</button>
+</div>
+<div id="applicationVersionList">
+    @Html.Partial("../ApplicationVersion/_List", Model.ApplicationVersions)
+</div>
+
+<div class="modal fade" id="newApplicationVersionDialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span>&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title">New Application Version</h4>
+            </div>
+            <div class="modal-body">
+                @using (Ajax.BeginForm("NewApplicationVersion", null, new AjaxOptions
+                {
+                    InsertionMode = InsertionMode.Replace,
+                    UpdateTargetId = "applicationVersionList",
+                    LoadingElementId = "newApplicationVersionLoader",
+                    OnBegin = "$(\"#newApplicationVersionLoader .spinner\").spin();",
+                    OnComplete = "$(\"#newApplicationVersionLoader .spinner\").spin(false);"
+                }, new { id = "newApplicationVersionForm" }))
+                {
+                    @Html.Partial("../ApplicationVersion/_CreateApplication", new MigrationTool.Models.ApplicationVersion())
+                    @Html.Hidden("applicationId", Model.Id)
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Create</button>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+    <!-- Application Owners -->
+    <h2>Application Owners</h2>
+    @using (Ajax.BeginForm("ModifyApplicationOwner", new AjaxOptions
+{
+    InsertionMode = InsertionMode.Replace,
+    UpdateTargetId = "applicationOwnerList",
+}))
+    {
+        <input type="hidden" name="applicationId" value="@Model.Id" />
+        <div id="applicationOwnerList">
+            @Html.Partial("_LinkedApplicationOwners", Model.ApplicationsApplicationOwners)
+        </div>
+        if (User.IsInRole(MigrationTool.Roles.Edit) || User.IsInRole(MigrationTool.Roles.Admin))
+        {
+            <button type="button" class="btn btn-default" data-toggle="modal" data-target="#addApplicationOwnerDialog" id="addApplicationOwnerButton">Add</button>
+        }
+    }
+
+    <div class="modal fade" id="addApplicationOwnerDialog">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span>&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title">Add Application Owner</h4>
+                </div>
+                <div class="modal-body">
+                    @using (Ajax.BeginForm("SearchApplicationOwnersSingleSelect", "ApplicationOwner", null, new AjaxOptions
+                {
+                    InsertionMode = InsertionMode.Replace,
+                    UpdateTargetId = "applicationOwnerSearchResults",
+                    LoadingElementId = "applicationOwnerSearchLoader",
+                    OnBegin = "$(\"#applicationOwnerSearchLoader .spinner\").spin();",
+                    OnComplete = "$(\"#applicationOwnerSearchLoader .spinner\").spin(false);"
+                }, new { id = "applicationOwnerSearchForm" }))
+                    {
+                        string search = "";
+                        string role = "";
+                        <div class="input-group">
+                            @Html.TextBoxFor(model => search, new { @class = "form-control", id = "applicationOwnerSearchBox" })
+                            <span class="input-group-btn">
+                                <button class="btn btn-default" type="submit">Search</button>
+                            </span>
+                        </div>
+                        <p></p>
+                        @Html.Partial("_Loader", "applicationOwnerSearchLoader")
+                        <div id="applicationOwnerSearchResults"></div>
+                        <div class="form-group">
+                            <label>Role</label>
+                            @Html.TextBoxFor(model => role, new { @class = "form-control", id = "publishedApplicationOwnerRole" })
+                        </div>
+                    }
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" id="addApplicationOwnerLink">Add</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Binaries -->
+    <h2>Binaries</h2>
+    @using (Ajax.BeginForm("RemoveBinary", new AjaxOptions
+{
+    InsertionMode = InsertionMode.Replace,
+    UpdateTargetId = "binaryList",
+    LoadingElementId = "binaryLoader",
+    OnBegin = "$(\"#binaryLoader .spinner\").spin();",
+    OnComplete = "$(\"#binaryLoader .spinner\").spin(false);"
+}))
+    {
+        @Html.Hidden("applicationId", Model.Id)
+        <div id="binaryList">
+            @Html.Partial("_LinkedBinaries", Model.Binaries)
+        </div>
+        @Html.Partial("_Loader", "binaryLoader")
+        if (User.IsInRole(MigrationTool.Roles.Edit) || User.IsInRole(MigrationTool.Roles.Admin))
+        {
+            <button type="button" class="btn btn-default" data-toggle="modal" data-target="#addBinaryDialog" id="addBinaryButton">Add</button>
+        }
+    }
+
+    <div class="modal fade" id="addBinaryDialog">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span>&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title">Add Binary</h4>
+                </div>
+                <div class="modal-body">
+                    @using (Ajax.BeginForm("SearchBinaryForApplicationSelectSingle", "Binary", null, new AjaxOptions
+                {
+                    InsertionMode = InsertionMode.Replace,
+                    UpdateTargetId = "binarySearchResults",
+                    LoadingElementId = "binarySearchLoader",
+                    OnBegin = "$(\"#binarySearchLoader .spinner\").spin();",
+                    OnComplete = "$(\"#binarySearchLoader .spinner\").spin(false);"
+                }, new { id = "binarySearchForm" }))
+                    {
+                        string search = "";
+                        <div class="input-group">
+                            @Html.Hidden("applicationId", Model.Id)
+                            @Html.TextBoxFor(model => search, new { @class = "form-control", id = "binarySearchBox" })
+                            <span class="input-group-btn">
+                                <button class="btn btn-default" type="submit">Search</button>
+                            </span>
+                        </div>
+                        <p></p>
+                        @Html.Partial("_Loader", "binarySearchLoader")
+                        <div id="binarySearchResults"></div>
+                    }
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" id="addBinaryLink">Add</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Entitled Users -->
+    <h2>Entitled Users</h2>
+    @{
+        var users = (Model.ApplicationVersions.SelectMany(x => x.PublishedApplications).Where(x => x.XenAppFarm.ToBeMigrated).SelectMany(x => x.ActiveDirectoryGroups).SelectMany(x => x.EntitledUsers).Union(Model.ApplicationVersions.SelectMany(x => x.PublishedApplications).Where(x => x.XenAppFarm.ToBeMigrated).SelectMany(x => x.EntitledUsers).Distinct()).ToList());
+        var entitlement = from u in users
+                          group u by u.Division into g
+                          select new { Division = g.Key, Count = g.Count() };
+
+        DateTime now = DateTime.Now.AddDays(-30);
+        var launches = (from l in Model.ApplicationVersions.SelectMany(x => x.PublishedApplications).Where(x => x.XenAppFarm.ToBeMigrated).SelectMany(x => x.PublishedApplicationLaunches)
+                        where l.StartTime >= now
+                        group l by l.EntitledUser.Division into g
+                        select new { Division = g.Key, Duration = TimeSpan.FromSeconds(g.Sum(x => x.Duration)) }).ToList();
+
+                        <table class="table table-striped">
+                            <tr>
+                                <th>Division</th>
+                                <th class="text-right">Entitled Users</th>
+                                <th class="text-right">Usage Time (Past 30 Days)</th>
+                            </tr>
+                            @foreach (var item in entitlement.OrderByDescending(e => e.Count))
+                            {
+                                <tr>
+                                    <th>@(item.Division == null ? "none" : item.Division.Name)</th>
+                                    <td class="text-right">@Html.DisplayFor(modelItem => item.Count, "IntThousands")</td>
+                                    <td class="text-right">
+                                        @{
+                                var launchData = launches.Where(x => x.Division == item.Division).FirstOrDefault();
+                                if (launchData != null)
+                                {
+                                    @Html.DisplayFor(modelItem => launchData.Duration, "TimeSpanHoursMinutes")
+                                }
+                                else
+                                {
+                                    <text>0h 0m</text>
+                                }
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                            <tr>
+                                <th>Total</th>
+                                <th class="text-right">@Html.DisplayFor(modelItem => users.Count, "IntThousands")</th>
+                                <th class="text-right">
+                                    @{
+                                        TimeSpan totalTime = TimeSpan.FromSeconds(launches.Sum(x => x.Duration.TotalSeconds));
+                                    }
+                                    @Html.DisplayFor(modelItem => totalTime, "TimeSpanHoursMinutes")
+                                </th>
+                            </tr>
+                        </table>
+    }
+
+    @using (Ajax.BeginForm("GetUserList", new AjaxOptions
+{
+    InsertionMode = InsertionMode.Replace,
+    UpdateTargetId = "userListContainer",
+    LoadingElementId = "userListLoader",
+    OnBegin = "$(\"#FullUserListButton\").prop(\"disabled\", true);$(\"#userListLoader .spinner\").spin();",
+    OnComplete = "$(\"#FullUserListButton\").prop(\"disabled\", false);$(\"#userListLoader .spinner\").spin(false);"
+}))
+    {
+        @Html.Hidden("applicationId", Model.Id)
+        <button type="submit" class="btn btn-default" id="FullUserListButton">Full User List</button>
+        <p></p>
+    }
+    @Html.Partial("_Loader", "userListLoader")
+    <div id="userListContainer">
+    </div>
+    <p></p>
+
+    <!-- Business Solutions -->
+    <h2>Business Solutions</h2>
+    @Html.Partial("../BusinessSolution/_List", Model.BusinessSolutions)
+
+    <!-- Notes and Tags -->
+    <div class="row">
+        @if (User.IsInRole(MigrationTool.Roles.Edit) || User.IsInRole(MigrationTool.Roles.Admin))
+        {
+            <div class="col-md-6">
+                @Html.Partial("_NoteForm", Model)
+            </div>
+        }
+        <div class="col-md-6">
+            @Html.Partial("_TagForm", Model)
+        </div>
+    </div>
+
+    @Html.Partial("_NoteList", Model)
+
+    @section Scripts {
+        <script type="text/javascript">
+            $(function () {
+                configurePickers();
+            });
+
+            function configurePickers() {
+                $(".datetimepicker").each(function () {
+                    var $this = $(this);
+                    $this.datetimepicker({
+                        useCurrent: true,
+                        useSeconds: false,
+                        showToday: true,
+                        sideBySide: true
+                    });
+                });
+            }
+
+            $("#linkClarityEntryDialog").on("show.bs.modal", function (e) {
+                $("#clarityEntrySearchResults").html("");
+                $("#clarityEntrySearchForm").each(function () {
+                    this.reset();
+                });
+            });
+
+            $("#linkClarityEntryDialog").on("shown.bs.modal", function () {
+                $("#clarityEntrySearchBox").focus();
+            });
+
+            $("#linkClarityEntryButton").click(function () {
+                var selectedClarityEntry = $("input[name=selectedClarityEntry]:checked", "#clarityEntrySearchForm").val();
+                if (selectedClarityEntry) {
+                    $.ajax({
+                        url: "/Application/SetClarityEntryLink",
+                        data: {
+                            applicationId: "@Model.Id",
+                            clarityEntryId: selectedClarityEntry
+                        },
+                        type: "POST",
+
+                        success: function (data) {
+                            $("#linkedClarityEntryContainer").html(data);
+                        }
+                    });
+                }
+            });
+
+            $("#newClarityEntryDialog").on("show.bs.modal", function (e) {
+                $("#newClarityEntryForm").each(function () {
+                    this.reset();
+                });
+            })
+
+            $("#newClarityEntryForm").submit(function () {
+                $("#newClarityEntryDialog").modal("hide");
+            });
+
+            $("#removeClarityEntryLinkForm").submit(function () {
+                $("#removeClarityEntryLinkConfirmDialog").modal("hide");
+            });
+
+            $("#newApplicationVersionDialog").on("show.bs.modal", function (e) {
+                $("#newApplicationVersionForm").each(function () {
+                    this.reset();
+                });
+            })
+
+            $("#newApplicationVersionForm").submit(function () {
+                $("#newApplicationVersionDialog").modal("hide");
+            });
+
+            $("#addApplicationOwnerDialog").on("show.bs.modal", function () {
+                $("#applicationOwnerSearchResults").html("");
+                $("#applicationOwnerSearchForm").each(function () {
+                    this.reset();
+                });
+            });
+
+            $("#addApplicationOwnerDialog").on("shown.bs.modal", function () {
+                $("#applicationOwnerSearchBox").focus();
+            });
+
+            $("#addApplicationOwnerLink").click(function () {
+                var selectedApplicationOwner = $("input[name=selectedApplicationOwner]:checked", "#applicationOwnerSearchForm").val();
+                var role = $("#publishedApplicationOwnerRole").val();
+                if (selectedApplicationOwner && role) {
+                    $.ajax({
+                        url: "/Application/AddApplicationOwner",
+                        data: {
+                            applicationId: "@Model.Id",
+                            applicationOwnerId: selectedApplicationOwner,
+                            role: role
+                        },
+                        type: "POST",
+
+                        success: function (data) {
+                            $("#applicationOwnerList").html(data);
+                        }
+                    });
+                }
+            });
+
+            $("#addBinaryDialog").on("show.bs.modal", function () {
+                $("#binarySearchResults").html("");
+                $("#binarySearchForm").each(function () {
+                    this.reset();
+                });
+            });
+
+            $("#addBinaryDialog").on("shown.bs.modal", function () {
+                $("#binarySearchBox").focus();
+            });
+
+            $("#addBinaryLink").click(function () {
+                var selectedBinary = $("input[name=selectedBinary]:checked", "#binarySearchForm").val();
+                if (selectedBinary) {
+                    $.ajax({
+                        url: "/Application/AddBinary",
+                        data: {
+                            applicationId: "@Model.Id",
+                            binaryId: selectedBinary
+                        },
+                        type: "POST",
+
+                        success: function (data) {
+                            $("#binaryList").html(data);
+                        }
+                    });
+                }
+            });
+        </script>
+    }

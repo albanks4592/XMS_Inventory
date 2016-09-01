@@ -1,0 +1,35 @@
+﻿@using MigrationTool.ViewModels
+@model IEnumerable<VirtualHardDriveListViewModel>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+@Html.Partial("_Breadcrumb", new Breadcrumb("Virtual Hard Drives"))
+
+@using (Ajax.BeginForm("FilterIndex", "VirtualHardDrive", new AjaxOptions
+{
+    InsertionMode = InsertionMode.Replace,
+    UpdateTargetId = "VirtualHardDriveList",
+    LoadingElementId = "VirtualHardDriveLoader",
+    OnBegin = "$('#VirtualHardDriveLoader .spinner').spin();",
+    OnComplete = "$('#VirtualHardDriveLoader .spinner').spin(false);"
+}))
+{
+    @Html.Partial("_StandardFilter")
+}
+
+<p></p>
+@if (User.IsInRole(MigrationTool.Roles.Edit) || User.IsInRole(MigrationTool.Roles.Admin))
+{
+    @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-default" })
+    <p></p>
+}
+@Html.Partial("_Loader", "VirtualHardDriveLoader")
+<div id="VirtualHardDriveList">
+    @Html.Partial("_List", Model)
+    @if (Model == null)
+    {
+        @Html.Partial("_SearchFirst")
+    }
+</div>

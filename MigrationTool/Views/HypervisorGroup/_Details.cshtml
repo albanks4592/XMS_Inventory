@@ -1,0 +1,53 @@
+﻿@model MigrationTool.ViewModels.HypervisorGroupDetailsViewModel
+
+<dl class="dl-horizontal">
+    <!-- Name -->
+    <dt>@Html.DisplayNameFor(model => model.Name)</dt>
+    <dd>@Html.DisplayFor(model => model.Name)</dd>
+
+    <!-- Hypervisor Group Type -->
+    <dt>@Html.DisplayNameFor(model => model.HypervisorGroupType)</dt>
+    <dd>@Html.DisplayFor(model => model.HypervisorGroupType)</dd>
+
+    <!-- High availability calculation type-->
+    <dt>@Html.DisplayNameFor(model => model.HighAvailabilityCalculationType)</dt>
+    @if (Model.HighAvailabilityCalculationType == 0)
+    {
+        <dd>@MigrationTool.Strings.None</dd>
+    }
+    else if (Model.HighAvailabilityCalculationType == 1)
+    {
+        <dd>@MigrationTool.Strings.ReservedHypervisors</dd>
+
+        <!-- Reserved Hypervisors -->
+        <dt>@Html.DisplayNameFor(model => model.HighAvailabilityReservedHypervisors)</dt>
+        <dd>@Html.DisplayFor(model => Model.HighAvailabilityReservedHypervisors)</dd>
+    }
+    else
+    {
+        <dd>@MigrationTool.Strings.ReservedPercentage</dd>
+
+        <!-- Reserved percentage -->
+        <dt>@Html.DisplayNameFor(model => model.HighAvailabilityReservedPercentage)</dt>
+        <dd>@Html.DisplayFor(model => model.HighAvailabilityReservedPercentage)</dd>
+    }
+
+    <!-- Created Date -->
+    <dt>@Html.DisplayNameFor(model => model.CreatedDate)</dt>
+    <dd>@Html.DisplayFor(model => model.CreatedDate)</dd>
+
+    <!-- Last Updated -->
+    <dt>@Html.DisplayNameFor(model => model.LastUpdated)</dt>
+    <dd>@Html.DisplayFor(model => model.LastUpdated)</dd>
+
+    <!-- Inactive flag -->
+    <dt>@Html.DisplayNameFor(model => model.Inactive)</dt>
+    <dd>@Html.DisplayFor(model => model.Inactive)</dd>
+
+    @if (Model.Inactive && Model.InactiveDate != null)
+    {
+        <!-- Inactive Date -->
+        <dt>@Html.DisplayNameFor(model => model.InactiveDate)</dt>
+        <dd>@Html.DisplayFor(model => model.InactiveDate)</dd>
+    }
+</dl>

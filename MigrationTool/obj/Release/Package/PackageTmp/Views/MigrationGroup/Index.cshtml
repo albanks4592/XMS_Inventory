@@ -1,0 +1,30 @@
+﻿@model IEnumerable<MigrationTool.Models.MigrationGroup>
+@using MigrationTool.ViewModels
+
+@{
+    ViewBag.Title = "Index";
+}
+
+@Html.Partial("_Breadcrumb", new Breadcrumb("Migration Groups"))
+
+@using (Ajax.BeginForm("FilterIndex", "MigrationGroup", new AjaxOptions {
+    InsertionMode = InsertionMode.Replace,
+    UpdateTargetId = "MigrationGroupList",
+    LoadingElementId = "MigrationGroupLoader",
+    OnBegin = "$(\"#MigrationGroupLoader .spinner\").spin();",
+    OnComplete = "$(\"#MigrationGroupLoader .spinner\").spin(false);"
+})) {
+    @Html.Partial("_StandardFilter")
+}
+
+
+<p></p>
+@if (User.IsInRole(MigrationTool.Roles.Edit) || User.IsInRole(MigrationTool.Roles.Admin))
+{
+    @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-default" })
+    <p></p>
+}
+@Html.Partial("_Loader", "MigrationGroupLoader")
+<div id="MigrationGroupList">
+    @Html.Partial("_List", Model)
+</div>

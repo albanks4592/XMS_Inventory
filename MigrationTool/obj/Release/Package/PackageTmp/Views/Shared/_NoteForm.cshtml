@@ -1,0 +1,44 @@
+﻿@model MigrationTool.Models.IHasNotes
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">Notes</h3>
+    </div>
+    <div class="panel-body">
+        @using (@Ajax.BeginForm("AddNote", "Note", null, new AjaxOptions
+        {
+            InsertionMode = InsertionMode.InsertBefore,
+            UpdateTargetId = Model.Id.ToString() + "_noteList",
+            LoadingElementId = Model.Id.ToString() + "_noteLoader",
+            OnBegin = "$(\"#" + Model.Id.ToString() + "_noteLoader .spinner\").spin();$(\"#" + Model.Id.ToString() + "_noteFormAddButton\").prop(\"disabled\", true);",
+            OnComplete = "$(\"#" + Model.Id.ToString() + "_noteLoader .spinner\").spin(false);$(\"#" + Model.Id.ToString() + "_noteForm\")[0].reset();$(\"#" + Model.Id.ToString() + "_noteFormAddButton\").prop(\"disabled\", false);"
+        }, new { id = Model.Id.ToString() + "_noteForm" }))
+        {
+            Guid parentId = Model.Id;
+            string body = "";
+            IEnumerable<SelectListItem> noteTypes = new[] {
+                new SelectListItem {Value = "0", Text = "Information"},
+                new SelectListItem {Value = "1", Text = "Success"},
+                new SelectListItem {Value = "2", Text = "Warning"},
+                new SelectListItem {Value = "3", Text = "Danger"}
+            };
+    
+            @Html.HiddenFor(x => parentId)
+            <div class="form-group">
+                <label for="body">
+                    Body</label>
+                @Html.TextAreaFor(x => body, new { @class = "form-control", rows = "5" })
+            </div>
+
+            <div class="form-group">
+                <label for="noteType">
+                    Type</label>
+                @Html.DropDownList("noteType", noteTypes, new { @class = "form-control" })
+            </div>
+            
+            <div class="form-group pull-right">
+                <input type="submit" value="Add" class="btn btn-primary" id="@(Model.Id.ToString())_noteFormAddButton" />
+            </div>
+        }
+    </div>
+</div>

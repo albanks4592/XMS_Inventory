@@ -1,0 +1,27 @@
+﻿@{
+    string filter = "";
+}
+<div class="clearfix">
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="form-group">
+                @Html.LabelFor(model => filter, "Filter")
+                @Html.TextBoxFor(model => filter, new { @class = "form-control" })
+            </div>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" name="noActiveRecordsLink" value="true" />
+                    Only display records that are Active
+                </label>
+            </div>
+            <button type="submit" class="btn btn-primary pull-right">Filter</button>
+        </div>
+
+
+            
+        <div class="col-sm-6">
+            
+        </div>
+    </div>
+    
+</div>

@@ -1,0 +1,875 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="MigrationTool_DevelopmentModelStoreContainer" CdmEntityContainer="MigrationToolEntities">
+    <EntitySetMapping Name="ActiveDirectoryGroups">
+      <EntityTypeMapping TypeName="MigrationTool_DevelopmentModel.ActiveDirectoryGroup">
+        <MappingFragment StoreEntitySet="ActiveDirectoryGroups">
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="InactiveDate" ColumnName="InactiveDate" />
+          <ScalarProperty Name="Inactive" ColumnName="Inactive" />
+          <ScalarProperty Name="LastUpdated" ColumnName="LastUpdated" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="EntitledUsers">
+      <EntityTypeMapping TypeName="MigrationTool_DevelopmentModel.EntitledUser">
+        <MappingFragment StoreEntitySet="EntitledUsers">
+          <ScalarProperty Name="CreationDate" ColumnName="CreationDate" />
+          <ScalarProperty Name="Supervisor" ColumnName="Supervisor" />
+          <ScalarProperty Name="EmailSystem" ColumnName="EmailSystem" />
+          <ScalarProperty Name="CountryName" ColumnName="CountryName" />
+          <ScalarProperty Name="SectorCode" ColumnName="SectorCode" />
+          <ScalarProperty Name="PostalAddress" ColumnName="PostalAddress" />
+          <ScalarProperty Name="WorldRegion" ColumnName="WorldRegion" />
+          <ScalarProperty Name="SiteName" ColumnName="SiteName" />
+          <ScalarProperty Name="ExtendedSiteCode" ColumnName="ExtendedSiteCode" />
+          <ScalarProperty Name="DepartmentDescription" ColumnName="DepartmentDescription" />
+          <ScalarProperty Name="BusinessUnitDescription" ColumnName="BusinessUnitDescription" />
+          <ScalarProperty Name="CountryCode" ColumnName="CountryCode" />
+          <ScalarProperty Name="LegalEntity" ColumnName="LegalEntity" />
+          <ScalarProperty Name="Reference" ColumnName="Reference" />
+          <ScalarProperty Name="PersonnelCategory" ColumnName="PersonnelCategory" />
+          <ScalarProperty Name="ActiveDirectoryDomain" ColumnName="ActiveDirectoryDomain" />
+          <ScalarProperty Name="CostCenter" ColumnName="CostCenter" />
+          <ScalarProperty Name="SiteCode" ColumnName="SiteCode" />
+          <ScalarProperty Name="BusinessUnitCode" ColumnName="BusinessUnitCode" />
+          <ScalarProperty Name="ToBeMigrated" ColumnName="ToBeMigrated" />
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="InactiveDate" ColumnName="InactiveDate" />
+          <ScalarProperty Name="Inactive" ColumnName="Inactive" />
+          <ScalarProperty Name="EmailAddress" ColumnName="EmailAddress" />
+          <ScalarProperty Name="LastName" ColumnName="LastName" />
+          <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+          <ScalarProperty Name="Division_Id" ColumnName="Division_Id" />
+          <ScalarProperty Name="LastUpdated" ColumnName="LastUpdated" />
+          <ScalarProperty Name="Username" ColumnName="Username" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Notes">
+      <EntityTypeMapping TypeName="MigrationTool_DevelopmentModel.Note">
+        <MappingFragment StoreEntitySet="Notes">
+          <ScalarProperty Name="User_Id" ColumnName="User_Id" />
+          <ScalarProperty Name="EditedAt" ColumnName="EditedAt" />
+          <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
+          <ScalarProperty Name="NoteType" ColumnName="NoteType" />
+          <ScalarProperty Name="Body" ColumnName="Body" />
+          <ScalarProperty Name="Parent_Id" ColumnName="Parent_Id" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <AssociationSetMapping Name="ActiveDirectoryGroupsEntitledUsers" TypeName="MigrationTool_DevelopmentModel.ActiveDirectoryGroupsEntitledUsers" StoreEntitySet="ActiveDirectoryGroupsEntitledUsers">
+      <EndProperty Name="EntitledUser">
+        <ScalarProperty Name="Id" ColumnName="EntitledUser_Id" />
+      </EndProperty>
+      <EndProperty Name="ActiveDirectoryGroup">
+        <ScalarProperty Name="Id" ColumnName="ActiveDirectoryGroup_Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <EntitySetMapping Name="XenAppFarmFolders">
+      <EntityTypeMapping TypeName="MigrationTool_DevelopmentModel.XenAppFarmFolder">
+        <MappingFragment StoreEntitySet="XenAppFarmFolders">
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="InactiveDate" ColumnName="InactiveDate" />
+          <ScalarProperty Name="Inactive" ColumnName="Inactive" />
+          <ScalarProperty Name="LastUpdated" ColumnName="LastUpdated" />
+          <ScalarProperty Name="Parent_Id" ColumnName="Parent_Id" />
+          <ScalarProperty Name="XenAppFarm_Id" ColumnName="XenAppFarm_Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="XenAppFarms">
+      <EntityTypeMapping TypeName="MigrationTool_DevelopmentModel.XenAppFarm">
+        <MappingFragment StoreEntitySet="XenAppFarms">
+          <ScalarProperty Name="ReportForPxQ" ColumnName="ReportForPxQ" />
+          <ScalarProperty Name="MigrationGroup_Id" ColumnName="MigrationGroup_Id" />
+          <ScalarProperty Name="XenAppFarmVersion_Id" ColumnName="XenAppFarmVersion_Id" />
+          <ScalarProperty Name="ToBeMigrated" ColumnName="ToBeMigrated" />
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="InactiveDate" ColumnName="InactiveDate" />
+          <ScalarProperty Name="Inactive" ColumnName="Inactive" />
+          <ScalarProperty Name="LastUpdated" ColumnName="LastUpdated" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Tags">
+      <EntityTypeMapping TypeName="MigrationTool_DevelopmentModel.Tag">
+        <MappingFragment StoreEntitySet="Tags">
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="TagsMetas">
+      <EntityTypeMapping TypeName="MigrationTool_DevelopmentModel.TagsMeta">
+        <MappingFragment StoreEntitySet="TagsMeta">
+          <ScalarProperty Name="Tag_Id" ColumnName="Tag_Id" />
+          <ScalarProperty Name="Parent_Id" ColumnName="Parent_Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Divisions">
+      <EntityTypeMapping TypeName="MigrationTool_DevelopmentModel.Division">
+        <MappingFragment StoreEntitySet="Divisions">
+          <ScalarProperty Name="LastUpdated" ColumnName="LastUpdated" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ApplicationOwners">
+      <EntityTypeMapping TypeName="MigrationTool_DevelopmentModel.ApplicationOwner">
+        <MappingFragment StoreEntitySet="ApplicationOwners">
+          <ScalarProperty Name="LastUpdated" ColumnName="LastUpdated" />
+          <ScalarProperty Name="Division_Id" ColumnName="Division_Id" />
+          <ScalarProperty Name="LastName" ColumnName="LastName" />
+          <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ApplicationsApplicationOwners">
+      <EntityTypeMapping TypeName="MigrationTool_DevelopmentModel.ApplicationsApplicationOwner">
+        <MappingFragment StoreEntitySet="ApplicationsApplicationOwners">
+          <ScalarProperty Name="SortOrder" ColumnName="SortOrder" />
+          <ScalarProperty Name="Role" ColumnName="Role" />
+          <ScalarProperty Name="ApplicationOwner_Id" ColumnName="ApplicationOwner_Id" />
+          <ScalarProperty Name="Application_Id" ColumnName="Application_Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ApplicationGroups">
+      <EntityTypeMapping TypeName="MigrationTool_DevelopmentModel.ApplicationGroup">
+        <MappingFragment StoreEntitySet="ApplicationGroups">
+          <ScalarProperty Name="LastUpdated" ColumnName="LastUpdated" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Users">
+      <EntityTypeMapping TypeName="MigrationTool_DevelopmentModel.User">
+        <MappingFragment StoreEntitySet="Users">
+          <ScalarProperty Name="Invoicing" ColumnName="Invoicing" />
+          <ScalarProperty Name="Inactive" ColumnName="Inactive" />
+          <ScalarProperty Name="LastName" ColumnName="LastName" />
+          <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+          <ScalarProperty Name="Username" ColumnName="Username" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Complexities">
+      <EntityTypeMapping TypeName="MigrationTool_DevelopmentModel.Complexity">
+        <MappingFragment StoreEntitySet="Complexities">
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Platforms">
+      <EntityTypeMapping TypeName="MigrationTool_DevelopmentModel.Platform">
+        <MappingFragment StoreEntitySet="Platforms">
+          <ScalarProperty Name="LastUpdated" ColumnName="LastUpdated" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ApplicationVersions">
+      <EntityTypeMapping TypeName="MigrationTool_DevelopmentModel.ApplicationVersion">
+        <MappingFragment StoreEntitySet="ApplicationVersions">
+          <ScalarProperty Name="EndOfLifeDate" ColumnName="EndOfLifeDate" />
+          <ScalarProperty Name="LastUpdated" ColumnName="LastUpdated" />
+          <ScalarProperty Name="Application_Id" ColumnName="Application_Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Applications">
+      <EntityTypeMapping TypeName="MigrationTool_DevelopmentModel.Application">
+        <MappingFragment StoreEntitySet="Applications">
+          <ScalarProperty Name="ClarityEntry_Id" ColumnName="ClarityEntry_Id" />
+          <ScalarProperty Name="BinariesVerified" ColumnName="BinariesVerified" />
+          <ScalarProperty Name="NewestOrganizationVersion_Id" ColumnName="NewestOrganizationVersion_Id" />
+          <ScalarProperty Name="NewestVendorVersion_Id" ColumnName="NewestVendorVersion_Id" />
+          <ScalarProperty Name="Complexity_Id" ColumnName="Complexity_Id" />
+          <ScalarProperty Name="ApplicationGroup_Id" ColumnName="ApplicationGroup_Id" />
+          <ScalarProperty Name="LastUpdated" ColumnName="LastUpdated" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ResponsibleParties">
+      <EntityTypeMapping TypeName="MigrationTool_DevelopmentModel.ResponsibleParty">
+        <MappingFragment StoreEntitySet="ResponsibleParties">
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="WorkflowDefinitions">
+      <EntityTypeMapping TypeName="MigrationTool_DevelopmentModel.WorkflowDefinition">
+        <MappingFragment StoreEntitySet="WorkflowDefinitions">
+          <ScalarProperty Name="DefaultWorkflow" ColumnName="DefaultWorkflow" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="WorkflowDurationEstimates">
+      <EntityTypeMapping TypeName="MigrationTool_DevelopmentModel.WorkflowDurationEstimate">
+        <MappingFragment StoreEntitySet="WorkflowDurationEstimates">
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="WorkflowDefinition_Id" ColumnName="WorkflowDefinition_Id" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="WorkflowStepActivities">
+      <EntityTypeMapping TypeName="MigrationTool_DevelopmentModel.WorkflowStepActivity">
+        <MappingFragment StoreEntitySet="WorkflowStepActivities">
+          <ScalarProperty Name="CompletedBy_Id" ColumnName="CompletedBy_Id" />
+          <ScalarProperty Name="CompletedAt" ColumnName="CompletedAt" />
+          <ScalarProperty Name="StartedBy_Id" ColumnName="StartedBy_Id" />
+          <ScalarProperty Name="StartedAt" ColumnName="StartedAt" />
+          <ScalarProperty Name="EndTime" ColumnName="EndTime" />
+          <ScalarProperty Name="StartTime" ColumnName="StartTime" />
+          <ScalarProperty Name="ResponsibleParty_Id" ColumnName="ResponsibleParty_Id" />
+          <ScalarProperty Name="WorkflowStepInstance_Id" ColumnName="WorkflowStepInstance_Id" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="WorkflowStepDefinitions">
+      <EntityTypeMapping TypeName="MigrationTool_DevelopmentModel.WorkflowStepDefinition">
+        <MappingFragment StoreEntitySet="WorkflowStepDefinitions">
+          <ScalarProperty Name="GroupName" ColumnName="GroupName" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="ResponsibleParty_Id" ColumnName="ResponsibleParty_Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="SortOrder" ColumnName="SortOrder" />
+          <ScalarProperty Name="WorkflowDefinition_Id" ColumnName="WorkflowDefinition_Id" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="WorkflowDurationEstimateDetails">
+      <EntityTypeMapping TypeName="MigrationTool_DevelopmentModel.WorkflowDurationEstimateDetail">
+        <MappingFragment StoreEntitySet="WorkflowDurationEstimateDetails">
+          <ScalarProperty Name="EstimatedDuration" ColumnName="EstimatedDuration" />
+          <ScalarProperty Name="WorkflowStepDefinition_Id" ColumnName="WorkflowStepDefinition_Id" />
+          <ScalarProperty Name="WorkflowDurationEstimate_Id" ColumnName="WorkflowDurationEstimate_Id" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="WorkflowStepInstances">
+      <EntityTypeMapping TypeName="MigrationTool_DevelopmentModel.WorkflowStepInstance">
+        <MappingFragment StoreEntitySet="WorkflowStepInstances">
+          <ScalarProperty Name="Skipped" ColumnName="Skipped" />
+          <ScalarProperty Name="CompletedBy_Id" ColumnName="CompletedBy_Id" />
+          <ScalarProperty Name="CompletedAt" ColumnName="CompletedAt" />
+          <ScalarProperty Name="StartedBy_Id" ColumnName="StartedBy_Id" />
+          <ScalarProperty Name="StartedAt" ColumnName="StartedAt" />
+          <ScalarProperty Name="EstimatedDuration" ColumnName="EstimatedDuration" />
+          <ScalarProperty Name="EndTime" ColumnName="EndTime" />
+          <ScalarProperty Name="StartTime" ColumnName="StartTime" />
+          <ScalarProperty Name="WorkflowInstance_Id" ColumnName="WorkflowInstance_Id" />
+          <ScalarProperty Name="WorkflowStepDefinition_Id" ColumnName="WorkflowStepDefinition_Id" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PublishedApplicationLaunches">
+      <EntityTypeMapping TypeName="MigrationTool_DevelopmentModel.PublishedApplicationLaunch">
+        <MappingFragment StoreEntitySet="PublishedApplicationLaunches">
+          <ScalarProperty Name="XenAppServer_Id" ColumnName="XenAppServer_Id" />
+          <ScalarProperty Name="Duration" ColumnName="Duration" />
+          <ScalarProperty Name="StartTime" ColumnName="StartTime" />
+          <ScalarProperty Name="EntitledUser_Id" ColumnName="EntitledUser_Id" />
+          <ScalarProperty Name="PublishedApplication_Id" ColumnName="PublishedApplication_Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Binaries">
+      <EntityTypeMapping TypeName="MigrationTool_DevelopmentModel.Binary">
+        <MappingFragment StoreEntitySet="Binaries">
+          <ScalarProperty Name="PackageName" ColumnName="PackageName" />
+          <ScalarProperty Name="ClarityEntry_Id" ColumnName="ClarityEntry_Id" />
+          <ScalarProperty Name="Virtualized" ColumnName="Virtualized" />
+          <ScalarProperty Name="SccmPackage" ColumnName="SccmPackage" />
+          <ScalarProperty Name="Version" ColumnName="Version" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ClarityEntries">
+      <EntityTypeMapping TypeName="MigrationTool_DevelopmentModel.ClarityEntry">
+        <MappingFragment StoreEntitySet="ClarityEntries">
+          <ScalarProperty Name="ClarityId" ColumnName="ClarityId" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="IqDocuments">
+      <EntityTypeMapping TypeName="MigrationTool_DevelopmentModel.IqDocument">
+        <MappingFragment StoreEntitySet="IqDocuments">
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="StrategicVendors">
+      <EntityTypeMapping TypeName="MigrationTool_DevelopmentModel.StrategicVendor">
+        <MappingFragment StoreEntitySet="StrategicVendors">
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PublishedApplications">
+      <EntityTypeMapping TypeName="MigrationTool_DevelopmentModel.PublishedApplication">
+        <MappingFragment StoreEntitySet="PublishedApplications">
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="InactiveDate" ColumnName="InactiveDate" />
+          <ScalarProperty Name="BusinessSolution_Id" ColumnName="BusinessSolution_Id" />
+          <ScalarProperty Name="Inactive" ColumnName="Inactive" />
+          <ScalarProperty Name="ApplicationVersion_Id" ColumnName="ApplicationVersion_Id" />
+          <ScalarProperty Name="XenAppFarmFolder_Id" ColumnName="XenAppFarmFolder_Id" />
+          <ScalarProperty Name="LastUpdated" ColumnName="LastUpdated" />
+          <ScalarProperty Name="CommandLineExecutable" ColumnName="CommandLineExecutable" />
+          <ScalarProperty Name="BrowserName" ColumnName="BrowserName" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="XenAppFarm_Id" ColumnName="XenAppFarm_Id" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <AssociationSetMapping Name="PublishedApplicationsActiveDirectoryGroups" TypeName="MigrationTool_DevelopmentModel.PublishedApplicationsActiveDirectoryGroups" StoreEntitySet="PublishedApplicationsActiveDirectoryGroups">
+      <EndProperty Name="PublishedApplication">
+        <ScalarProperty Name="Id" ColumnName="PublishedApplication_Id" />
+      </EndProperty>
+      <EndProperty Name="ActiveDirectoryGroup">
+        <ScalarProperty Name="Id" ColumnName="ActiveDirectoryGroup_Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="PublishedApplicationsEntitledUsers" TypeName="MigrationTool_DevelopmentModel.PublishedApplicationsEntitledUsers" StoreEntitySet="PublishedApplicationsEntitledUsers">
+      <EndProperty Name="PublishedApplication">
+        <ScalarProperty Name="Id" ColumnName="PublishedApplication_Id" />
+      </EndProperty>
+      <EndProperty Name="EntitledUser">
+        <ScalarProperty Name="Id" ColumnName="EntitledUser_Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="ApplicationsBinaries" TypeName="MigrationTool_DevelopmentModel.ApplicationsBinaries" StoreEntitySet="ApplicationsBinaries">
+      <EndProperty Name="Binary">
+        <ScalarProperty Name="Id" ColumnName="Binary_Id" />
+      </EndProperty>
+      <EndProperty Name="Application">
+        <ScalarProperty Name="Id" ColumnName="Application_Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="BinariesPlatforms" TypeName="MigrationTool_DevelopmentModel.BinariesPlatforms" StoreEntitySet="BinariesPlatforms">
+      <EndProperty Name="Platform">
+        <ScalarProperty Name="Id" ColumnName="Platform_Id" />
+      </EndProperty>
+      <EndProperty Name="Binary">
+        <ScalarProperty Name="Id" ColumnName="Binary_Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <EntitySetMapping Name="WorkflowInstances">
+      <EntityTypeMapping TypeName="MigrationTool_DevelopmentModel.WorkflowInstance">
+        <MappingFragment StoreEntitySet="WorkflowInstances">
+          <ScalarProperty Name="BusinessSolution_Id" ColumnName="BusinessSolution_Id" />
+          <ScalarProperty Name="EndTime" ColumnName="EndTime" />
+          <ScalarProperty Name="StartTime" ColumnName="StartTime" />
+          <ScalarProperty Name="WorkflowDurationEstimate_Id" ColumnName="WorkflowDurationEstimate_Id" />
+          <ScalarProperty Name="WorkflowDefinition_Id" ColumnName="WorkflowDefinition_Id" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="BusinessSolutions">
+      <EntityTypeMapping TypeName="MigrationTool_DevelopmentModel.BusinessSolution">
+        <MappingFragment StoreEntitySet="BusinessSolutions">
+          <ScalarProperty Name="WorkflowDefinition_Id" ColumnName="WorkflowDefinition_Id" />
+          <ScalarProperty Name="WorkflowInstance_Id" ColumnName="WorkflowInstance_Id" />
+          <ScalarProperty Name="ClarityEntry_Id" ColumnName="ClarityEntry_Id" />
+          <ScalarProperty Name="BusinessAction_Id" ColumnName="BusinessAction_Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <AssociationSetMapping Name="BusinessSolutionsBinaries" TypeName="MigrationTool_DevelopmentModel.BusinessSolutionsBinaries" StoreEntitySet="BusinessSolutionsBinaries">
+      <EndProperty Name="BusinessSolution">
+        <ScalarProperty Name="Id" ColumnName="BusinessSolution_Id" />
+      </EndProperty>
+      <EndProperty Name="Binary">
+        <ScalarProperty Name="Id" ColumnName="Binary_Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="BusinessSolutionsDivisions" TypeName="MigrationTool_DevelopmentModel.BusinessSolutionsDivisions" StoreEntitySet="BusinessSolutionsDivisions">
+      <EndProperty Name="Division">
+        <ScalarProperty Name="Id" ColumnName="Division_Id" />
+      </EndProperty>
+      <EndProperty Name="BusinessSolution">
+        <ScalarProperty Name="Id" ColumnName="BusinessSolution_Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="BusinessSolutionsIqDocuments" TypeName="MigrationTool_DevelopmentModel.BusinessSolutionsIqDocuments" StoreEntitySet="BusinessSolutionsIqDocuments">
+      <EndProperty Name="IqDocument">
+        <ScalarProperty Name="Id" ColumnName="IqDocument_Id" />
+      </EndProperty>
+      <EndProperty Name="BusinessSolution">
+        <ScalarProperty Name="Id" ColumnName="BusinessSolution_Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="BusinessSolutionsStrategicVendors" TypeName="MigrationTool_DevelopmentModel.BusinessSolutionsStrategicVendors" StoreEntitySet="BusinessSolutionsStrategicVendors">
+      <EndProperty Name="StrategicVendor">
+        <ScalarProperty Name="Id" ColumnName="StrategicVendor_Id" />
+      </EndProperty>
+      <EndProperty Name="BusinessSolution">
+        <ScalarProperty Name="Id" ColumnName="BusinessSolution_Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <EntitySetMapping Name="BusinessActions">
+      <EntityTypeMapping TypeName="MigrationTool_DevelopmentModel.BusinessAction">
+        <MappingFragment StoreEntitySet="BusinessActions">
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="HypervisorGroups">
+      <EntityTypeMapping TypeName="MigrationTool_DevelopmentModel.HypervisorGroup">
+        <MappingFragment StoreEntitySet="HypervisorGroups">
+          <ScalarProperty Name="Hyperconverged" ColumnName="Hyperconverged" />
+          <ScalarProperty Name="HypervisorController_Id" ColumnName="HypervisorController_Id" />
+          <ScalarProperty Name="HighAvailabilityReservedHypervisors" ColumnName="HighAvailabilityReservedHypervisors" />
+          <ScalarProperty Name="HighAvailabilityReservedPercentage" ColumnName="HighAvailabilityReservedPercentage" />
+          <ScalarProperty Name="HighAvailabilityCalculationType" ColumnName="HighAvailabilityCalculationType" />
+          <ScalarProperty Name="HypervisorGroupType_Id" ColumnName="HypervisorGroupType_Id" />
+          <ScalarProperty Name="InactiveDate" ColumnName="InactiveDate" />
+          <ScalarProperty Name="Inactive" ColumnName="Inactive" />
+          <ScalarProperty Name="LastUpdated" ColumnName="LastUpdated" />
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Hypervisors">
+      <EntityTypeMapping TypeName="MigrationTool_DevelopmentModel.Hypervisor">
+        <MappingFragment StoreEntitySet="Hypervisors">
+          <ScalarProperty Name="HyperVisorVersion" ColumnName="HyperVisorVersion" />
+          <ScalarProperty Name="SiteLocation" ColumnName="SiteLocation" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="IPAddress" ColumnName="IPAddress" />
+          <ScalarProperty Name="HypervisorController_Id" ColumnName="HypervisorController_Id" />
+          <ScalarProperty Name="SimultaneousMultithreading" ColumnName="SimultaneousMultithreading" />
+          <ScalarProperty Name="ProcessorCores" ColumnName="ProcessorCores" />
+          <ScalarProperty Name="Memory" ColumnName="Memory" />
+          <ScalarProperty Name="HypervisorWorkloadProfile_Id" ColumnName="HypervisorWorkloadProfile_Id" />
+          <ScalarProperty Name="HypervisorGroup_Id" ColumnName="HypervisorGroup_Id" />
+          <ScalarProperty Name="InactiveDate" ColumnName="InactiveDate" />
+          <ScalarProperty Name="Inactive" ColumnName="Inactive" />
+          <ScalarProperty Name="LastUpdated" ColumnName="LastUpdated" />
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="HypervisorType_Id" ColumnName="HypervisorType_Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="HypervisorTypes">
+      <EntityTypeMapping TypeName="MigrationTool_DevelopmentModel.HypervisorType">
+        <MappingFragment StoreEntitySet="HypervisorTypes">
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="VirtualMachineTypes">
+      <EntityTypeMapping TypeName="MigrationTool_DevelopmentModel.VirtualMachineType">
+        <MappingFragment StoreEntitySet="VirtualMachineTypes">
+          <ScalarProperty Name="Billable" ColumnName="Billable" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="HypervisorWorkloadProfiles">
+      <EntityTypeMapping TypeName="MigrationTool_DevelopmentModel.HypervisorWorkloadProfile">
+        <MappingFragment StoreEntitySet="HypervisorWorkloadProfiles">
+          <ScalarProperty Name="MaxVirtualMachines" ColumnName="MaxVirtualMachines" />
+          <ScalarProperty Name="Type" ColumnName="Type" />
+          <ScalarProperty Name="VirtualProcessorsPerCore" ColumnName="VirtualProcessorsPerCore" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="VirtualMachines">
+      <EntityTypeMapping TypeName="MigrationTool_DevelopmentModel.VirtualMachine">
+        <MappingFragment StoreEntitySet="VirtualMachines">
+          <ScalarProperty Name="VirtualProcessors" ColumnName="VirtualProcessors" />
+          <ScalarProperty Name="Memory" ColumnName="Memory" />
+          <ScalarProperty Name="InactiveDate" ColumnName="InactiveDate" />
+          <ScalarProperty Name="Inactive" ColumnName="Inactive" />
+          <ScalarProperty Name="LastUpdated" ColumnName="LastUpdated" />
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="Hypervisor_Id" ColumnName="Hypervisor_Id" />
+          <ScalarProperty Name="VirtualMachineType_Id" ColumnName="VirtualMachineType_Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="XenDesktopBrokerDesktops">
+      <EntityTypeMapping TypeName="MigrationTool_DevelopmentModel.XenDesktopBrokerDesktop">
+        <MappingFragment StoreEntitySet="XenDesktopBrokerDesktops">
+          <ScalarProperty Name="XenDesktopBrokerDesktopGroup_Id" ColumnName="XenDesktopBrokerDesktopGroup_Id" />
+          <ScalarProperty Name="XenDesktopCatalog_Id" ColumnName="XenDesktopCatalog_Id" />
+          <ScalarProperty Name="VirtualMachine_Id" ColumnName="VirtualMachine_Id" />
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="InactiveDate" ColumnName="InactiveDate" />
+          <ScalarProperty Name="Inactive" ColumnName="Inactive" />
+          <ScalarProperty Name="LastUpdated" ColumnName="LastUpdated" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <AssociationSetMapping Name="XenDesktopBrokerDesktopsEntitledUsers" TypeName="MigrationTool_DevelopmentModel.XenDesktopBrokerDesktopsEntitledUsers" StoreEntitySet="XenDesktopBrokerDesktopsEntitledUsers">
+      <EndProperty Name="XenDesktopBrokerDesktop">
+        <ScalarProperty Name="Id" ColumnName="XenDesktopBrokerDesktop_Id" />
+      </EndProperty>
+      <EndProperty Name="EntitledUser">
+        <ScalarProperty Name="Id" ColumnName="EntitledUser_Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <EntitySetMapping Name="XenDesktopCatalogs">
+      <EntityTypeMapping TypeName="MigrationTool_DevelopmentModel.XenDesktopCatalog">
+        <MappingFragment StoreEntitySet="XenDesktopCatalogs">
+          <ScalarProperty Name="RandomAllocation" ColumnName="RandomAllocation" />
+          <ScalarProperty Name="XenDesktopCatalogType_Id" ColumnName="XenDesktopCatalogType_Id" />
+          <ScalarProperty Name="XenDesktopSite_Id" ColumnName="XenDesktopSite_Id" />
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="InactiveDate" ColumnName="InactiveDate" />
+          <ScalarProperty Name="Inactive" ColumnName="Inactive" />
+          <ScalarProperty Name="LastUpdated" ColumnName="LastUpdated" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="XenDesktopServers">
+      <EntityTypeMapping TypeName="MigrationTool_DevelopmentModel.XenDesktopServer">
+        <MappingFragment StoreEntitySet="XenDesktopServers">
+          <ScalarProperty Name="XenDesktopSite_Id" ColumnName="XenDesktopSite_Id" />
+          <ScalarProperty Name="VirtualMachine_Id" ColumnName="VirtualMachine_Id" />
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="InactiveDate" ColumnName="InactiveDate" />
+          <ScalarProperty Name="Inactive" ColumnName="Inactive" />
+          <ScalarProperty Name="LastUpdated" ColumnName="LastUpdated" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="XenDesktopSites">
+      <EntityTypeMapping TypeName="MigrationTool_DevelopmentModel.XenDesktopSite">
+        <MappingFragment StoreEntitySet="XenDesktopSites">
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="InactiveDate" ColumnName="InactiveDate" />
+          <ScalarProperty Name="Inactive" ColumnName="Inactive" />
+          <ScalarProperty Name="LastUpdated" ColumnName="LastUpdated" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <AssociationSetMapping Name="BusinessSolutionsApplications" TypeName="MigrationTool_DevelopmentModel.BusinessSolutionsApplications" StoreEntitySet="BusinessSolutionsApplications">
+      <EndProperty Name="BusinessSolution">
+        <ScalarProperty Name="Id" ColumnName="BusinessSolution_Id" />
+      </EndProperty>
+      <EndProperty Name="Application">
+        <ScalarProperty Name="Id" ColumnName="Application_Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <EntitySetMapping Name="HypervisorGroupTypes">
+      <EntityTypeMapping TypeName="MigrationTool_DevelopmentModel.HypervisorGroupType">
+        <MappingFragment StoreEntitySet="HypervisorGroupTypes">
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="XenDesktopCatalogTypes">
+      <EntityTypeMapping TypeName="MigrationTool_DevelopmentModel.XenDesktopCatalogType">
+        <MappingFragment StoreEntitySet="XenDesktopCatalogTypes">
+          <ScalarProperty Name="CatalogLevel" ColumnName="CatalogLevel" />
+          <ScalarProperty Name="ReportForPxQ" ColumnName="ReportForPxQ" />
+          <ScalarProperty Name="Billable" ColumnName="Billable" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="XenAppServerRoles">
+      <EntityTypeMapping TypeName="MigrationTool_DevelopmentModel.XenAppServerRole">
+        <MappingFragment StoreEntitySet="XenAppServerRoles">
+          <ScalarProperty Name="Billable" ColumnName="Billable" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="XenAppServers">
+      <EntityTypeMapping TypeName="MigrationTool_DevelopmentModel.XenAppServer">
+        <MappingFragment StoreEntitySet="XenAppServers">
+          <ScalarProperty Name="ipAddress" ColumnName="ipAddress" />
+          <ScalarProperty Name="OS" ColumnName="OS" />
+          <ScalarProperty Name="Manufacturer" ColumnName="Manufacturer" />
+          <ScalarProperty Name="XenAppServerRole_Id" ColumnName="XenAppServerRole_Id" />
+          <ScalarProperty Name="VirtualMachineType_Id" ColumnName="VirtualMachineType_Id" />
+          <ScalarProperty Name="VirtualMachine_Id" ColumnName="VirtualMachine_Id" />
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="InactiveDate" ColumnName="InactiveDate" />
+          <ScalarProperty Name="Inactive" ColumnName="Inactive" />
+          <ScalarProperty Name="XenAppFarmFolder_Id" ColumnName="XenAppFarmFolder_Id" />
+          <ScalarProperty Name="LastUpdated" ColumnName="LastUpdated" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="XenAppFarm_Id" ColumnName="XenAppFarm_Id" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <AssociationSetMapping Name="PublishedApplicationsXenAppServers" TypeName="MigrationTool_DevelopmentModel.PublishedApplicationsXenAppServers" StoreEntitySet="PublishedApplicationsXenAppServers">
+      <EndProperty Name="XenAppServer">
+        <ScalarProperty Name="Id" ColumnName="XenAppServer_Id" />
+      </EndProperty>
+      <EndProperty Name="PublishedApplication">
+        <ScalarProperty Name="Id" ColumnName="PublishedApplication_Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <EntitySetMapping Name="XenAppFarmVersions">
+      <EntityTypeMapping TypeName="MigrationTool_DevelopmentModel.XenAppFarmVersion">
+        <MappingFragment StoreEntitySet="XenAppFarmVersions">
+          <ScalarProperty Name="Billable" ColumnName="Billable" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="MigrationGroups">
+      <EntityTypeMapping TypeName="MigrationTool_DevelopmentModel.MigrationGroup">
+        <MappingFragment StoreEntitySet="MigrationGroups">
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="InventoryMachines">
+      <EntityTypeMapping TypeName="MigrationTool_DevelopmentModel.InventoryMachine">
+        <MappingFragment StoreEntitySet="InventoryMachines">
+          <ScalarProperty Name="InactiveDate" ColumnName="InactiveDate" />
+          <ScalarProperty Name="Inactive" ColumnName="Inactive" />
+          <ScalarProperty Name="LastUpdated" ColumnName="LastUpdated" />
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PublishedApplicationLevels">
+      <EntityTypeMapping TypeName="MigrationTool_DevelopmentModel.PublishedApplicationLevel">
+        <MappingFragment StoreEntitySet="PublishedApplicationLevels">
+          <ScalarProperty Name="ApplicationLevel" ColumnName="ApplicationLevel" />
+          <ScalarProperty Name="PublishedApplicationName" ColumnName="PublishedApplicationName" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="XenDesktopBrokerConnections">
+      <EntityTypeMapping TypeName="MigrationTool_DevelopmentModel.XenDesktopBrokerConnection">
+        <MappingFragment StoreEntitySet="XenDesktopBrokerConnections">
+          <ScalarProperty Name="EndTime" ColumnName="EndTime" />
+          <ScalarProperty Name="BrokeringTime" ColumnName="BrokeringTime" />
+          <ScalarProperty Name="EntitledUser_Id" ColumnName="EntitledUser_Id" />
+          <ScalarProperty Name="XenDesktopBrokerDesktop_Id" ColumnName="XenDesktopBrokerDesktop_Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="DataStoreGroups">
+      <EntityTypeMapping TypeName="MigrationTool_DevelopmentModel.DataStoreGroup">
+        <MappingFragment StoreEntitySet="DataStoreGroups">
+          <ScalarProperty Name="HypervisorController_Id" ColumnName="HypervisorController_Id" />
+          <ScalarProperty Name="InactiveDate" ColumnName="InactiveDate" />
+          <ScalarProperty Name="Inactive" ColumnName="Inactive" />
+          <ScalarProperty Name="LastUpdated" ColumnName="LastUpdated" />
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="DataStores">
+      <EntityTypeMapping TypeName="MigrationTool_DevelopmentModel.DataStore">
+        <MappingFragment StoreEntitySet="DataStores">
+          <ScalarProperty Name="UniqueId" ColumnName="UniqueId" />
+          <ScalarProperty Name="LocalStorage" ColumnName="LocalStorage" />
+          <ScalarProperty Name="DataStoreCategory_Id" ColumnName="DataStoreCategory_Id" />
+          <ScalarProperty Name="InactiveDate" ColumnName="InactiveDate" />
+          <ScalarProperty Name="Inactive" ColumnName="Inactive" />
+          <ScalarProperty Name="LastUpdated" ColumnName="LastUpdated" />
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="DataStoreGroup_Id" ColumnName="DataStoreGroup_Id" />
+          <ScalarProperty Name="FreeSpace" ColumnName="FreeSpace" />
+          <ScalarProperty Name="Capacity" ColumnName="Capacity" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="VirtualHardDrives">
+      <EntityTypeMapping TypeName="MigrationTool_DevelopmentModel.VirtualHardDrive">
+        <MappingFragment StoreEntitySet="VirtualHardDrives">
+          <ScalarProperty Name="InactiveDate" ColumnName="InactiveDate" />
+          <ScalarProperty Name="Inactive" ColumnName="Inactive" />
+          <ScalarProperty Name="LastUpdated" ColumnName="LastUpdated" />
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="DataStore_Id" ColumnName="DataStore_Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Provisioned" ColumnName="Provisioned" />
+          <ScalarProperty Name="FreeSpace" ColumnName="FreeSpace" />
+          <ScalarProperty Name="Capacity" ColumnName="Capacity" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <AssociationSetMapping Name="DataStoresHypervisors" TypeName="MigrationTool_DevelopmentModel.DataStoresHypervisors" StoreEntitySet="DataStoresHypervisors">
+      <EndProperty Name="Hypervisor">
+        <ScalarProperty Name="Id" ColumnName="Hypervisor_Id" />
+      </EndProperty>
+      <EndProperty Name="DataStore">
+        <ScalarProperty Name="Id" ColumnName="DataStore_Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="VirtualMachinesVirtualHardDrives" TypeName="MigrationTool_DevelopmentModel.VirtualMachinesVirtualHardDrives" StoreEntitySet="VirtualMachinesVirtualHardDrives">
+      <EndProperty Name="VirtualMachine">
+        <ScalarProperty Name="Id" ColumnName="VirtualMachine_Id" />
+      </EndProperty>
+      <EndProperty Name="VirtualHardDrive">
+        <ScalarProperty Name="Id" ColumnName="VirtualHardDrive_Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <EntitySetMapping Name="DataStoreCategories">
+      <EntityTypeMapping TypeName="MigrationTool_DevelopmentModel.DataStoreCategory">
+        <MappingFragment StoreEntitySet="DataStoreCategories">
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="DataSources">
+      <EntityTypeMapping TypeName="MigrationTool_DevelopmentModel.DataSource">
+        <MappingFragment StoreEntitySet="DataSources">
+          <ScalarProperty Name="Inactive" ColumnName="Inactive" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="DataSourcesStatus">
+      <EntityTypeMapping TypeName="MigrationTool_DevelopmentModel.DataSourcesStatu">
+        <MappingFragment StoreEntitySet="DataSourcesStatus">
+          <ScalarProperty Name="Duration" ColumnName="Duration" />
+          <ScalarProperty Name="Success" ColumnName="Success" />
+          <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+          <ScalarProperty Name="DataSources_Id" ColumnName="DataSources_Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="HypervisorControllers">
+      <EntityTypeMapping TypeName="MigrationTool_DevelopmentModel.HypervisorController">
+        <MappingFragment StoreEntitySet="HypervisorControllers">
+          <ScalarProperty Name="InactiveDate" ColumnName="InactiveDate" />
+          <ScalarProperty Name="Inactive" ColumnName="Inactive" />
+          <ScalarProperty Name="LastUpdated" ColumnName="LastUpdated" />
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="CapacityRules">
+      <EntityTypeMapping TypeName="MigrationTool_DevelopmentModel.CapacityRule">
+        <MappingFragment StoreEntitySet="CapacityRules">
+          <ScalarProperty Name="StorageDataStoreOverheadPercent" ColumnName="StorageDataStoreOverheadPercent" />
+          <ScalarProperty Name="StorageDataStoreOverheadBytes" ColumnName="StorageDataStoreOverheadBytes" />
+          <ScalarProperty Name="StorageDataStoreOverheadType" ColumnName="StorageDataStoreOverheadType" />
+          <ScalarProperty Name="StorageVmOverheadPercent" ColumnName="StorageVmOverheadPercent" />
+          <ScalarProperty Name="StorageVmOverheadBytes" ColumnName="StorageVmOverheadBytes" />
+          <ScalarProperty Name="StorageVmOverheadType" ColumnName="StorageVmOverheadType" />
+          <ScalarProperty Name="StorageVmSizeBytes" ColumnName="StorageVmSizeBytes" />
+          <ScalarProperty Name="StorageVmSizeType" ColumnName="StorageVmSizeType" />
+          <ScalarProperty Name="MemoryHostOverheadPercent" ColumnName="MemoryHostOverheadPercent" />
+          <ScalarProperty Name="MemoryHostOverheadBytes" ColumnName="MemoryHostOverheadBytes" />
+          <ScalarProperty Name="MemoryHostOverheadType" ColumnName="MemoryHostOverheadType" />
+          <ScalarProperty Name="MemoryVmOverheadPercent" ColumnName="MemoryVmOverheadPercent" />
+          <ScalarProperty Name="MemoryVmOverheadBytes" ColumnName="MemoryVmOverheadBytes" />
+          <ScalarProperty Name="MemoryVmOverheadType" ColumnName="MemoryVmOverheadType" />
+          <ScalarProperty Name="MemoryPerVmBytes" ColumnName="MemoryPerVmBytes" />
+          <ScalarProperty Name="MemoryPerVmType" ColumnName="MemoryPerVmType" />
+          <ScalarProperty Name="ComputeOvercommitConsequent" ColumnName="ComputeOvercommitConsequent" />
+          <ScalarProperty Name="ComputeOvercommitAntecedent" ColumnName="ComputeOvercommitAntecedent" />
+          <ScalarProperty Name="ComputeVcpusPerVm" ColumnName="ComputeVcpusPerVm" />
+          <ScalarProperty Name="ComputeVcpuCountType" ColumnName="ComputeVcpuCountType" />
+          <ScalarProperty Name="MaximumVms" ColumnName="MaximumVms" />
+          <ScalarProperty Name="RuleType" ColumnName="RuleType" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="CapacityRulesMetas">
+      <EntityTypeMapping TypeName="MigrationTool_DevelopmentModel.CapacityRulesMeta">
+        <MappingFragment StoreEntitySet="CapacityRulesMeta">
+          <ScalarProperty Name="CapacityRule_Id" ColumnName="CapacityRule_Id" />
+          <ScalarProperty Name="Parent_Id" ColumnName="Parent_Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="CapacityStatistics">
+      <EntityTypeMapping TypeName="MigrationTool_DevelopmentModel.CapacityStatistic">
+        <MappingFragment StoreEntitySet="CapacityStatistics">
+          <ScalarProperty Name="TotalStorageBytes" ColumnName="TotalStorageBytes" />
+          <ScalarProperty Name="TotalMemoryBytes" ColumnName="TotalMemoryBytes" />
+          <ScalarProperty Name="TotalLogicalCores" ColumnName="TotalLogicalCores" />
+          <ScalarProperty Name="LastUpdated" ColumnName="LastUpdated" />
+          <ScalarProperty Name="StorageCapacityPercent" ColumnName="StorageCapacityPercent" />
+          <ScalarProperty Name="MemoryCapacityPercent" ColumnName="MemoryCapacityPercent" />
+          <ScalarProperty Name="ComputeCapacityPercent" ColumnName="ComputeCapacityPercent" />
+          <ScalarProperty Name="Parent_Id" ColumnName="Parent_Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

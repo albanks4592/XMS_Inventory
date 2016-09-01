@@ -1,0 +1,12 @@
+﻿@model MigrationTool.ViewModels.IHasNotesViewModel
+@Html.Partial("_Loader", Model.Id.ToString() + "_noteLoader")
+@using (Ajax.BeginForm("RemoveNoteDetailsViewModel", "Note", new AjaxOptions
+{
+    InsertionMode = InsertionMode.Replace,
+    UpdateTargetId = Model.Id.ToString() + "_noteList"        
+}))
+{
+    <div id="@(Model.Id.ToString())_noteList">
+        @Html.Partial("_NoteDetailsViewModelListInner", Model.Notes)
+    </div>
+}

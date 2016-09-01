@@ -1,0 +1,86 @@
+﻿@model MigrationTool.Models.HypervisorController
+@using MigrationTool.ViewModels
+
+@{
+    ViewBag.Title = MigrationTool.Strings.EditAction;
+}
+
+<!-- Header and breadcrumbs -->
+@Html.Partial("_Breadcrumb", new Breadcrumb(ViewBag.Title, new BreadcrumbItem { LinkText = MigrationTool.Strings.HypervisorControllerPlural, ControllerName = "HypervisorController"}))
+<h2>@ViewBag.Title</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+    
+    <!-- Hidden fields -->
+    @Html.HiddenFor(model => model.Id)
+    @Html.HiddenFor(model => model.LastUpdated)
+
+    <!-- Name -->
+    <div class="form-group">
+        @Html.LabelFor(model => model.Name)
+        @Html.EditorFor(model => model.Name)
+        @Html.ValidationMessageFor(model => model.Name)
+    </div>
+
+    <div class="well">
+        <!-- Created Date -->
+        @if (User.IsInRole(MigrationTool.Roles.Admin))
+        {
+            <div class="form-group">
+                @Html.LabelFor(model => model.CreatedDate)
+                @Html.EditorFor(model => model.CreatedDate)
+                @Html.ValidationMessageFor(model => model.CreatedDate)
+            </div>
+        }
+        else
+        {
+            @Html.HiddenFor(model => model.CreatedDate)
+        }
+
+        <!-- Inactive -->
+        <div class="form-group">
+            @Html.EditorFor(model => model.Inactive)
+            @Html.ValidationMessageFor(model => model.Inactive)
+        </div>
+
+        <!-- Inactive Date -->
+        <div class="form-group">
+            @Html.LabelFor(model => model.InactiveDate)
+            @Html.EditorFor(model => model.InactiveDate)
+            @Html.ValidationMessageFor(model => model.InactiveDate)
+        </div>
+    </div>
+    
+    <button type="submit" class="btn btn-primary">@MigrationTool.Strings.Save</button>
+    @Html.ActionLink(MigrationTool.Strings.Cancel, "Details", new { id = Model.Id }, new { @class = "btn btn-default" })
+    if (User.IsInRole(MigrationTool.Roles.Admin))
+    {
+        <div class="pull-right">
+            @Html.ActionLink(MigrationTool.Strings.DeleteAction, "Delete", new { id = Model.Id }, new { @class = "btn btn-danger" })
+        </div>
+    }
+}
+
+@section Scripts {
+    <script type="text/javascript">
+        // Date pickers.
+        $(function () {
+            configurePickers();
+        });
+
+        function configurePickers() {
+            $(".datetimepicker").each(function () {
+                var $this = $(this);
+                $this.datetimepicker({
+                    useCurrent: false,
+                    useSeconds: false,
+                    showToday: true,
+                    sideBySide: true
+                });
+            });
+        }
+    </script>
+}

@@ -1,0 +1,472 @@
+﻿@model MigrationTool.Models.CapacityRule
+
+@Html.AntiForgeryToken()
+@Html.ValidationSummary(true)
+
+<!-- Name -->
+<div class="form-group">
+    @Html.LabelFor(model => model.Name)
+    @Html.EditorFor(model => model.Name)
+    @Html.ValidationMessageFor(model => model.Name)
+</div>
+
+<!-- Rule Type -->
+<div class="form-group">
+    @Html.LabelFor(model => model.RuleType)
+
+    <div class="radio">
+        <label>
+            @Html.RadioButtonFor(model => model.RuleType, 0)
+            @MigrationTool.Strings.CapacityRule_RuleType_Maximum
+        </label>
+    </div>
+
+    <div class="radio">
+        <label>
+            @Html.RadioButtonFor(model => model.RuleType, 1)
+            @MigrationTool.Strings.CapacityRule_RuleType_Compute
+        </label>
+    </div>
+
+    <div class="radio">
+        <label>
+            @Html.RadioButtonFor(model => model.RuleType, 2)
+            @MigrationTool.Strings.CapacityRule_RuleType_Memory
+        </label>
+    </div>
+
+    <div class="radio">
+        <label>
+            @Html.RadioButtonFor(model => model.RuleType, 3)
+            @MigrationTool.Strings.CapacityRule_RuleType_Storage
+        </label>
+    </div>
+
+    @Html.ValidationMessageFor(model => model.RuleType)
+</div>
+
+<hr />
+
+<!-- Maximum section -->
+<div id="MaximumSection" style="display: none;">
+    <!-- Maximum VMs per entity -->
+    <div class="form-group">
+        @Html.LabelFor(model => model.MaximumVms)
+        <div class="form-inline">
+            <div class="input-group">
+                @Html.EditorFor(model => model.MaximumVms)
+                <span class="input-group-addon">@MigrationTool.Strings.VirtualMachineOptionalPluralAbbreviated</span>
+            </div>
+            @Html.ValidationMessageFor(model => model.MaximumVms)
+        </div>
+    </div>
+</div>
+
+<!-- Compute section -->
+<div id="ComputeSection" style="display: none;">
+    <!-- vCPU counting method -->
+    <div class="form-group">
+        @Html.LabelFor(model => model.ComputeVcpuCountType)
+        <div class="form-inline radio-with-input">
+            <div class="radio">
+                <label>
+                    @Html.RadioButtonFor(model => model.ComputeVcpuCountType, 0)
+                    @MigrationTool.Strings.CapacityRule_Specify
+                </label>
+            </div>
+
+            <div class="input-group">
+                @Html.EditorFor(model => model.ComputeVcpusPerVm)
+                <span class="input-group-addon">@MigrationTool.Strings.VirtualProcessorOptionalPluralAbbreviated</span>
+            </div>
+            @Html.ValidationMessageFor(model => model.ComputeVcpusPerVm)
+        </div>
+
+        <div class="radio radio-no-input">
+            <label>
+                @Html.RadioButtonFor(model => model.ComputeVcpuCountType, 1)
+                @MigrationTool.Strings.CapacityRule_Minimum
+            </label>
+        </div>
+
+        <div class="radio radio-no-input">
+            <label>
+                @Html.RadioButtonFor(model => model.ComputeVcpuCountType, 2)
+                @MigrationTool.Strings.CapacityRule_Maximum
+            </label>
+        </div>
+
+        <div class="radio radio-no-input">
+            <label>
+                @Html.RadioButtonFor(model => model.ComputeVcpuCountType, 3)
+                @MigrationTool.Strings.CapacityRule_Average
+            </label>
+        </div>
+        @Html.ValidationMessageFor(model => model.ComputeVcpuCountType)
+    </div>
+
+    <!-- Overcommit ratio -->
+    <div class="form-group">
+        @Html.Label(@MigrationTool.Strings.OvercommitRatio)
+        <div class="form-inline">
+            <div class="input-group">
+                @Html.EditorFor(model => model.ComputeOvercommitAntecedent)
+                <span class="input-group-addon">@MigrationTool.Strings.RatioSeparatorCharacter</span>
+                @Html.EditorFor(model => model.ComputeOvercommitConsequent)
+            </div>
+            @Html.ValidationMessageFor(model => model.ComputeOvercommitAntecedent)
+            @Html.ValidationMessageFor(model => model.ComputeOvercommitConsequent)
+        </div>
+    </div>
+
+    <hr />
+</div>
+
+<!-- Memory section -->
+<div id="MemorySection" style="display: none;">
+    <!-- Memory per VM -->
+    <div class="form-group">
+        @Html.LabelFor(model => model.MemoryPerVmType)
+        <div class="form-inline radio-with-input">
+            <div class="radio">
+                <label>
+                    @Html.RadioButtonFor(model => model.MemoryPerVmType, 0)
+                    @MigrationTool.Strings.CapacityRule_Specify
+                </label>
+            </div>
+
+            <div class="input-group">
+                @Html.EditorFor(model => model.MemoryPerVmBytes)
+                <span class="input-group-addon">@MigrationTool.Strings.Bytes</span>
+            </div>
+            @Html.ValidationMessageFor(model => model.MemoryPerVmBytes)
+        </div>
+
+        <div class="radio radio-no-input">
+            <label>
+                @Html.RadioButtonFor(model => model.MemoryPerVmType, 1)
+                @MigrationTool.Strings.CapacityRule_Minimum
+            </label>
+        </div>
+
+        <div class="radio radio-no-input">
+            <label>
+                @Html.RadioButtonFor(model => model.MemoryPerVmType, 2)
+                @MigrationTool.Strings.CapacityRule_Maximum
+            </label>
+        </div>
+
+        <div class="radio radio-no-input">
+            <label>
+                @Html.RadioButtonFor(model => model.MemoryPerVmType, 3)
+                @MigrationTool.Strings.CapacityRule_Average
+            </label>
+        </div>
+        @Html.ValidationMessageFor(model => model.MemoryPerVmType)
+    </div>
+
+    <!-- Per VM Overhead -->
+    <div class="form-group">
+        @Html.LabelFor(model => model.MemoryVmOverheadType)
+        <div class="radio radio-no-input">
+            <label>
+                @Html.RadioButtonFor(model => model.MemoryVmOverheadType, 0)
+                @MigrationTool.Strings.CapacityRule_None
+            </label>
+        </div>
+
+        <div class="form-inline radio-with-input">
+            <div class="radio">
+                <label>
+                    @Html.RadioButtonFor(model => model.MemoryVmOverheadType, 1)
+                    @MigrationTool.Strings.CapacityRule_Specify
+                </label>
+            </div>
+
+            <div class="input-group">
+                @Html.EditorFor(model => model.MemoryVmOverheadBytes)
+                <span class="input-group-addon">@MigrationTool.Strings.Bytes</span>
+            </div>
+            @Html.ValidationMessageFor(model => model.MemoryVmOverheadBytes)
+        </div>
+
+        <div class="form-inline radio-with-input">
+            <div class="radio">
+                <label>
+                    @Html.RadioButtonFor(model => model.MemoryVmOverheadType, 2)
+                    @MigrationTool.Strings.CapacityRule_Percent
+                </label>
+            </div>
+
+            <div class="input-group">
+                @Html.EditorFor(model => model.MemoryVmOverheadPercent)
+                <span class="input-group-addon">@MigrationTool.Strings.PercentSignCharacter</span>
+            </div>
+            @Html.ValidationMessageFor(model => model.MemoryVmOverheadPercent)
+        </div>
+        @Html.ValidationMessageFor(model => model.MemoryVmOverheadType)
+    </div>
+
+
+    <!-- Per Host Overhead -->
+    <div class="form-group">
+        @Html.LabelFor(model => model.MemoryHostOverheadType)
+        <div class="radio radio-no-input">
+            <label>
+                @Html.RadioButtonFor(model => model.MemoryHostOverheadType, 0)
+                @MigrationTool.Strings.CapacityRule_None
+            </label>
+        </div>
+
+        <div class="form-inline radio-with-input">
+            <div class="radio">
+                <label>
+                    @Html.RadioButtonFor(model => model.MemoryHostOverheadType, 1)
+                    @MigrationTool.Strings.CapacityRule_Specify
+                </label>
+            </div>
+            <div class="input-group">
+                @Html.EditorFor(model => model.MemoryHostOverheadBytes)
+                <span class="input-group-addon">@MigrationTool.Strings.Bytes</span>
+            </div>
+            @Html.ValidationMessageFor(model => model.MemoryHostOverheadBytes)
+        </div>
+
+        <div class="form-inline radio-with-input">
+            <div class="radio">
+                <label>
+                    @Html.RadioButtonFor(model => model.MemoryHostOverheadType, 2)
+                    @MigrationTool.Strings.CapacityRule_Percent
+                </label>
+            </div>
+            <div class="input-group">
+                @Html.EditorFor(model => model.MemoryHostOverheadPercent)
+                <span class="input-group-addon">@MigrationTool.Strings.PercentSignCharacter</span>
+            </div>
+            @Html.ValidationMessageFor(model => model.MemoryHostOverheadPercent)
+        </div>
+        @Html.ValidationMessageFor(model => model.MemoryHostOverheadType)
+    </div>
+
+    <hr />
+</div>
+
+<!-- Storage section -->
+<div id="StorageSection" style="display: none;">
+    <!-- Storage per VM -->
+    <div class="form-group">
+        @Html.LabelFor(model => model.StorageVmSizeType)
+        <div class="form-inline radio-with-input">
+            <div class="radio">
+                <label>
+                    @Html.RadioButtonFor(model => model.StorageVmSizeType, 0)
+                    @MigrationTool.Strings.CapacityRule_Specify
+                </label>
+            </div>
+
+            <div class="input-group">
+                @Html.EditorFor(model => model.StorageVmSizeBytes)
+                <span class="input-group-addon">@MigrationTool.Strings.Bytes</span>
+            </div>
+            @Html.ValidationMessageFor(model => model.StorageVmSizeBytes)
+        </div>
+
+        <div class="radio radio-no-input">
+            <label>
+                @Html.RadioButtonFor(model => model.StorageVmSizeType, 1)
+                @MigrationTool.Strings.CapacityRule_Minimum
+            </label>
+        </div>
+
+        <div class="radio radio-no-input">
+            <label>
+                @Html.RadioButtonFor(model => model.StorageVmSizeType, 2)
+                @MigrationTool.Strings.CapacityRule_Maximum
+            </label>
+        </div>
+
+        <div class="radio radio-no-input">
+            <label>
+                @Html.RadioButtonFor(model => model.StorageVmSizeType, 3)
+                @MigrationTool.Strings.CapacityRule_Average
+            </label>
+        </div>
+        @Html.ValidationMessageFor(model => model.StorageVmSizeType)
+    </div>
+
+    <!-- Per VM Overhead -->
+    <div class="form-group">
+        @Html.LabelFor(model => model.StorageVmOverheadType)
+        <div class="radio radio-no-input">
+            <label>
+                @Html.RadioButtonFor(model => model.StorageVmOverheadType, 0)
+                @MigrationTool.Strings.CapacityRule_None
+            </label>
+        </div>
+
+        <div class="form-inline radio-with-input">
+            <div class="radio">
+                <label>
+                    @Html.RadioButtonFor(model => model.StorageVmOverheadType, 1)
+                    @MigrationTool.Strings.CapacityRule_Specify
+                </label>
+            </div>
+
+            <div class="input-group">
+                @Html.EditorFor(model => model.StorageVmOverheadBytes)
+                <span class="input-group-addon">@MigrationTool.Strings.Bytes</span>
+            </div>
+            @Html.ValidationMessageFor(model => model.StorageVmOverheadBytes)
+        </div>
+
+        <div class="form-inline radio-with-input">
+            <div class="radio">
+                <label>
+                    @Html.RadioButtonFor(model => model.StorageVmOverheadType, 2)
+                    @MigrationTool.Strings.CapacityRule_Percent
+                </label>
+            </div>
+
+            <div class="input-group">
+                @Html.EditorFor(model => model.StorageVmOverheadPercent)
+                <span class="input-group-addon">@MigrationTool.Strings.PercentSignCharacter</span>
+            </div>
+            @Html.ValidationMessageFor(model => model.StorageVmOverheadPercent)
+        </div>
+        @Html.ValidationMessageFor(model => model.StorageVmOverheadType)
+    </div>
+
+
+    <!-- Per DataStore Overhead -->
+    <div class="form-group">
+        @Html.LabelFor(model => model.StorageDataStoreOverheadType)
+        <div class="radio radio-no-input">
+            <label>
+                @Html.RadioButtonFor(model => model.StorageDataStoreOverheadType, 0)
+                @MigrationTool.Strings.CapacityRule_None
+            </label>
+        </div>
+
+        <div class="form-inline radio-with-input">
+            <div class="radio">
+                <label>
+                    @Html.RadioButtonFor(model => model.StorageDataStoreOverheadType, 1)
+                    @MigrationTool.Strings.CapacityRule_Specify
+                </label>
+            </div>
+
+            <div class="input-group">
+                @Html.EditorFor(model => model.StorageDataStoreOverheadBytes)
+                <span class="input-group-addon">@MigrationTool.Strings.Bytes</span>
+            </div>
+            @Html.ValidationMessageFor(model => model.StorageDataStoreOverheadBytes)
+        </div>
+
+        <div class="form-inline radio-with-input">
+            <div class="radio">
+                <label>
+                    @Html.RadioButtonFor(model => model.StorageDataStoreOverheadType, 2)
+                    @MigrationTool.Strings.CapacityRule_Percent
+                </label>
+            </div>
+
+            <div class="input-group">
+                @Html.EditorFor(model => model.StorageDataStoreOverheadPercent)
+                <span class="input-group-addon">@MigrationTool.Strings.PercentSignCharacter</span>
+            </div>
+            @Html.ValidationMessageFor(model => model.StorageDataStoreOverheadPercent)
+        </div>
+        @Html.ValidationMessageFor(model => model.StorageDataStoreOverheadType)
+
+    </div>
+    <hr />
+</div>
+
+<!-- Scripts -->
+<script type="text/javascript">
+    document.addEventListener('DOMContentLoaded', function () {
+        $('input[name=RuleType]').change(function (event) {
+            showAndHide(event.target.value);
+        });
+
+        $(':radio').change(enableAndDisable);
+
+        showAndHide($('input[name=RuleType]:checked').val());
+    });
+
+    function showAndHide(o) {
+        switch (o) {
+            case '0':
+                $('#MaximumSection').show();
+                $('#ComputeSection').hide();
+                $('#MemorySection').hide();
+                $('#StorageSection').hide();
+                break;
+
+            case '1':
+                $('#MaximumSection').hide();
+                $('#ComputeSection').show();
+                $('#MemorySection').hide();
+                $('#StorageSection').hide();
+                break;
+
+            case '2':
+                $('#MaximumSection').hide();
+                $('#ComputeSection').hide();
+                $('#MemorySection').show();
+                $('#StorageSection').hide();
+                break;
+
+            case '3':
+                $('#MaximumSection').hide();
+                $('#ComputeSection').hide();
+                $('#MemorySection').hide();
+                $('#StorageSection').show();
+                break;
+
+            default:
+                $('#MaximumSection').hide();
+                $('#ComputeSection').hide();
+                $('#MemorySection').hide();
+                $('#StorageSection').hide();
+                break;
+        }
+
+        // Always trigger this when switching sections.
+        enableAndDisable();
+    }
+
+    function enableAndDisable() {
+        var section = $('input[name=RuleType]:checked').val();
+        
+        switch (section) {
+            case '1':
+                $('input[name=ComputeVcpusPerVm]').prop('disabled', $('input[name=ComputeVcpuCountType]:checked').val() !== '0');
+                break;
+
+            case '2':
+                $('input[name=MemoryPerVmBytes]').prop('disabled', $('input[name=MemoryPerVmType]:checked').val() !== '0');
+
+                var memoryVmOverheadType = $('input[name=MemoryVmOverheadType]:checked').val();
+                $('input[name=MemoryVmOverheadBytes]').prop('disabled', memoryVmOverheadType !== '1');
+                $('input[name=MemoryVmOverheadPercent]').prop('disabled', memoryVmOverheadType !== '2');
+
+                var memoryHostOverheadType = $('input[name=MemoryHostOverheadType]:checked').val();
+                $('input[name=MemoryHostOverheadBytes]').prop('disabled', memoryHostOverheadType !== '1');
+                $('input[name=MemoryHostOverheadPercent]').prop('disabled', memoryHostOverheadType !== '2');
+                break;
+
+            case '3':
+                $('input[name=StorageVmSizeBytes]').prop('disabled', $('input[name=StorageVmSizeType]:checked').val() !== '0');
+
+                var storageVmOverheadType = $('input[name=StorageVmOverheadType]:checked').val();
+                $('input[name=StorageVmOverheadBytes]').prop('disabled',  storageVmOverheadType !== '1');
+                $('input[name=StorageVmOverheadPercent]').prop('disabled', storageVmOverheadType !== '2');
+
+                var storageDataStoreOverheadType = $('input[name=StorageDataStoreOverheadType]:checked').val();
+                $('input[name=StorageDataStoreOverheadBytes]').prop('disabled', storageDataStoreOverheadType !== '1');
+                $('input[name=StorageDataStoreOverheadPercent]').prop('disabled', storageDataStoreOverheadType !== '2');
+                break;
+        }
+    }
+</script>

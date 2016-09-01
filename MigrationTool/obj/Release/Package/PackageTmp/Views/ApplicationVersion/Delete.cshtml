@@ -1,0 +1,23 @@
+﻿@model MigrationTool.Models.ApplicationVersion
+@using MigrationTool.ViewModels
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+@Html.Partial("_Breadcrumb", new Breadcrumb(ViewBag.Title, new BreadcrumbItem { LinkText = "Application Versions", ControllerName = "ApplicationVersion" }))
+<h2>@ViewBag.Title</h2>
+
+<h3>Are you sure you want to delete this Application Version?</h3>
+<dl>
+    <dt>@Html.DisplayNameFor(model => model.Application.Name)</dt>
+    <dd>@Html.DisplayFor(model => model.Application.Name)</dd>
+            
+    <dt>@Html.DisplayNameFor(model => model.Name)</dt>
+    <dd>@Html.DisplayFor(model => model.Name)</dd>
+</dl>
+ 
+@using (Html.BeginForm()) {
+    <button type="submit" class="btn btn-danger">Delete</button>
+    @Html.ActionLink("Cancel", "Details", new { Id = Model.Id }, new { @class = "btn btn-default" })
+}

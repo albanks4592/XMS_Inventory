@@ -1,0 +1,25 @@
+﻿@model IEnumerable<MigrationTool.ViewModels.UserListViewModel>
+<table class="table table-striped">
+    <tr>
+        <th>@Html.DisplayNameFor(model => model.Username)</th>
+        <th>@Html.DisplayNameFor(model => model.FirstName)</th>
+        <th>@Html.DisplayNameFor(model => model.LastName)</th>
+        <th>@Html.DisplayNameFor(model => model.EmailAddress)</th>
+        <th>@Html.DisplayNameFor(model => model.Division)</th>
+        <th>@Html.DisplayNameFor(model => model.Usage)</th>
+    </tr>
+    @if (Model != null)
+    {
+        foreach (var item in Model.OrderBy(x => x.Username))
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.Username)</td>
+                <td>@Html.DisplayFor(modelItem => item.FirstName)</td>
+                <td>@Html.DisplayFor(modelItem => item.LastName)</td>
+                <td>@Html.DisplayFor(modelItem => item.EmailAddress)</td>
+                <td>@Html.DisplayFor(modelItem => item.Division)</td>
+                <td>@Html.DisplayFor(modelItem => item.Usage, "TimeSpanHoursMinutes")</td>
+            </tr>
+        }
+    }
+</table>

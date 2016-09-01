@@ -1,0 +1,23 @@
+﻿@model MigrationTool.Models.ApplicationVersion
+
+@{
+    string name;
+    if (Model == null)
+    {
+        name = string.Empty;
+    }
+    else if (string.IsNullOrEmpty(Model.Name))
+    {
+        
+        name = "<empty>";
+    }
+    else
+    {
+        name = Model.Name;
+    }
+}
+
+@if (Model != null)
+{
+    @Html.ActionLink(name, "Details", "ApplicationVersion", new { id = Model.Id }, null)
+}

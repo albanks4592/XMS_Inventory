@@ -1,0 +1,31 @@
+﻿@model IEnumerable<MigrationTool.Models.XenDesktopBrokerDesktop>
+@using MigrationTool.ViewModels
+
+@{
+    ViewBag.Title = "Index";
+}
+
+@Html.Partial("_Breadcrumb", new Breadcrumb("XenDesktop Brokered Desktops"))
+<h2>Index of XenDesktop BrokerDesktops</h2>
+
+@using (Ajax.BeginForm("FilterIndex", "XenDesktopBrokerDesktop", new AjaxOptions {
+    InsertionMode = InsertionMode.Replace,
+    UpdateTargetId = "XenDesktopBrokerDesktopList",
+    LoadingElementId = "XenDesktopBrokerDesktopLoader",
+    OnBegin = "$(\"#XenDesktopBrokerDesktopLoader .spinner\").spin();",
+    OnComplete = "$(\"#XenDesktopBrokerDesktopLoader .spinner\").spin(false);"
+})) {
+    @Html.Partial("_StandardFilter")
+}
+
+<p></p>
+@if (User.IsInRole(MigrationTool.Roles.Edit) || User.IsInRole(MigrationTool.Roles.Admin))
+{
+    @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-default" })
+    <p></p>
+}
+@Html.Partial("_Loader", "XenDesktopBrokerDesktopLoader")
+<div id="XenDesktopBrokerDesktopList">
+    @Html.Partial("_List", new List<MigrationTool.Models.XenDesktopBrokerDesktop>())
+    @Html.Partial("_SearchFirst")
+</div>

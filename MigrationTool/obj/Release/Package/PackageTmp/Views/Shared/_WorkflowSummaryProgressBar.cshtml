@@ -1,0 +1,120 @@
+﻿@model MigrationTool.Models.WorkflowDefinition
+@{
+    int stepCount = Model.WorkflowStepDefinitions.Count();
+    int dotCount = stepCount + 1;
+    double percent = 1 / (double)dotCount * 100;
+    
+    string circleType;
+    string popover;
+    
+    DateTime now = DateTime.Now;
+
+    int instanceCount = Model.WorkflowInstances.Count();
+    int startedCount = Model.WorkflowInstances.Where(x => x.StartTime != null).Count();
+    int startedPercent = (int)(startedCount / (double)instanceCount * 100);
+    int finishedCount = Model.WorkflowInstances.Where(x => x.EndTime != null).Count();
+    int finishedPercent = (int)(finishedCount / (double)instanceCount * 100);
+
+    int previousPercent = startedPercent;
+    
+    if (startedPercent == 100)
+    {
+        circleType = "wf-circle-success";
+    }
+    else
+    {
+        circleType = "";
+    }
+    popover = "Started " + Html.DisplayFor(model => startedCount, "IntThousands") + " / " + Html.DisplayFor(model => instanceCount, "IntThousands");
+}
+
+<div class="wf-progress-bar clearfix">
+    <!-- Start circle -->
+    <div class="wf-circle @circleType" data-toggle="popover" data-placement="top" data-content="@popover" title="@Model.Name" data-trigger="hover">
+        <div>
+            <div>
+                <small>
+                    @(startedPercent)%
+                </small>
+            </div>
+            <div>
+                <small>
+                    <span class="glyphicon glyphicon-play"></span>
+                </small>
+            </div>
+        </div>
+    </div>
+    
+    <div class="wf-floaters">
+        @foreach (var step in Model.WorkflowStepDefinitions.OrderBy(x => x.SortOrder))
+        {
+            int stepStartedCount = step.WorkflowStepInstances.Where(x => x.StartTime != null).Count();
+            int stepCompletedCount = step.WorkflowStepInstances.Where(x => x.EndTime != null).Count();
+            int stepStartedPercent = (int)(stepStartedCount / (double)instanceCount * 100);
+            if (stepStartedPercent == 100)
+            {
+                circleType = "wf-circle-success";
+            }
+            else
+            {
+                circleType = "";
+            }
+            popover = "Started " + Html.DisplayFor(model => stepStartedCount, "IntThousands") + " / " + Html.DisplayFor(model => instanceCount, "IntThousands") +
+                "\nCompleted " + Html.DisplayFor(model => stepCompletedCount, "IntThousands") + " / " + Html.DisplayFor(model => instanceCount, "IntThousands");
+            <div style="width: @(percent)%;">
+                <div class="wf-connector">
+                    <div class="progress">
+                        @if (previousPercent == 100 && stepStartedPercent == 100)
+                        {
+                            <div class="progress-bar progress-bar-success" role="progressbar" style="width: 100%;"></div>
+                        }
+                    </div>
+                </div>
+                <div class="wf-circle @circleType" data-toggle="popover" data-placement="top" data-content="@popover" title="@Model.Name: @step.Name" data-trigger="hover">
+                    <div>
+                        <div>
+                            <small>@(stepStartedPercent)%</small>
+                        </div>
+                        <div>
+                            <small><span class="glyphicon glyphicon-ok"></span></small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            previousPercent = stepStartedPercent;
+        }
+        <!-- End circle -->
+        @{
+            if (finishedPercent == 100) {
+                circleType = "wf-circle-success";
+            } else {
+                circleType = "";
+            }
+            popover = "Completed " + Html.DisplayFor(model => finishedCount, "IntThousands") + " / " + Html.DisplayFor(model => instanceCount, "IntThousands");
+        }
+        <div style="width: @(percent)%;">
+            <div class="wf-connector">
+                <div class="progress">
+                    @if (previousPercent == 100 && finishedPercent == 100)
+                    {
+                        <div class="progress-bar progress-bar-success" role="progressbar" style="width: 100%;"></div>
+                    }
+                </div>
+            </div>
+            <div class="wf-circle @circleType" data-toggle="popover" data-placement="top" data-content="@popover" title="@Model.Name" data-trigger="hover">
+                <div>
+                    <div>
+                        <small>
+                            @(finishedPercent)%
+                        </small>
+                    </div>
+                    <div>
+                        <small>
+                            <span class="glyphicon glyphicon-flag"></span>
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

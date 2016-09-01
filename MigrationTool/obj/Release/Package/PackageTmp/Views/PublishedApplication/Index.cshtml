@@ -1,0 +1,68 @@
+﻿@model IEnumerable<MigrationTool.Models.PublishedApplication>
+@using MigrationTool.ViewModels
+
+@{
+    ViewBag.Title = "Index";
+}
+
+@Html.Partial("_Breadcrumb", new Breadcrumb("Published Applications"))
+<h2>Index of Published Applications</h2>
+
+@using (Ajax.BeginForm("FilterIndex", "PublishedApplication", new AjaxOptions {
+    InsertionMode = InsertionMode.Replace,
+    UpdateTargetId = "publishedApplicationList",
+    LoadingElementId = "publishedApplicationLoader",
+    OnBegin = "$(\"#publishedApplicationLoader .spinner\").spin();",
+    OnComplete = "$(\"#publishedApplicationLoader .spinner\").spin(false);"
+})) {
+    string filter = "";
+    <div class="clearfix">
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => filter, "Filter")
+                    @Html.TextBoxFor(model => filter, new { @class = "form-control" })
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" name="noApplicationVersionLink" value="true" />
+                            Only display Published Applications that do not have a linked Application
+                        </label>
+                    </div>
+
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" name="noBusinessSolutionLink" value="true" />
+                            Only display Published Applications that do not have a linked Business Solution
+                        </label>
+                    </div>
+
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" name="noActiveRecordsLink" value="true" />
+                            Only display Published Applications that are Active
+                        </label>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="col-sm-6">
+                <div class="form-group">
+                    @Html.Label("Tags")
+                    @{Html.RenderAction("GetTagSelect", "Tag", new { tagName = "tagFilter" });}
+                    <p class="help-block">Separate multiple tags with a comma.</p>
+                </div>
+            </div>
+
+            @Html.Partial("_NotesFilter")
+        </div>
+        <button class="btn btn-primary pull-right" type="submit">Filter</button>
+    </div>
+}
+
+<p></p>
+@Html.Partial("_Loader", "publishedApplicationLoader")
+<div id="publishedApplicationList">
+    @Html.Partial("_List", new List<MigrationTool.Models.PublishedApplication>())
+    @Html.Partial("_SearchFirst")
+</div>

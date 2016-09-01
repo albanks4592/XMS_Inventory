@@ -1,0 +1,34 @@
+﻿@model MigrationTool.Models.Division
+@using MigrationTool.ViewModels
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<!-- Header and breadcrumbs -->
+@Html.Partial("_Breadcrumb", new Breadcrumb(ViewBag.Title, new BreadcrumbItem { LinkText = "Divisions", ControllerName = "Division" }))
+@if (User.IsInRole(MigrationTool.Roles.Edit) || User.IsInRole(MigrationTool.Roles.Admin))
+{
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }, new { @class = "btn btn-default btn-lg pull-right" })
+}
+<h2>@ViewBag.Title</h2>
+
+<dl class="dl-horizontal">
+    <dt>@Html.DisplayNameFor(model => model.Name)</dt>
+    <dd>@Html.DisplayFor(model => model.Name)</dd>
+</dl>
+
+<div class="row">
+    @if (User.IsInRole(MigrationTool.Roles.Edit) || User.IsInRole(MigrationTool.Roles.Admin))
+    {
+        <div class="col-md-6">
+            @Html.Partial("_NoteForm", Model)
+        </div>
+    }
+
+    <div class="col-md-6">
+        @Html.Partial("_TagForm", Model)
+    </div>
+</div>
+
+@Html.Partial("_NoteList", Model)

@@ -1,0 +1,51 @@
+﻿@model IEnumerable<MigrationTool.Models.WorkflowStepDefinition>
+@{
+    bool? canEdit = null;
+}
+<table class="table table-striped">
+    <tr>
+        <th>@Html.DisplayNameFor(model => model.Name)</th>
+        <th>@Html.DisplayNameFor(model => model.GroupName)</th>
+        <th>@Html.DisplayNameFor(model => model.ResponsibleParty.Name)</th>
+        @if (User.IsInRole(MigrationTool.Roles.Edit) || User.IsInRole(MigrationTool.Roles.Admin))
+        {
+            <th></th>
+            <th></th>
+        }
+    </tr>
+    @if (Model != null && Model.Count() > 0)
+    {
+        int max = Model.Max(a => a.SortOrder);
+        foreach (var item in Model.OrderBy(a => a.SortOrder))
+        {
+            if (!canEdit.HasValue)
+            {
+                canEdit = item.WorkflowDefinition.WorkflowInstances.Count() == 0;
+            }
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                <td>@Html.DisplayFor(modelItem => item.GroupName)</td>
+                <td>@Html.DisplayFor(modelItem => item.ResponsibleParty.Name)</td>
+                @if (User.IsInRole(MigrationTool.Roles.Edit) || User.IsInRole(MigrationTool.Roles.Admin))
+                {
+                    <td>
+                        @if (canEdit.Value)
+                        {
+                            <div class="btn-group">
+                                <button class="btn btn-default @if(item.SortOrder == 0) {<text>disabled</text>}" type="submit" name="moveUp" value="@item.Id"><span class="glyphicon glyphicon-chevron-up"></span></button>
+                                <button class="btn btn-default @if(item.SortOrder == max) {<text>disabled</text>}" type="submit" name="moveDown" value="@item.Id"><span class="glyphicon glyphicon-chevron-down"></span></button>
+                            </div>
+                        }
+                    </td>
+                    <td>
+                        <button class="btn btn-default" id="@item.Id" data-toggle="modal" data-target="#editWorkflowStepDialog">Edit</button>
+                        @if (canEdit.Value)
+                        {
+                            <button class="btn btn-default" type="submit" name="remove" value="@item.Id">Remove</button>
+                        }
+                    </td>
+                }
+            </tr>
+        }
+    }
+</table>

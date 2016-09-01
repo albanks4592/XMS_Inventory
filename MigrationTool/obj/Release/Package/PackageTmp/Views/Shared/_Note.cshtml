@@ -1,0 +1,57 @@
+﻿@model MigrationTool.Models.Note
+@{
+    string panelClass = "panel-default";
+    string panelTitle = "Default";
+    string glyphIconClass = "";
+
+    switch (Model.NoteType)
+    {
+        case 0:
+            panelClass = "panel-info";
+            panelTitle = "Information";
+            glyphIconClass = "glyphicon-info-sign";
+            break;
+        case 1:
+            panelClass = "panel-success";
+            panelTitle = "Success";
+            glyphIconClass = "glyphicon-ok";
+            break;
+        case 2:
+            panelClass = "panel-warning";
+            panelTitle = "Warning";
+            glyphIconClass = "glyphicon-warning-sign";
+            break;
+        case 3:
+            panelClass = "panel-danger";
+            panelTitle = "Danger";
+            glyphIconClass = "glyphicon-exclamation-sign";
+            break;
+    }
+}
+<div class="panel @panelClass">
+    <div class="panel-heading clearfix">
+        <div class="pull-left">
+            <h3 class="panel-title">
+                <span class="glyphicon @glyphIconClass"></span>
+                @panelTitle
+            </h3>
+        </div>
+        <div class="pull-right">
+            @Model.User.DisplayName - @Html.DisplayFor(model => model.CreatedAt)
+            @if (Model.User.Username.Equals(User.Identity.Name, StringComparison.InvariantCultureIgnoreCase) && (User.IsInRole(MigrationTool.Roles.Edit) || User.IsInRole(MigrationTool.Roles.Admin)))
+            {
+                <text>&nbsp;</text>
+                <button type="submit" class="close" name="noteId" value="@Model.Id"><span>&times;</span><span class="sr-only">Delete</span></button>
+            }
+        </div>
+    </div>
+    <div class="panel-body">
+        @{
+            string[] paragraphs = Model.Body.Replace("\r", string.Empty).Split('\n');
+            foreach (string paragraph in paragraphs)
+            {
+                <p>@paragraph</p>
+            }
+        }
+    </div>
+</div>

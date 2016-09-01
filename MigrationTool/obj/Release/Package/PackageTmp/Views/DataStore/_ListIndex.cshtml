@@ -1,0 +1,33 @@
+﻿@model IEnumerable<MigrationTool.ViewModels.DataStoreListIndexViewModel>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.Name)</th>
+            <th>@Html.DisplayNameFor(model => model.DataStoreGroup)</th>
+            <th>@Html.DisplayNameFor(model => model.DataStoreCategory)</th>
+            <th>@Html.DisplayNameFor(model => model.Capacity)</th>
+            <th>@Html.DisplayNameFor(model => model.ActiveVirtualMachineCount)</th>
+            <th>@MigrationTool.Strings.Usage</th>
+            <th>@Html.DisplayNameFor(model => model.Notes)</th>
+            <th>@Html.DisplayNameFor(model => model.Tags)</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null) { 
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => item)</td>
+                    <td>@Html.DisplayFor(modelItem => item.DataStoreGroup)</td>
+                    <td>@Html.DisplayFor(modelItem => item.DataStoreCategory)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Capacity)</td>
+                    <td>@Html.DisplayFor(modelItem => item.ActiveVirtualMachineCount)</td>
+                    <td>@Html.Partial("_ProgressBar_StorageCapacity", item)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Notes)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Tags)</td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+@Html.Partial("_RecordCount", Model == null ? 0 : Model.Count())

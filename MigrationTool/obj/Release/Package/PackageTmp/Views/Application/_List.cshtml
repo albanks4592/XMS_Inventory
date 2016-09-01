@@ -1,0 +1,40 @@
+﻿@model IEnumerable<MigrationTool.Models.Application>
+<table class="table">
+    <tr>
+        <th colspan=2>@Html.DisplayNameFor(model => model.Name)</th>
+        <th>Binaries</th>
+        <th>@Html.DisplayNameFor(model => model.BinariesVerified)</th>
+        <th>@Html.DisplayNameFor(model => model.Notes)</th>
+        <th>@Html.DisplayNameFor(model => model.TagsMetas)</th>
+    </tr>
+    @if (Model != null)
+    {
+        foreach (var item in Model.OrderBy(x => x.Name))
+        {
+            int binaryCount = item.Binaries.Count();
+            <tr>
+                <td colspan=2>@Html.DisplayFor(modelItem => item)</td>
+                <td>
+                    @Html.DisplayFor(model => binaryCount, "IntThousands")
+                    @if(binaryCount > 0) {
+                        <button class="btn btn-link btn-xs" id="@(item.Id)_CollapseButton" data-toggle="collapse" data-target=".@(item.Id)-collapse"><span class="glyphicon glyphicon-plus"></span></button>
+                    }
+                </td>
+                <td>@Html.DisplayFor(modelItem => item.BinariesVerified)</td>
+                <td>@Html.DisplayFor(modelItem => item.Notes, "NoteCounts")</td>
+                <td>@Html.DisplayFor(modelItem => item.TagsMetas, "TagList")</td>
+            </tr>
+            foreach (var binary in item.Binaries.OrderBy(x => x.Name))
+            {
+                <tr class="active @(item.Id)-collapse collapse collapse-content" data-collapse-button="@(item.Id)_CollapseButton">
+                    <td></td>
+                    <td>@Html.DisplayFor(model => binary)</td>
+                    <td colspan=2></td>
+                    <td>@Html.DisplayFor(model => binary.Notes, "NoteCounts")</td>
+                    <td>@Html.DisplayFor(model => binary.TagsMetas, "TagList")</td>
+                </tr>
+            }
+        }
+    }
+</table>
+@Html.Partial("_RecordCount", Model == null ? 0 : Model.Count())

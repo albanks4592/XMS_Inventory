@@ -1,0 +1,5 @@
+﻿@model MigrationTool.Models.HypervisorGroupType
+@if (Model != null)
+{
+    @Html.ActionLink(Model.Name, "Details", "HypervisorGroupType", new { Id = Model.Id }, null)
+}

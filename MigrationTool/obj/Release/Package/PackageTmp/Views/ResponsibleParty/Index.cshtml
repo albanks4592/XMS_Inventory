@@ -1,0 +1,30 @@
+﻿@model IEnumerable<MigrationTool.Models.ResponsibleParty>
+@using MigrationTool.ViewModels
+
+@{
+    ViewBag.Title = "Index";
+}
+
+@Html.Partial("_Breadcrumb", new Breadcrumb("Responsible Parties"))
+<h2>@ViewBag.Title</h2>
+
+@using (Ajax.BeginForm("FilterIndex", "ResponsibleParty", new AjaxOptions {
+    InsertionMode = InsertionMode.Replace,
+    UpdateTargetId = "ResponsiblePartyList",
+    LoadingElementId = "ResponsiblePartyLoader",
+    OnBegin = "$(\"#ResponsiblePartyLoader .spinner\").spin();",
+    OnComplete = "$(\"#ResponsiblePartyLoader .spinner\").spin(false); $(\"#filterTextBox\").focus();"
+})) {
+    @Html.Partial("_StandardFilter")
+}
+
+<p></p>
+@if (User.IsInRole(MigrationTool.Roles.Edit) || User.IsInRole(MigrationTool.Roles.Admin))
+{
+    @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-default" })
+    <p></p>
+}
+@Html.Partial("_Loader", "ResponsiblePartyLoader")
+<div id="ResponsiblePartyList">
+    @Html.Partial("_List", Model)
+</div>

@@ -1,0 +1,54 @@
+﻿@model MigrationTool.Models.XenAppServerRole
+@using MigrationTool.ViewModels
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<!-- Header and breadcrumbs -->
+@Html.Partial("_Breadcrumb", new Breadcrumb(ViewBag.Title, new BreadcrumbItem { LinkText = "XenApp Server Roles", ControllerName = "XenAppServerRole" }))
+@if (User.IsInRole(MigrationTool.Roles.Edit) || User.IsInRole(MigrationTool.Roles.Admin))
+{
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }, new { @class = "btn btn-default btn-lg pull-right" })
+}
+<h2>@ViewBag.Title</h2>
+
+<dl class="dl-horizontal">
+    <dt>@Html.DisplayNameFor(model => model.Name)</dt>
+    <dd>@Html.DisplayFor(model => model.Name)</dd>
+
+    <dt>@Html.DisplayNameFor(model => model.Billable)</dt>
+    <dd>@Html.DisplayFor(model => model.Billable)</dd>
+</dl>
+
+<h2>XenApp Servers</h2>
+<div id="XenAppServerList">
+    @using (Ajax.BeginForm("GetXenAppServerList", new AjaxOptions()
+    {
+        InsertionMode = InsertionMode.Replace,
+        UpdateTargetId = "XenAppServerList",
+        LoadingElementId = "XenAppServerListLoader",
+        OnBegin = "$(\"#XenAppServerListLoader .spinner\").spin(true);$(\"#LoadXenAppServerListListButton\").remove();"
+    }))
+    {
+        @Html.Partial("_Loader", "XenAppServerListLoader")
+        @Html.Hidden("xenAppServerRoleId", Model.Id)
+        <button class="btn btn-default" type="submit" id="LoadXenAppServerListListButton">Load XenApp Server List</button>
+        <p></p>
+    }
+</div>
+
+<div class="row">
+    @if (User.IsInRole(MigrationTool.Roles.Edit) || User.IsInRole(MigrationTool.Roles.Admin))
+    {
+        <div class="col-md-6">
+            @Html.Partial("_NoteForm", Model)
+        </div>
+    }
+
+    <div class="col-md-6">
+        @Html.Partial("_TagForm", Model)
+    </div>
+</div>
+
+@Html.Partial("_NoteList", Model)

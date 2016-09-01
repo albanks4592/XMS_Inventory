@@ -1,0 +1,48 @@
+﻿@model IEnumerable<MigrationTool.Models.Application>
+@using MigrationTool.ViewModels
+
+@{
+    ViewBag.Title = "Index";
+}
+
+@Html.Partial("_Breadcrumb", new Breadcrumb("Applications"))
+<h2>Index of Applications</h2>
+
+@using (Ajax.BeginForm("FilterIndex", "Application", new AjaxOptions {
+    InsertionMode = InsertionMode.Replace,
+    UpdateTargetId = "applicationList",
+    LoadingElementId = "applicationLoader",
+    OnBegin = "$(\"#applicationLoader .spinner\").spin();",
+    OnComplete = "$(\"#applicationLoader .spinner\").spin(false);prepareCollapse();"
+})) {
+    @Html.Partial("_StandardFilter")
+}
+
+<p></p>
+@if (User.IsInRole(MigrationTool.Roles.Edit) || User.IsInRole(MigrationTool.Roles.Admin))
+{
+    @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-default" })
+    <p></p>
+}
+@Html.Partial("_Loader", "applicationLoader")
+<div id="applicationList">
+    @Html.Partial("_List", Model)
+</div>
+
+@section Scripts {
+    <script type="text/javascript">
+        function prepareCollapse() {
+            $(".collapse-content").on("show.bs.collapse", function () {
+                $("#" + $(this).data("collapse-button") + " span.glyphicon").removeClass("glyphicon-plus").addClass("glyphicon-minus");
+            });
+
+            $(".collapse-content").on("hide.bs.collapse", function () {
+                $("#" + $(this).data("collapse-button") + " span.glyphicon").removeClass("glyphicon-minus").addClass("glyphicon-plus");
+            });
+        }
+
+        $(function () {
+            prepareCollapse();
+        });
+    </script>
+}

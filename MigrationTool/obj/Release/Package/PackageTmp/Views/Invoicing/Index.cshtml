@@ -1,0 +1,317 @@
+﻿@model MigrationTool.ViewModels.Invoicing.IndexViewModel
+@using MigrationTool.ViewModels
+
+@{
+    ViewBag.Title = "Invoicing Dashboard";
+}
+
+@Html.Partial("_Breadcrumb", new Breadcrumb(ViewBag.Title))
+
+<h1>Resource Data</h1>
+
+<div class="row">
+    <div class="col-md-6">
+        <h2>Billable</h2>
+        <table class="table">
+            @* XenApp Servers *@
+            <tr>
+                <th colspan="2">
+                    <button type="button" class="btn btn-link btn-xs" data-toggle="collapse" data-target=".xaserver-collapse" id="xaserver_CollapseButton"><span class="glyphicon glyphicon-plus"></span></button>
+                    @Html.ActionLink("XenApp Servers", "Index", "Server")
+                </th>
+                <th class="text-right">@Html.DisplayFor(model => model.BillableServerCount, "IntThousands")</th>
+            </tr>
+
+            <tr class="xaserver-collapse collapse-content collapse" data-collapse-button="xaserver_CollapseButton">
+                <td></td>
+                <th colspan="2">By XenApp Farm Version</th>
+            </tr>
+
+            @foreach (var item in Model.BillableServersByFarmVersion)
+            {
+                <tr class="xaserver-collapse collapse-content collapse" data-collapse-button="xaserver_CollapseButton">
+                    <td></td>
+                    @if (item.Key == null)
+                    {
+                        <td>&lt;no XenApp Farm Version&gt;</td>
+                    }
+                    else
+                    {
+                        <td>@Html.DisplayFor(model => item.Key)</td>
+                    }
+                    <td class="text-right">@Html.DisplayFor(model => item.Value, "IntThousands")</td>
+                </tr>
+            }
+
+            <tr class="xaserver-collapse collapse-content collapse" data-collapse-button="xaserver_CollapseButton">
+                <td></td>
+                <th colspan="2">By Virtual Machine Type</th>
+            </tr>
+
+            @foreach (var item in Model.BillableServersByVmType)
+            {
+                <tr class="xaserver-collapse collapse-content collapse" data-collapse-button="xaserver_CollapseButton">
+                    <td></td>
+                    @if (item.Key == null)
+                    {
+                        <td>&lt;no Virtual Machine Type&gt;</td>
+                    }
+                    else
+                    {
+                        <td>@Html.DisplayFor(model => item.Key)</td>
+                    }
+                    <td class="text-right">@Html.DisplayFor(model => item.Value, "IntThousands")</td>
+                </tr>
+            }
+
+            <tr class="xaserver-collapse collapse-content collapse" data-collapse-button="xaserver_CollapseButton">
+                <td></td>
+                <th colspan="2">By XenApp Server Role</th>
+            </tr>
+
+            @foreach (var item in Model.BillableServersByRole)
+            {
+                <tr class="xaserver-collapse collapse-content collapse" data-collapse-button="xaserver_CollapseButton">
+                    <td></td>
+                    @if (item.Key == null)
+                    {
+                        <td>&lt;no XenApp Server Role&gt;</td>
+                    }
+                    else
+                    {
+                        <td>@Html.DisplayFor(model => item.Key)</td>
+                    }
+                    <td class="text-right">@Html.DisplayFor(model => item.Value, "IntThousands")</td>
+                </tr>
+            }
+
+            @* BrokerDesktops *@
+            @foreach (var desktopGroup in Model.BillableBrokerDesktopCounts)
+            {
+                Guid catalogTypeId = desktopGroup.CatalogType == null ? Guid.Empty : desktopGroup.CatalogType.Id;
+                string random = desktopGroup.RandomAllocation ? " (Pooled)" : "";
+                string randomId = desktopGroup.RandomAllocation ? "R" : "";
+                <tr>
+                    <th colspan="2">
+                        <button type="button" class="btn btn-link btn-xs" data-toggle="collapse" data-target=".brokerdesktop-@(catalogTypeId)@(randomId)-collapse" id="brokerdesktop_@(catalogTypeId)@(randomId)_CollapseButton"><span class="glyphicon glyphicon-plus"></span></button>
+                        @if (desktopGroup.CatalogType == null)
+                        {
+                            <text>&lt;no XenDesktop Catalog Type@(random)&gt;</text>
+                        }
+                        else
+                        {
+                            //<text>@(desktopGroup.CatalogType.Name)@(random)</text>
+                            @Html.DisplayFor(model => desktopGroup.CatalogType)
+                            <text>@(random)</text>
+                        }
+                    </th>
+                    <th class="text-right">@Html.DisplayFor(model => desktopGroup.Count, "IntThousands")</th>
+                </tr>
+                
+                foreach (var site in desktopGroup.Sites)
+                {
+                    <tr class="brokerdesktop-@(catalogTypeId)@(randomId)-collapse collapse-content collapse" data-collapse-button="brokerdesktop_@(catalogTypeId)@(randomId)_CollapseButton">
+                        <td></td>
+                        @if (site.Key == null)
+                        {
+                            <td>&lt;no XenDesktop Site&gt;</td>
+                        }
+                        else
+                        {
+                            <td>@Html.DisplayFor(model => site.Key)</td>
+                        }
+                        <td class="text-right">@Html.DisplayFor(model => site.Value, "IntThousands")</td>
+                    </tr>
+                }
+            }
+        </table>
+    </div>
+
+    <div class="col-md-6">
+        <h2>Not Billable</h2>
+        <table class="table">
+            @* XenApp Servers *@
+            <tr>
+                <th colspan="2">
+                    <button type="button" class="btn btn-link btn-xs" data-toggle="collapse" data-target=".ub-xaserver-collapse" id="ub_xaserver_CollapseButton"><span class="glyphicon glyphicon-plus"></span></button>
+                    @Html.ActionLink("XenApp Servers", "Index", "Server")
+                </th>
+                <th class="text-right">@Html.DisplayFor(model => Model.UnbillableServerCount, "IntThousands")</th>
+            </tr>
+
+            <tr class="ub-xaserver-collapse collapse-content collapse" data-collapse-button="ub_xaserver_CollapseButton">
+                <td></td>
+                <th colspan="2">By XenApp Farm Version</th>
+            </tr>
+
+            @foreach (var item in Model.UnbillableServersByFarmVersion)
+            {
+                <tr class="ub-xaserver-collapse collapse-content collapse" data-collapse-button="ub_xaserver_CollapseButton">
+                    <td></td>
+                    @if (item.Key == null)
+                    {
+                        <td>&lt;no XenApp Farm Version&gt;</td>
+                    }
+                    else
+                    {
+                        <td>@Html.DisplayFor(model => item.Key)</td>
+                    }
+                    <td class="text-right">@Html.DisplayFor(model => item.Value, "IntThousands")</td>
+                </tr>
+            }
+
+            <tr class="ub-xaserver-collapse collapse-content collapse" data-collapse-button="ub_xaserver_CollapseButton">
+                <td></td>
+                <th colspan="2">By Virtual Machine Type</th>
+            </tr>
+
+            @foreach (var item in Model.UnbillableServersByVmType)
+            {
+                <tr class="ub-xaserver-collapse collapse-content collapse" data-collapse-button="ub_xaserver_CollapseButton">
+                    <td></td>
+                    @if (item.Key == null)
+                    {
+                        <td>&lt;no Virtual Machine Type&gt;</td>
+                    }
+                    else
+                    {
+                        <td>@Html.DisplayFor(model => item.Key)</td>
+                    }
+                    <td class="text-right">@Html.DisplayFor(model => item.Value, "IntThousands")</td>
+                </tr>
+            }
+
+            <tr class="ub-xaserver-collapse collapse-content collapse" data-collapse-button="ub_xaserver_CollapseButton">
+                <td></td>
+                <th colspan="2">By XenApp Server Role</th>
+            </tr>
+
+            @foreach (var item in Model.UnbillableServersByRole)
+            {
+                <tr class="ub-xaserver-collapse collapse-content collapse" data-collapse-button="ub_xaserver_CollapseButton">
+                    <td></td>
+                    @if (item.Key == null)
+                    {
+                        <td>&lt;no XenApp Server Role&gt;</td>
+                    }
+                    else
+                    {
+                        <td>@Html.DisplayFor(model => item.Key)</td>
+                    }
+                    <td class="text-right">@Html.DisplayFor(model => item.Value, "IntThousands")</td>
+                </tr>
+            }
+
+            @* BrokerDesktops *@
+            @foreach (var desktopGroup in Model.UnbillableBrokerDesktopCounts)
+            {
+                Guid catalogTypeId = desktopGroup.CatalogType == null ? Guid.Empty : desktopGroup.CatalogType.Id;
+                string random = desktopGroup.RandomAllocation ? " (Pooled)" : "";
+                string randomId = desktopGroup.RandomAllocation ? "R" : "";
+                <tr>
+                    <th colspan="2">
+                        <button type="button" class="btn btn-link btn-xs" data-toggle="collapse" data-target=".ub-brokerdesktop-@(catalogTypeId)@(randomId)-collapse" id="ub_brokerdesktop_@(catalogTypeId)@(randomId)_CollapseButton"><span class="glyphicon glyphicon-plus"></span></button>
+                        @if (desktopGroup.CatalogType == null)
+                        {
+                            <text>&lt;no XenDesktop Catalog Type@(random)&gt;</text>
+                        }
+                        else
+                        {
+                            @Html.DisplayFor(model => desktopGroup.CatalogType)
+                            <text>@(random)</text>
+                        }
+                    </th>
+                    <th class="text-right">@Html.DisplayFor(model => desktopGroup.Count, "IntThousands")</th>
+                </tr>
+                
+                foreach (var site in desktopGroup.Sites)
+                {
+                    <tr class="ub-brokerdesktop-@(catalogTypeId)@(randomId)-collapse collapse-content collapse" data-collapse-button="ub_brokerdesktop_@(catalogTypeId)@(randomId)_CollapseButton">
+                        <td></td>
+                        @if (site.Key == null)
+                        {
+                            <td>&lt;no XenDesktop Site&gt;</td>
+                        }
+                        else
+                        {
+                            <td>@Html.DisplayFor(model => site.Key)</td>
+                        }
+                        <td class="text-right">@Html.DisplayFor(model => site.Value, "IntThousands")</td>
+                    </tr>
+                }
+            }
+        </table>
+    </div>
+</div>
+
+<h1>Definitions</h1>
+<div class="row">
+    <div class="col-md-6">
+        <h2>XenApp Servers</h2>
+        <p>A XenApp Server is considered billable if the following conditions are met:</p>
+        <ul>
+            <li>The server is a member of an active XenApp Farm</li>
+            <li>The server is a session host (in versions before 6.0 all servers are session hosts)</li>
+            <li>The server's machine type (indicated by its name) is billable</li>
+        </ul>
+        <div class="small">
+            <p>Technical logic checks</p>
+            <ul>
+                <li>Server is not marked as inactive</li>
+                <li>Farm to which the server belongs is not marked as inactive</li>
+                <li>Farm's version is marked as billable</li>
+                <li>Server's role is marked as billable</li>
+                <li>Server's machine type is marked as billable</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <h2>Brokered Desktops</h2>
+        <p>A Brokered Desktop is considered billable if the following conditions are met:</p>
+        <ul>
+            <li>The desktop is in a production catalog</li>
+            <li>The desktop is assigned to a user</li>
+            <li>That user is marked as ACTIVE in the GDDB</li>
+        </ul>
+        <div class="small">
+            <p>Technical logic checks</p>
+            <ul>
+                <li>Desktop is not marked as inactive</li>
+                <li>Catalog to which the desktop belongs is not marked as inactive</li>
+                <li>Catalog's type is marked as billable</li>
+                <li>At least one of the users entitled to the desktop is not marked as inactive</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <h2>Brokered Desktops (Pooled)</h2>
+        <p>Brokered Desktop Catalogs that contain pooled VMs are billed purely based on active VMs, since no user assignment takes place. The following conditions apply:</p>
+        <ul>
+            <li>The desktop is in a production catalog</li>
+            <li>The catalog uses Random Allocation</li>
+        </ul>
+        <div class="small">
+            <p>Technical logic checks</p>
+            <ul>
+                <li>Desktop is not marked as inactive</li>
+                <li>Catalog to which the desktop belongs is not marked as inactive</li>
+                <li>Catalog to which the desktop belongs is set for Random Allocation</li>
+                <li>Catalog's type is marked as billable</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script type="text/javascript">
+        $(".collapse-content").on("show.bs.collapse", function () {
+            $("#" + $(this).data("collapse-button") + " span.glyphicon").removeClass("glyphicon-plus").addClass("glyphicon-minus");
+        });
+
+        $(".collapse-content").on("hide.bs.collapse", function () {
+            $("#" + $(this).data("collapse-button") + " span.glyphicon").removeClass("glyphicon-minus").addClass("glyphicon-plus");
+        });
+    </script>
+}

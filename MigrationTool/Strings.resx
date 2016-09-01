@@ -1,0 +1,534 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Bytes" xml:space="preserve">
+    <value>Bytes</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="CapacityRule" xml:space="preserve">
+    <value>Capacity Rule</value>
+  </data>
+  <data name="CapacityRulePlural" xml:space="preserve">
+    <value>Capacity Rules</value>
+  </data>
+  <data name="CapacityRule_Average" xml:space="preserve">
+    <value>Average</value>
+  </data>
+  <data name="Capacity" xml:space="preserve">
+    <value>Capacity</value>
+  </data>
+  <data name="CapacityRule_ComputeOvercommitAntecedent" xml:space="preserve">
+    <value>Overcommit Ratio Antecedent</value>
+  </data>
+  <data name="CapacityRule_ComputeOvercommitConsequent" xml:space="preserve">
+    <value>Overcommit Ratio Consequent</value>
+  </data>
+  <data name="CapacityRule_ComputeOvercommitRatio" xml:space="preserve">
+    <value>Overcommit Ratio</value>
+  </data>
+  <data name="CapacityRule_ComputeRuleDescription_P0_P1_P2" xml:space="preserve">
+    <value>Compute, {0} vCPU(s) per VM, {1:n0}:{2:n0} overcommit ratio</value>
+  </data>
+  <data name="CapacityRule_ComputeVcpuCountType" xml:space="preserve">
+    <value>vCPUs Per VM</value>
+  </data>
+  <data name="CapacityRule_ComputeVcpusPerVm" xml:space="preserve">
+    <value>vCPUs Per VM</value>
+  </data>
+  <data name="CapacityRule_Maximum" xml:space="preserve">
+    <value>Maximum</value>
+  </data>
+  <data name="CapacityRule_MaximumRuleDescription_P0" xml:space="preserve">
+    <value>{0:n0} VM(s) maximum per entity</value>
+  </data>
+  <data name="CapacityRule_MaximumVms" xml:space="preserve">
+    <value>Maximum VMs</value>
+  </data>
+  <data name="CapacityRule_MemoryHostOverheadType" xml:space="preserve">
+    <value>Memory Overhead Per Host</value>
+  </data>
+  <data name="CapacityRule_MemoryPerVmType" xml:space="preserve">
+    <value>Memory Per VM</value>
+  </data>
+  <data name="CapacityRule_MemoryRuleDescription_MemoryPerVm_P0" xml:space="preserve">
+    <value>Memory, {0} per VM</value>
+  </data>
+  <data name="CapacityRule_MemoryRuleDescription_PerHostOverhead_P0" xml:space="preserve">
+    <value>, {0} overhead per host</value>
+  </data>
+  <data name="CapacityRule_MemoryRuleDescription_PerVmOverhead_P0" xml:space="preserve">
+    <value>, {0} overhead per VM</value>
+  </data>
+  <data name="CapacityRule_MemoryVmOverheadType" xml:space="preserve">
+    <value>Memory Overhead Per VM</value>
+  </data>
+  <data name="CapacityRule_Minimum" xml:space="preserve">
+    <value>Minimum</value>
+  </data>
+  <data name="CapacityRule_None" xml:space="preserve">
+    <value>None</value>
+  </data>
+  <data name="CapacityRule_Percent" xml:space="preserve">
+    <value>Percent</value>
+  </data>
+  <data name="CapacityRule_RuleType" xml:space="preserve">
+    <value>Rule Type</value>
+  </data>
+  <data name="CapacityRule_RuleType_Compute" xml:space="preserve">
+    <value>Compute</value>
+  </data>
+  <data name="CapacityRule_RuleType_Maximum" xml:space="preserve">
+    <value>Maximum VMs Per Entity</value>
+  </data>
+  <data name="CapacityRule_RuleType_Memory" xml:space="preserve">
+    <value>Memory</value>
+  </data>
+  <data name="CapacityRule_RuleType_Storage" xml:space="preserve">
+    <value>Storage</value>
+  </data>
+  <data name="CapacityRule_Specify" xml:space="preserve">
+    <value>Specify</value>
+  </data>
+  <data name="CapacityRule_StorageDataStoreOverheadType" xml:space="preserve">
+    <value>Storage Overhead Per Data Store</value>
+  </data>
+  <data name="CapacityRule_StorageRuleDescription_PerDataStoreOverhead_P0" xml:space="preserve">
+    <value>, {0} overhead per Data Store</value>
+  </data>
+  <data name="CapacityRule_StorageRuleDescription_PerVmOverhead_P0" xml:space="preserve">
+    <value>, {0} overhead per VM</value>
+  </data>
+  <data name="CapacityRule_StorageRuleDescription_StoragePerVm_P0" xml:space="preserve">
+    <value>Storage, {0} per VM</value>
+  </data>
+  <data name="CapacityRule_StorageVmOverheadType" xml:space="preserve">
+    <value>Storage Overhead Per VM</value>
+  </data>
+  <data name="CapacityRule_StorageVmSizeType" xml:space="preserve">
+    <value>Storage Per VM</value>
+  </data>
+  <data name="CapacityRule_Summary" xml:space="preserve">
+    <value>Summary</value>
+  </data>
+  <data name="ConfirmDeletion_P0" xml:space="preserve">
+    <value>Are you sure you want to delete this {0}?</value>
+  </data>
+  <data name="CreateAction" xml:space="preserve">
+    <value>Create</value>
+  </data>
+  <data name="CreatedDate" xml:space="preserve">
+    <value>Created Date</value>
+  </data>
+  <data name="CreateNew" xml:space="preserve">
+    <value>Create New</value>
+  </data>
+  <data name="DataStore" xml:space="preserve">
+    <value>Data Store</value>
+  </data>
+  <data name="DataStoreCategory" xml:space="preserve">
+    <value>Data Store Category</value>
+  </data>
+  <data name="DataStoreGroup" xml:space="preserve">
+    <value>Data Store Group</value>
+  </data>
+  <data name="DataStoreGroupPlural" xml:space="preserve">
+    <value>Data Store Groups</value>
+  </data>
+  <data name="DataStorePlural" xml:space="preserve">
+    <value>Data Stores</value>
+  </data>
+  <data name="DeleteAction" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="DetailsAction" xml:space="preserve">
+    <value>Details</value>
+  </data>
+  <data name="EditAction" xml:space="preserve">
+    <value>Edit</value>
+  </data>
+  <data name="FreeSpace" xml:space="preserve">
+    <value>Free Space</value>
+  </data>
+  <data name="Hypervisor" xml:space="preserve">
+    <value>Hypervisor</value>
+  </data>
+  <data name="HypervisorController" xml:space="preserve">
+    <value>Hypervisor Controller</value>
+  </data>
+  <data name="HypervisorControllerPlural" xml:space="preserve">
+    <value>Hypervisor Controllers</value>
+  </data>
+  <data name="HypervisorGroup" xml:space="preserve">
+    <value>Hypervisor Group</value>
+  </data>
+  <data name="HypervisorGroupPlural" xml:space="preserve">
+    <value>Hypervisor Groups</value>
+  </data>
+  <data name="HypervisorPlural" xml:space="preserve">
+    <value>Hypervisors</value>
+  </data>
+  <data name="Id" xml:space="preserve">
+    <value>Internal ID</value>
+  </data>
+  <data name="Inactive" xml:space="preserve">
+    <value>Inactive</value>
+  </data>
+  <data name="InactiveDate" xml:space="preserve">
+    <value>Inactive Date</value>
+  </data>
+  <data name="IndexAction" xml:space="preserve">
+    <value>Index</value>
+  </data>
+  <data name="IndexOf_P0" xml:space="preserve">
+    <value>Index of {0}</value>
+  </data>
+  <data name="LastUpdated" xml:space="preserve">
+    <value>Last Updated</value>
+  </data>
+  <data name="LocalStorage" xml:space="preserve">
+    <value>Local Storage</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="Note" xml:space="preserve">
+    <value>Note</value>
+  </data>
+  <data name="NotePlural" xml:space="preserve">
+    <value>Notes</value>
+  </data>
+  <data name="OvercommitRatio" xml:space="preserve">
+    <value>Overcommit Ratio</value>
+  </data>
+  <data name="Percent" xml:space="preserve">
+    <value>Percent</value>
+  </data>
+  <data name="PercentSignCharacter" xml:space="preserve">
+    <value>%</value>
+  </data>
+  <data name="RatioSeparatorCharacter" xml:space="preserve">
+    <value>:</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="Tag" xml:space="preserve">
+    <value>Tag</value>
+  </data>
+  <data name="TagPlural" xml:space="preserve">
+    <value>Tags</value>
+  </data>
+  <data name="VirtualMachineOptionalPluralAbbreviated" xml:space="preserve">
+    <value>VM(s)</value>
+  </data>
+  <data name="VirtualProcessorOptionalPluralAbbreviated" xml:space="preserve">
+    <value>vCPU(s)</value>
+  </data>
+  <data name="UsedSpace" xml:space="preserve">
+    <value>Used Space</value>
+  </data>
+  <data name="VirtualHardDrivePlural" xml:space="preserve">
+    <value>Virtual Hard Drives</value>
+  </data>
+  <data name="VirtualMachinePlural" xml:space="preserve">
+    <value>Virtual Machines</value>
+  </data>
+  <data name="DataStoreCategory_Id" xml:space="preserve">
+    <value>DataStoreCategory_Id</value>
+  </data>
+  <data name="DataStoreGroup_Id" xml:space="preserve">
+    <value>DataStoreGroup_Id</value>
+  </data>
+  <data name="HypervisorType" xml:space="preserve">
+    <value>Hypervisor Type</value>
+  </data>
+  <data name="HyperVisorVersion" xml:space="preserve">
+    <value>HyperVisor Version</value>
+  </data>
+  <data name="IPAddress" xml:space="preserve">
+    <value>IPAddress</value>
+  </data>
+  <data name="Memory" xml:space="preserve">
+    <value>Memory</value>
+  </data>
+  <data name="ProcessorCorePlural" xml:space="preserve">
+    <value>Processor Cores</value>
+  </data>
+  <data name="SiteLocation" xml:space="preserve">
+    <value>Site Location</value>
+  </data>
+  <data name="Status" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="TotalCapacity" xml:space="preserve">
+    <value>Total Capacity</value>
+  </data>
+  <data name="UsedCapacity" xml:space="preserve">
+    <value>Used Capacity</value>
+  </data>
+  <data name="UsedCapacityPercent" xml:space="preserve">
+    <value>Used Capacity Percent</value>
+  </data>
+  <data name="VirtualProcessorPlural" xml:space="preserve">
+    <value>Virtual Processors</value>
+  </data>
+  <data name="HypervisorWorkloadProfile" xml:space="preserve">
+    <value>Hypervisor Workload Profile</value>
+  </data>
+  <data name="HypervisorGroupId" xml:space="preserve">
+    <value>HypervisorGroup_Id</value>
+  </data>
+  <data name="HypervisorTypeId" xml:space="preserve">
+    <value>HypervisorType_Id</value>
+  </data>
+  <data name="HypervisorWorkloadProfileId" xml:space="preserve">
+    <value>HypervisorWorkloadProfile_Id</value>
+  </data>
+  <data name="Usage" xml:space="preserve">
+    <value>Usage</value>
+  </data>
+  <data name="IStorageResource_AverageStoragePerVm" xml:space="preserve">
+    <value>Average Storage Per VM</value>
+  </data>
+  <data name="IStorageResource_MaximumStoragePerVm" xml:space="preserve">
+    <value>Maximum Storage Per VM</value>
+  </data>
+  <data name="IStorageResource_MinimumStoragePerVm" xml:space="preserve">
+    <value>Minimum Storage Per VM</value>
+  </data>
+  <data name="TotalStorage" xml:space="preserve">
+    <value>Total Storage</value>
+  </data>
+  <data name="Calculation" xml:space="preserve">
+    <value>Calculation</value>
+  </data>
+  <data name="CapacityRule_Inherited" xml:space="preserve">
+    <value>Capacity Rules Inherited from Parent</value>
+  </data>
+  <data name="VmCapacity" xml:space="preserve">
+    <value>Virtual Machine Capacity</value>
+  </data>
+  <data name="HighAvailabilityCalculation" xml:space="preserve">
+    <value>High Availability Calculation</value>
+  </data>
+  <data name="ReservedHypervisors" xml:space="preserve">
+    <value>Reserved Hypervisors</value>
+  </data>
+  <data name="ReservedPercentage" xml:space="preserve">
+    <value>Reserved Percentage</value>
+  </data>
+  <data name="DetailPlural" xml:space="preserve">
+    <value>Details</value>
+  </data>
+  <data name="HypervisorGroupType" xml:space="preserve">
+    <value>Hypervisor Group Type</value>
+  </data>
+  <data name="HypervisorGroupTypeId" xml:space="preserve">
+    <value>HypervisorGroupType_Id</value>
+  </data>
+  <data name="TotalStorageCapacity" xml:space="preserve">
+    <value>Total Storage</value>
+  </data>
+  <data name="UsedStorageCapacity" xml:space="preserve">
+    <value>Used Storage</value>
+  </data>
+  <data name="UsedStorageCapacityPercent" xml:space="preserve">
+    <value>Used Storage Percent</value>
+  </data>
+  <data name="IComputeResource_AverageVcpusPerVm" xml:space="preserve">
+    <value>Average VCPUs per VM</value>
+  </data>
+  <data name="IComputeResource_MaximumVcpusPerVm" xml:space="preserve">
+    <value>Maximum VCPUs per VM</value>
+  </data>
+  <data name="IComputeResource_MinimumVcpusPerVm" xml:space="preserve">
+    <value>Minimum VCPUs per VM</value>
+  </data>
+  <data name="IMemoryResource_AverageMemoryPerVm" xml:space="preserve">
+    <value>Average Memory per VM</value>
+  </data>
+  <data name="IMemoryResource_MaximumMemoryPerVm" xml:space="preserve">
+    <value>Maximum Memory per VM</value>
+  </data>
+  <data name="IMemoryResource_MinimumMemoryPerVm" xml:space="preserve">
+    <value>Minimum Memory per VM</value>
+  </data>
+  <data name="LogicalCore" xml:space="preserve">
+    <value>Logical Core</value>
+  </data>
+  <data name="LogicalCorePlural" xml:space="preserve">
+    <value>Logical Cores</value>
+  </data>
+  <data name="HypervisorGroup_AcceptingNewBuilds" xml:space="preserve">
+    <value>New Builds</value>
+  </data>
+  <data name="CapacityConstraint" xml:space="preserve">
+    <value>Capacity Constraint</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="IncludesHighAvailability" xml:space="preserve">
+    <value>Takes into account High Availability</value>
+  </data>
+  <data name="None" xml:space="preserve">
+    <value>None</value>
+  </data>
+  <data name="VmCapacity_ByRuleType" xml:space="preserve">
+    <value>Capacity By Rule Type</value>
+  </data>
+  <data name="Application" xml:space="preserve">
+    <value>Application</value>
+  </data>
+  <data name="BinariesVerified" xml:space="preserve">
+    <value>Binaries Verified</value>
+  </data>
+  <data name="ApplicationVersion" xml:space="preserve">
+    <value>Application Version</value>
+  </data>
+  <data name="BrowserName" xml:space="preserve">
+    <value>Browser Name</value>
+  </data>
+  <data name="BusinessSolution" xml:space="preserve">
+    <value>Business Solution</value>
+  </data>
+  <data name="CommandLine" xml:space="preserve">
+    <value>Command Line</value>
+  </data>
+  <data name="Description" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="EndOfLife" xml:space="preserve">
+    <value>End of Life</value>
+  </data>
+  <data name="Farm" xml:space="preserve">
+    <value>Farm</value>
+  </data>
+  <data name="Folder" xml:space="preserve">
+    <value>Folder</value>
+  </data>
+  <data name="PublishedApplication" xml:space="preserve">
+    <value>Published Application</value>
+  </data>
+  <data name="Version" xml:space="preserve">
+    <value>Version</value>
+  </data>
+</root>

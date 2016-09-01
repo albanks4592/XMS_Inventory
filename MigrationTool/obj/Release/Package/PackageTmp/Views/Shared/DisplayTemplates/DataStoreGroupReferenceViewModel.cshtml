@@ -1,0 +1,12 @@
+﻿@model MigrationTool.ViewModels.DataStoreGroupReferenceViewModel
+@if (Model != null)
+{
+    if (Model.Inactive)
+    {
+        <s>@Html.ActionLink(Model.Name, "Details", "DataStoreGroup", new { Id = Model.Id }, null)</s>
+    }
+    else
+    {
+        @Html.ActionLink(Model.Name, "Details", "DataStoreGroup", new { Id = Model.Id }, null)
+    }
+}

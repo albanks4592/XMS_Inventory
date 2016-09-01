@@ -1,0 +1,5 @@
+﻿@model IEnumerable<MigrationTool.Models.TagsMeta>
+@foreach (var item in Model.OrderBy(x => x.Tag.Name))
+{
+    <span class="label label-default">@item.Tag.Name</span>
+}

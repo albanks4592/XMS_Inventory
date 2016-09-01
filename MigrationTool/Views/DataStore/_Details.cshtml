@@ -1,0 +1,48 @@
+﻿@model MigrationTool.ViewModels.DataStoreDetailsViewModel
+
+<dl class="dl-horizontal">
+    <dt>@Html.DisplayNameFor(model => model.Name)</dt>
+    <dd>@Html.DisplayFor(model => model.Name)</dd>
+
+    <dt>@Html.DisplayNameFor(model => model.DataStoreGroup)</dt>
+    <dd>@Html.DisplayFor(model => model.DataStoreGroup)</dd>
+
+    <dt>@Html.DisplayNameFor(model => model.DataStoreCategory)</dt>
+    <dd>@Html.DisplayFor(model => model.DataStoreCategory)</dd>
+
+    <dt>@Html.DisplayNameFor(model => model.LocalStorage)</dt>
+    <dd>@Html.DisplayFor(model => model.LocalStorage)</dd>
+
+    <dt>@Html.DisplayNameFor(model => model.Capacity)</dt>
+    <dd>@Html.DisplayFor(model => model.Capacity, "MemoryGB")</dd>
+
+    <dt>@Html.DisplayNameFor(model => model.FreeSpace)</dt>
+    <dd>@Html.DisplayFor(model => model.FreeSpace, "MemoryGB")</dd>
+
+    <dt>Usage</dt>
+    <dd>@Html.Partial("_ProgressBar_VmCapacity", Model)</dd>
+
+    <dt>@Html.DisplayNameFor(model => model.ActiveVirtualMachineCount)</dt>
+    <dd>@Html.DisplayFor(model => model.ActiveVirtualMachineCount)</dd>
+
+    <dt>@Html.DisplayNameFor(model => model.ActiveVirtualHardDriveCount)</dt>
+    <dd>@Html.DisplayFor(model => model.ActiveVirtualHardDriveCount)</dd>
+
+    <dt>@Html.DisplayNameFor(model => model.CreatedDate)</dt>
+    <dd>@Html.DisplayFor(model => model.CreatedDate)</dd>
+
+    <dt>@Html.DisplayNameFor(model => model.LastUpdated)</dt>
+    <dd>@Html.DisplayFor(model => model.LastUpdated)</dd>
+
+    <dt>@Html.DisplayNameFor(model => model.Inactive)</dt>
+    <dd>@Html.DisplayFor(model => model.Inactive)</dd>
+
+    @if (Model.Inactive && Model.InactiveDate != null)
+    {
+        <dt>@Html.DisplayNameFor(model => model.InactiveDate)</dt>
+        <dd>@Html.DisplayFor(model => model.InactiveDate)</dd>
+    }
+    
+    <dt>@Html.DisplayNameFor(model => model.TotalCapacity)</dt>
+    <dd>@Html.DisplayFor(model => model.TotalCapacity)</dd>
+</dl>

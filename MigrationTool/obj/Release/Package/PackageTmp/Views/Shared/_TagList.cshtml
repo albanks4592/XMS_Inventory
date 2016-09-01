@@ -1,0 +1,11 @@
+﻿@model IEnumerable<MigrationTool.Models.TagsMeta>
+@foreach (var item in Model.OrderBy(x => x.Tag.Name))
+{
+    <span class="label label-default">
+        @item.Tag.Name
+        @if (User.IsInRole(MigrationTool.Roles.Edit) || User.IsInRole(MigrationTool.Roles.Admin))
+        {
+            <button type="submit" class="btn btn-default" name="tagId" value="@item.Tag.Id"><span>&times;</span></button>
+        }
+    </span>@Html.Raw("&nbsp;")
+}

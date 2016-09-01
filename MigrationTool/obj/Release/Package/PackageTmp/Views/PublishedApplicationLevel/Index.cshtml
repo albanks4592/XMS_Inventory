@@ -1,0 +1,58 @@
+﻿@model IEnumerable<MigrationTool.Models.PublishedApplicationLevel>
+@using MigrationTool.ViewModels
+
+@{
+    ViewBag.Title = "Index";
+}
+
+@Html.Partial("_Breadcrumb", new Breadcrumb("Published Application Levels"))
+<h2>Index of Published Application Levels</h2>
+
+@using (Ajax.BeginForm("FilterIndex", "PublishedApplicationLevel", new AjaxOptions {
+    InsertionMode = InsertionMode.Replace,
+    UpdateTargetId = "PublishedApplicationLevelList",
+    LoadingElementId = "PublishedApplicationLevelLoader",
+    OnBegin = "$(\"#PublishedApplicationLevelLoader .spinner\").spin();",
+    OnComplete = "$(\"#PublishedApplicationLevelLoader .spinner\").spin(false);"
+})) {
+    string filter = "";
+    int? appLevel = null;
+    <div class="clearfix">
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => filter, "Filter")
+                    @Html.TextBoxFor(model => filter, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => filter)
+
+                    @Html.LabelFor(model => appLevel, "Application Level")
+                    @Html.TextBoxFor(model => appLevel, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => appLevel)
+                </div>
+            </div>
+
+            <div class="col-sm-6">
+                <div class="form-group">
+                    @Html.Label("Tags")
+                    @{Html.RenderAction("GetTagSelect", "Tag", new { tagName = "tagFilter" });}
+                    <p class="help-block">Separate multiple tags with a comma.</p>
+                </div>
+            </div>
+
+            @Html.Partial("_NotesFilter")
+        </div>
+        <button class="btn btn-primary pull-right" type="submit">Filter</button>
+    </div>
+}
+
+<p></p>
+@if (User.IsInRole(MigrationTool.Roles.Edit) || User.IsInRole(MigrationTool.Roles.Admin))
+{
+    @Html.ActionLink("Bulk Assignment", "BulkAssignment", null, new { @class = "btn btn-default" })
+    <p></p>
+}
+@Html.Partial("_Loader", "PublishedApplicationLevelLoader")
+<div id="PublishedApplicationLevelList">
+    @Html.Partial("_List", new List<MigrationTool.Models.PublishedApplicationLevel>())
+    @Html.Partial("_SearchFirst")
+</div>

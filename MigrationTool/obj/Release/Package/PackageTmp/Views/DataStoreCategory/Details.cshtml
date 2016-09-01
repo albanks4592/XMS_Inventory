@@ -1,0 +1,66 @@
+﻿@using MigrationTool.ViewModels;
+@model DataStoreCategoryDetailsViewModel
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<!-- Header and breadcrumbs -->
+@Html.Partial("_Breadcrumb", new Breadcrumb(ViewBag.Title, new BreadcrumbItem { LinkText = "Data Store Categories", ControllerName = "DataStoreCategory" }))
+@if (User.IsInRole(MigrationTool.Roles.Edit) || User.IsInRole(MigrationTool.Roles.Admin))
+{
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }, new { @class = "btn btn-default btn-lg pull-right" })
+}
+<h2>@ViewBag.Title</h2>
+
+<!-- Details -->
+<dl class="dl-horizontal">
+    <dt>@Html.DisplayNameFor(model => model.Name)</dt>
+    <dd>@Html.DisplayFor(model => model.Name)</dd>
+
+    <dt>@Html.DisplayNameFor(model => model.ActiveDataStoreCount)</dt>
+    <dd>@Html.DisplayFor(model => model.ActiveDataStoreCount)</dd>
+</dl>
+
+<!-- Data Store List -->
+<h2>Data Stores</h2>
+@if (Model.TotalDataStoreCount <= 10)
+{
+    Html.RenderAction("GetDataStoreList", new { DataStoreCategoryId = Model.Id });
+}
+else
+{
+    Html.RenderPartial("_Loader", "DataStoreListLoader");
+    <div id="DataStoreList">
+        @using (Ajax.BeginForm("GetDataStoreList", new AjaxOptions
+        {
+            InsertionMode = InsertionMode.Replace,
+            UpdateTargetId = "DataStoreList",
+            LoadingElementId = "DataStoreListLoader",
+            OnBegin = "$('#DataStoreListLoader .spinner').spin(true);$('#LoadDataStoreListButton').remove();",
+            OnComplete = "$('#DataStoreListLoader .spinner').spin(false);"
+        }))
+        {
+            @Html.Hidden("dataStoreCategoryId", Model.Id)
+            <button class="btn btn-default" type="submit" id="LoadDataStoreListButton">Load Data Store List (@Html.DisplayFor(model => model.TotalDataStoreCount))</button>
+            <p></p>
+        }
+    </div>
+}
+
+<!-- Notes and Tags -->
+<div class="row">
+    @if (User.IsInRole(MigrationTool.Roles.Edit) || User.IsInRole(MigrationTool.Roles.Admin))
+    {
+        <div class="col-md-6">
+            @Html.Partial("_NoteDetailsViewModelForm", Model)
+        </div>
+    }
+
+    <div class="col-md-6">
+        @Html.Partial("_TagDetailsViewModelForm", Model)
+    </div>
+
+</div>
+
+@Html.Partial("_NoteDetailsViewModelList", Model)

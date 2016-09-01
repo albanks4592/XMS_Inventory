@@ -1,0 +1,115 @@
+﻿<#@ template language="C#" HostSpecific="True" #>
+<#@ output extension=".cshtml" #>
+<#
+MvcTextTemplateHost mvcHost = (MvcTextTemplateHost)(Host);
+if(!String.IsNullOrEmpty(mvcHost.ViewDataTypeName)) {
+#>
+@using MigrationTool.ViewModels
+@model <#= mvcHost.ViewDataType.Name #>DetailsViewModel
+
+<#
+}
+
+// The following chained if-statement outputs the file header code and markup for a partial view, a content page, or a regular view.
+if(mvcHost.IsPartialView) {
+#>
+<#
+} else if(mvcHost.IsContentPage) {
+#>
+@{
+    ViewBag.Title = MigrationTool.Strings.DetailsAction;
+<#
+if (!String.IsNullOrEmpty(mvcHost.MasterPageFile)) {
+#>
+    Layout = "<#= mvcHost.MasterPageFile#>";
+<#
+}
+#>
+}
+
+<!-- Header and breadcrumbs -->
+@Html.Partial("_Breadcrumb", new Breadcrumb(ViewBag.Title, new BreadcrumbItem { LinkText = MigrationTool.Strings._________Plural, ControllerName = "<#= mvcHost.ViewDataType.Name #>" }))
+
+@if (User.IsInRole(MigrationTool.Roles.Edit) || User.IsInRole(MigrationTool.Roles.Admin))
+{
+    @Html.ActionLink(MigrationTool.Strings.EditAction, "Edit", new { id = Model.Id }, new { @class = "btn btn-default btn-lg pull-right" })
+}
+<h2>@ViewBag.Title</h2>
+
+<!-- Details -->
+@Html.Partial("_Details", Model)
+
+<!-- Tab headers -->
+<ul class="nav nav-tabs" role="tablist">
+    <li role="presentation" class="active"><a href="#DetailsTab" role="tab" data-toggle="tab">@MigrationTool.Strings.DetailPlural</a></li>
+    
+</ul>
+
+
+<!-- Tab content -->
+<div class="tab-content">
+    
+    <!-- Details tab -->
+    <div role="tabpanel" class="tab-pane active" id="DetailsTab">
+        <!-- Notes and Tags -->
+        <div class="row">
+            @if (User.IsInRole(MigrationTool.Roles.Edit) || User.IsInRole(MigrationTool.Roles.Admin))
+            {
+                <div class="col-md-6">
+                    @Html.Partial("_NoteDetailsViewModelForm", Model)
+                </div>
+            }
+
+            <div class="col-md-6">
+                @Html.Partial("_TagDetailsViewModelForm", Model)
+            </div>
+
+        </div>
+
+        @Html.Partial("_NoteDetailsViewModelList", Model)
+    </div>
+
+</div>
+
+@section Scripts {
+    <script type="text/javascript">
+        
+    </script>
+}
+<#
+} else {
+#>
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title><#= mvcHost.ViewName #></title>
+</head>
+<body>
+<#
+    PushIndent("    ");
+}
+#>
+<#
+if(!mvcHost.IsPartialView && !mvcHost.IsContentPage) {
+#>
+<div>
+    
+</div>
+<#
+}
+#>
+<#
+if(!mvcHost.IsPartialView && !mvcHost.IsContentPage) {
+    ClearIndent();
+#>
+</body>
+</html>
+<#
+}
+#>

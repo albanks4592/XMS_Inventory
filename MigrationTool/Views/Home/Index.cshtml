@@ -1,0 +1,70 @@
+﻿@using MigrationTool.ViewModels;
+@model HomeViewModel
+
+@{
+    ViewBag.Title = "Home Page";
+
+    @section BeforeContainer {
+        <div class="jumbotron">
+            <div class="container">
+                <h1>Novartis XMS</h1>
+                <p>A tool for showing data and statistics for the Novartis Environment.</p>
+            </div>
+        </div>
+    }
+    var DisplayName = Model.DataSources.FirstOrDefault();
+}
+
+<h2>Data Sources</h2>
+<p>Check the status of the data sources to see if the all the data in the Database is current.</p>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>@Html.DisplayNameFor(model => DisplayName.Name)</th>
+            <th>@Html.DisplayNameFor(model => DisplayName.Succcess)</th>
+            <th>@Html.DisplayNameFor(model => DisplayName.CreateDate)</th>
+            <th>@Html.DisplayNameFor(model => DisplayName.Duration)</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var Item in Model.DataSources)
+        {
+            
+            if (Item.Succcess) 
+            {    
+            <tr class="success">
+                <td>@Html.DisplayFor(modelItem => Item.Name)</td>
+                <td><span class="glyphicon glyphicon-ok" aria-hidden="true" style="color:green"></span></td>
+                <td>@Html.DisplayFor(modelItem => Item.CreateDate)</td>
+                <td>@Html.DisplayFor(modelItem => Item.Duration,"TimeSpanHoursMinutes")</td>
+            </tr>
+            }
+            else
+            {
+                <tr class="danger">
+                    <td>@Html.DisplayFor(modelItem => Item.Name)</td>
+                    <td><span class="glyphicon glyphicon-remove" aria-hidden="true" style="color:red"></span></td>
+                    <td>@Html.DisplayFor(modelItem => Item.CreateDate)</td>
+                    <td>@Html.DisplayFor(modelItem => Item.Duration, "TimeSpanHoursMinutes")</td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+   
+
+
+
+
+
+       
+
+      
+        
+
+
+@section Scripts {
+    <script type="text/javascript">
+        $("[data-toggle='popover']").popover();
+    </script>
+}

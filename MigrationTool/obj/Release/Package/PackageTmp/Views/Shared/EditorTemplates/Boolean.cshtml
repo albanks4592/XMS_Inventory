@@ -1,0 +1,15 @@
+﻿@model bool?
+@{
+    bool val;
+    if (Model.HasValue) {
+        val = (bool)Model;
+    } else {
+        val = false;
+    }
+}
+<div class="checkbox">
+    <label>
+        @Html.CheckBox("", val)
+        @Html.DisplayNameForModel()
+    </label>
+</div>

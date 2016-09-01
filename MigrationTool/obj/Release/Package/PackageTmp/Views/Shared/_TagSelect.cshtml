@@ -1,0 +1,7 @@
+﻿@model IEnumerable<MigrationTool.Models.Tag>
+<select name="@ViewBag.TagName" class="select2-tagselect form-control" multiple="multiple">
+    @foreach (var tag in Model.OrderBy(x => x.Name))
+    {
+        <option value="@tag.Name">@tag.Name</option>
+    }
+</select>

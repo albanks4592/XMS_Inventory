@@ -1,0 +1,47 @@
+﻿@model IEnumerable<MigrationTool.Models.HypervisorWorkloadProfile>
+
+@helper typeName(int type) {
+    switch (type) {
+        case 0:
+            @:VCPU per Physical Core
+            break;
+            
+        case 1:
+            @:Maximum Virtual Machine Limit
+            break;
+            
+        default:
+            @:None
+            break;
+    }
+}
+
+<table class="table table-striped">
+    <tr>
+        <th>@Html.DisplayNameFor(model => model.Name)</th>
+        <th>@Html.DisplayNameFor(model => model.Type)</th>
+        <th>Metric</th>
+        <th>@Html.DisplayNameFor(model => model.Notes)</th>
+        <th>@Html.DisplayNameFor(model => model.TagsMetas)</th>
+    </tr>
+    @foreach (var item in Model.OrderBy(model => model.Name))
+    {
+        <tr>
+            <td>@Html.DisplayFor(modelItem => item)</td>
+            <td>@typeName(item.Type)</td>
+            @switch (item.Type)
+            {
+                case 0:
+                   <td>@Html.DisplayFor(modelItem => item.VirtualProcessorsPerCore)</td>
+                   break;
+
+                case 1:
+                   <td>@Html.DisplayFor(modelItem => item.MaxVirtualMachines)</td>
+                   break;
+            }
+            <td>@Html.DisplayFor(modelItem => item.Notes, "NoteCounts")</td>
+            <td>@Html.DisplayFor(modelItem => item.TagsMetas, "TagList")</td>
+        </tr>
+    }
+</table>
+@Html.Partial("_RecordCount", Model == null ? 0 : Model.Count())

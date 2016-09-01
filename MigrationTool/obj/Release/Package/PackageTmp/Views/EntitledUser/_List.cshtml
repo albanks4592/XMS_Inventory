@@ -1,0 +1,22 @@
+﻿@model IEnumerable<MigrationTool.Models.EntitledUser>
+<table class="table table-striped">
+    <tr>
+        <th>@Html.DisplayNameFor(model => model.Username)</th>
+        <th>@Html.DisplayNameFor(model => model.FullName)</th>
+        <th>@Html.DisplayNameFor(model => model.Division)</th>
+        <th>@Html.DisplayNameFor(model => model.Notes)</th>
+        <th>@Html.DisplayNameFor(model => model.TagsMetas)</th>
+    </tr>
+    @if (Model != null) {
+        foreach (var item in Model.OrderBy(x => x.Username)) {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item)</td>
+                <td>@Html.DisplayFor(modelItem => item.FullName)</td>
+                <td>@Html.DisplayFor(modelItem => item.Division)</td>
+                <td>@Html.DisplayFor(modelItem => item.Notes, "NoteCounts")</td>
+                <td>@Html.DisplayFor(modelItem => item.TagsMetas, "TagList")</td>
+            </tr>
+        }
+    }
+</table>
+@Html.Partial("_RecordCount", Model == null ? 0 : Model.Count())

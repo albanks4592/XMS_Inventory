@@ -1,0 +1,91 @@
+﻿@model MigrationTool.Models.XenAppFarmFolder
+
+@{
+    ViewBag.Title = "Edit";
+    IEnumerable<MigrationTool.Models.XenAppFarmFolder> rootPath = Model.PathFromRoot();
+    MigrationTool.Models.XenAppFarm farm = rootPath.First().XenAppFarm;
+}
+
+<p></p>
+<ol class="breadcrumb">
+    <li>@Html.ActionLink("Home", "Index", "Home")</li>
+    <li>@Html.DisplayFor(modelItem => farm)</li>
+    @foreach (var item in rootPath)
+    {
+        <li>
+            @if (item == Model)
+            {
+                @item.Name
+            }
+            else
+            {
+                @Html.ActionLink(item.Name, "Details", "XenAppFarmFolder", new { Id = item.Id }, null)
+            }
+        </li>
+    }
+</ol>
+<h2>Edit</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.ValidationSummary(true)
+    @Html.HiddenFor(model => model.Id)
+    @Html.HiddenFor(model => model.XenAppFarm_Id)
+    @Html.HiddenFor(model => model.Parent_Id)
+    @Html.HiddenFor(model => model.LastUpdated)
+            
+    <div class="form-group">
+        @Html.LabelFor(model => model.Name)
+        @Html.EditorFor(model => model.Name)
+        @Html.ValidationMessageFor(model => model.Name)
+    </div>
+    
+    <div class="well">
+        @if (User.IsInRole(MigrationTool.Roles.Admin))
+        {
+            <div class="form-group">
+                @Html.LabelFor(model => model.CreatedDate)
+                @Html.EditorFor(model => model.CreatedDate)
+                @Html.ValidationMessageFor(model => model.CreatedDate)
+            </div>
+        }
+        else
+        {
+            @Html.HiddenFor(model => model.CreatedDate)
+        }
+            
+        <div class="form-group">
+            @Html.EditorFor(model => model.Inactive)
+            @Html.ValidationMessageFor(model => model.Inactive)
+        </div>
+            
+        <div class="form-group">
+            @Html.LabelFor(model => model.InactiveDate)
+            @Html.EditorFor(model => model.InactiveDate)
+            @Html.ValidationMessageFor(model => model.InactiveDate)
+        </div>
+    </div>
+        
+    <button type="submit" class="btn btn-primary">Save</button>
+    @Html.ActionLink("Cancel", "Details", new { Id = Model.Id }, new { @class = "btn btn-default" });
+}
+
+@section Scripts {
+    <script type="text/javascript">
+        $(function () {
+            configurePickers();
+        });
+
+        function configurePickers() {
+            $(".datetimepicker").each(function () {
+                var $this = $(this);
+                $this.datetimepicker({
+                    useCurrent: false,
+                    useSeconds: false,
+                    showToday: true,
+                    sideBySide: true
+                });
+            });
+        }
+    </script>
+}

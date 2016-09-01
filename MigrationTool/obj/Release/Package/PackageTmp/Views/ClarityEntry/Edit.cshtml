@@ -1,0 +1,35 @@
+﻿@model MigrationTool.Models.ClarityEntry
+@using MigrationTool.ViewModels
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+@Html.Partial("_Breadcrumb", new Breadcrumb(ViewBag.Title, new BreadcrumbItem { LinkText = "Clarity Entries", ControllerName = "ClarityEntry" }))
+<h2>@ViewBag.Title</h2>
+
+@using (Html.BeginForm()) {
+    @Html.ValidationSummary(true)
+    @Html.HiddenFor(model => model.Id)
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Name)
+        @Html.EditorFor(model => model.Name)
+        @Html.ValidationMessageFor(model => model.Name)
+    </div>
+            
+    <div class="form-group">
+        @Html.LabelFor(model => model.ClarityId)
+        @Html.EditorFor(model => model.ClarityId)
+        @Html.ValidationMessageFor(model => model.ClarityId)
+    </div>
+        
+    <button type="submit" class="btn btn-primary">Save</button>
+    @Html.ActionLink("Cancel", "Details", new { Id = Model.Id }, new { @class = "btn btn-default" })
+    if (User.IsInRole(MigrationTool.Roles.Admin))
+    {
+        <div class="pull-right">
+            @Html.ActionLink("Delete", "Delete", new { Id = Model.Id }, new { @class = "btn btn-danger" })
+        </div>
+    }                                                                                                            
+}

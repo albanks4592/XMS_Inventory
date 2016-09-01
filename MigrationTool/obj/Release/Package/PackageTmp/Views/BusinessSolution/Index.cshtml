@@ -1,0 +1,29 @@
+﻿@model IEnumerable<MigrationTool.Models.BusinessSolution>
+@using MigrationTool.ViewModels
+
+@{
+    ViewBag.Title = "Index";
+}
+@Html.Partial("_Breadcrumb", new Breadcrumb("Business Solutions"))
+<h2>Index of Business Solutions</h2>
+
+@using (Ajax.BeginForm("FilterIndex", "BusinessSolution", new AjaxOptions {
+    InsertionMode = InsertionMode.Replace,
+    UpdateTargetId = "BusinessSolutionList",
+    LoadingElementId = "BusinessSolutionLoader",
+    OnBegin = "$(\"#BusinessSolutionLoader .spinner\").spin();",
+    OnComplete = "$(\"#BusinessSolutionLoader .spinner\").spin(false);"
+})) {
+    @Html.Partial("_StandardFilter")
+}
+
+<p></p>
+@if (User.IsInRole(MigrationTool.Roles.Edit) || User.IsInRole(MigrationTool.Roles.Admin))
+{
+    @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-default" })
+    <p></p>
+}
+@Html.Partial("_Loader", "BusinessSolutionLoader")
+<div id="BusinessSolutionList">
+    @Html.Partial("_List", Model)
+</div>

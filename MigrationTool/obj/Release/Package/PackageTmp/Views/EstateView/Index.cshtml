@@ -1,0 +1,114 @@
+﻿@model IEnumerable<MigrationTool.Models.BusinessSolution>
+@using MigrationTool.ViewModels
+
+@{
+    ViewBag.Title = "Estate View";
+}
+
+@Html.Partial("_Breadcrumb", new Breadcrumb(ViewBag.Title))
+<h2>@ViewBag.Title</h2>
+
+@using (Ajax.BeginForm("FilterIndex", "EstateView", new AjaxOptions
+{
+    InsertionMode = InsertionMode.Replace,
+    UpdateTargetId = "businessSolutionList",
+    LoadingElementId = "businessSolutionLoader",
+    OnBegin = "$(\"#FilterButton\").prop(\"disabled\", true);$(\"#businessSolutionLoader .spinner\").spin();",
+    OnComplete = "$(\"#FilterButton\").prop(\"disabled\", false);$(\"#businessSolutionLoader .spinner\").spin(false); $(\"[data-toggle='popover']\").popover();"
+}))
+{
+    string filter = "";
+    Guid? businessActionId = null;
+    Guid? divisionId = null;
+    Guid? strategicVendorId = null;
+    Guid? applicationId = null;
+    Guid? responsiblePartyId = null;
+    int? status = null;
+    <div class="clearfix">
+        <h3>Filter</h3>
+
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => filter, "Name")
+                    @Html.EditorFor(model => filter)
+                    @Html.ValidationMessageFor(model => filter)
+                </div>
+            </div>
+
+            <div class="col-sm-6">
+                <div class="form-group">
+                    @Html.Label("Tags")
+                    @{Html.RenderAction("GetTagSelect", "Tag", new { tagName = "tagFilter" });}
+                    <p class="help-block">Separate multiple tags with a comma.</p>
+                </div>
+            </div>
+
+            <div class="col-sm-6 col-md-4">
+                <div class="form-group">
+                    @Html.LabelFor(model => businessActionId, "Business Action")
+                    @Html.DropDownListFor(model => businessActionId, (SelectList)ViewBag.BusinessAction_Id_Select, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => businessActionId)
+                </div>
+            </div>
+
+            <div class="col-sm-6 col-md-4">
+                <div class="form-group">
+                    @Html.LabelFor(model => divisionId, "Division")
+                    @Html.DropDownListFor(model => divisionId, (SelectList)ViewBag.Division_Id_Select, "<any>", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => divisionId)
+                </div>
+            </div>
+
+            <div class="col-sm-6 col-md-4">
+                <div class="form-group">
+                    @Html.LabelFor(model => strategicVendorId, "Strategic Vendor")
+                    @Html.DropDownListFor(model => strategicVendorId, (SelectList)ViewBag.StrategicVendor_Id_Select, "<any>", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => strategicVendorId)
+                </div>
+            </div>
+
+            <div class="col-sm-6 col-md-4">
+                <div class="form-group">
+                    @Html.LabelFor(model => applicationId, "Application")
+                    @Html.DropDownListFor(model => applicationId, (SelectList)ViewBag.Application_Id_Select, "<any>", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => applicationId)
+                </div>
+            </div>
+
+            <div class="col-sm-6 col-md-4">
+                <div class="form-group">
+                    @Html.LabelFor(model => responsiblePartyId, "Current Responsible Party")
+                    @Html.DropDownListFor(model => responsiblePartyId, (SelectList)ViewBag.ResponsibleParty_Id_Select, "<any>", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => responsiblePartyId)
+                </div>
+            </div>
+
+            <div class="col-sm-6 col-md-4">
+                <div class="form-group">
+                    @Html.LabelFor(model => status, "Status")
+                    @Html.DropDownListFor(model => status, (SelectList)ViewBag.Status_Select, "<any>", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => status)
+                </div>
+            </div>
+        </div>
+
+        <div class="pull-right">
+            <button type="reset" class="btn btn-default">Reset</button>
+            <button type="submit" class="btn btn-primary" id="FilterButton">Filter</button>
+        </div>
+    </div>
+}
+
+<hr />
+
+@Html.Partial("_Loader", "businessSolutionLoader")
+<div id="businessSolutionList">
+    @Html.Partial("_List", Model)
+</div>
+
+@section Scripts {
+    <script type="text/javascript">
+        $("[data-toggle='popover']").popover();
+    </script>
+}

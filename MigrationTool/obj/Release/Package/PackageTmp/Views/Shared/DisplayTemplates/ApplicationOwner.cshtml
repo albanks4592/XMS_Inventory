@@ -1,0 +1,5 @@
+﻿@model MigrationTool.Models.ApplicationOwner
+@if (Model != null)
+{
+    @Html.ActionLink(Model.FullName, "Details", "ApplicationOwner", new { id = Model.Id }, null)
+}

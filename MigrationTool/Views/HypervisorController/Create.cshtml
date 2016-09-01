@@ -1,0 +1,27 @@
+﻿@model MigrationTool.Models.HypervisorController
+@using MigrationTool.ViewModels
+
+@{
+    ViewBag.Title = MigrationTool.Strings.CreateAction;
+}
+
+<!-- Header and breadcrumbs -->
+@Html.Partial("_Breadcrumb", new Breadcrumb(ViewBag.Title, new BreadcrumbItem { LinkText = MigrationTool.Strings.HypervisorControllerPlural, ControllerName = "HypervisorController" }))
+
+<h2>@ViewBag.Title</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <!-- Name -->
+    <div class="form-group">
+        @Html.LabelFor(model => model.Name)
+        @Html.EditorFor(model => model.Name)
+        @Html.ValidationMessageFor(model => model.Name)
+    </div>
+
+    <button type="submit" class="btn btn-primary">@MigrationTool.Strings.CreateAction</button>
+    @Html.ActionLink(MigrationTool.Strings.Cancel, "Index", null, new { @class = "btn btn-default" })
+}

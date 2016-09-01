@@ -1,0 +1,142 @@
+﻿@model MigrationTool.ViewModels.StorageDashboardViewModel
+
+@{
+    ViewBag.Title = "Storage";
+}
+
+<h1>Storage Dashboard</h1>
+
+@foreach (var category in Model.DataStoreCategories)
+{
+    if (category.TopDataStoresUsedPercent.Count() > 0) {
+        <h2>@category.Name</h2>
+        <div class="row">
+            <div class="col-md-4">
+                <h3>Top 5 Data Stores by Usage Percent</h3>
+                <table class="table table-condensed">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th class="col-xs-3 text-right">Usage</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in category.TopDataStoresUsedPercent)
+                        {
+                            <tr>
+                                <td>@Html.DisplayFor(model => item)</td>
+                                <td class="text-right">@Html.DisplayFor(model => item.UsedCapacityPercent)</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="col-md-4">
+                <h3>Top 5 Data Stores by Used Space</h3>
+                <table class="table table-condensed">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th class="col-xs-3 text-right">Free Space</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in category.TopDataStoresUsedSpace)
+                        {
+                            <tr>
+                                <td>@Html.DisplayFor(model => item)</td>
+                                <td class="text-right">@Html.DisplayFor(model => item.FreeSpace, "MemoryGB")</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="col-md-4">
+                <h3>Top 5 Data Stores by Virtual Machine Count</h3>
+                <table class="table table-condensed">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th class="col-xs-3 text-right">VMs</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in category.TopDataStoresVirtualMachineCount)
+                        {
+                            <tr>
+                                <td>@Html.DisplayFor(model => item)</td>
+                                <td class="text-right">@Html.DisplayFor(model => item.ActiveVirtualMachineCount)</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        if (category.DataStoreGroupCount > 0) { 
+            <h3>Clustered Storage</h3>
+            if (category.DataStoreGroupCount <= 10)
+            {
+                Html.RenderAction("GetClusteredStorageList", new { dataStoreCategoryId = category.Id });
+            }
+            else
+            {
+                Html.RenderPartial("_Loader", "ClusteredStorageListLoader-" + category.Id.ToString());
+                <div id="ClusteredStorageList-@category.Id">
+                    @using (Ajax.BeginForm("GetClusteredStorageList", new AjaxOptions
+                {
+                    InsertionMode = InsertionMode.Replace,
+                    UpdateTargetId = "ClusteredStorageList-" + category.Id.ToString(),
+                    LoadingElementId = "ClusteredStorageListLoader-" + category.Id.ToString(),
+                    OnBegin = "$('#ClusteredStorageListLoader-" + category.Id.ToString() + " .spinner').spin();$('#LoadClusteredStorageListButton-" + category.Id.ToString() + "').remove();",
+                    OnComplete = "$('#ClusteredStorageListLoader-" + category.Id.ToString() + " .spinner').spin(false);"
+                }))
+                    {
+                        @Html.Hidden("dataStoreCategoryId", category.Id)
+                        <button class="btn btn-default" type="submit" id="LoadClusteredStorageListButton-@category.Id">Load Standalone Data Store List (@Html.DisplayFor(model => category.DataStoreGroupCount))</button>
+                        <p></p>
+                    }
+                </div>
+            }
+        }
+
+        <h3>Standalone Data Stores</h3>
+        if (category.StandaloneDataStoreCount <= 10)
+        {
+            Html.RenderAction("GetStandaloneDataStoreList", new { dataStoreCategoryId = category.Id });
+        }
+        else
+        {
+            Html.RenderPartial("_Loader", "StandaloneDataStoreListLoader-" + category.Id.ToString());
+            <div id="StandaloneDataStoreList-@category.Id">
+                @using (Ajax.BeginForm("GetStandaloneDataStoreList", new AjaxOptions
+            {
+                InsertionMode = InsertionMode.Replace,
+                UpdateTargetId = "StandaloneDataStoreList-" + category.Id.ToString(),
+                LoadingElementId = "StandaloneDataStoreListLoader-" + category.Id.ToString(),
+                OnBegin = "$('#StandaloneDataStoreListLoader-" + category.Id.ToString() + " .spinner').spin();$('#LoadStandaloneDataStoreListButton-" + category.Id.ToString() + "').remove();",
+                OnComplete = "$('#StandaloneDataStoreListLoader-" + category.Id.ToString() + " .spinner').spin(false);"
+            }))
+                {
+                    @Html.Hidden("dataStoreCategoryId", category.Id)
+                    <button class="btn btn-default" type="submit" id="LoadStandaloneDataStoreListButton-@category.Id">Load Standalone Data Store List (@Html.DisplayFor(model => category.StandaloneDataStoreCount))</button>
+                    <p></p>
+                }
+            </div>
+        }
+    }
+}
+
+@section Scripts {
+    <script type="text/javascript">
+        $(".collapse-content").on("show.bs.collapse", function () {
+            $("#" + $(this).data("collapse-button") + " span.glyphicon").removeClass("glyphicon-plus").addClass("glyphicon-minus");
+        });
+
+        $(".collapse-content").on("hide.bs.collapse", function () {
+            $("#" + $(this).data("collapse-button") + " span.glyphicon").removeClass("glyphicon-minus").addClass("glyphicon-plus");
+        });
+    </script>
+}

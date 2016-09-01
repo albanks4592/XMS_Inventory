@@ -1,0 +1,19 @@
+﻿@model MigrationTool.Models.ApplicationVersion
+
+<div class="form-group">
+    @Html.LabelFor(model => model.Application_Id, "Application")
+    @Html.DropDownList("Application_Id", (SelectList)ViewBag.Application_Id_Select, String.Empty, new { @class = "form-control" })
+    @Html.ValidationMessageFor(model => model.Application_Id)
+</div>
+
+<div class="form-group">
+    @Html.LabelFor(model => model.Name)
+    @Html.EditorFor(model => model.Name)
+    @Html.ValidationMessageFor(model => model.Name)
+</div>
+
+<div class="form-group">
+    @Html.LabelFor(model => model.EndOfLifeDate)
+    @Html.EditorFor(model => model.EndOfLifeDate)
+    @Html.ValidationMessageFor(model => model.EndOfLifeDate)
+</div>

@@ -1,0 +1,61 @@
+﻿@model IEnumerable<MigrationTool.Models.Division>
+@using MigrationTool.ViewModels
+
+@{
+    ViewBag.Title = "Index";
+}
+
+@Html.Partial("_Breadcrumb", new Breadcrumb("Entitled Users"))
+<h2>Index of Entitled Users</h2>
+
+@using (Ajax.BeginForm("FilterIndex", "EntitledUser", new AjaxOptions {
+    InsertionMode = InsertionMode.Replace,
+    UpdateTargetId = "entitledUserList",
+    LoadingElementId = "entitledUserLoader",
+    OnBegin = "$(\"#entitledUserLoader .spinner\").spin();",
+    OnComplete = "$(\"#entitledUserLoader .spinner\").spin(false); $(\"#filterTextBox\").focus();"
+})) {
+    string filter = "";
+    Guid? divisionId = Guid.Empty;
+    <div class="clearfix">
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => filter, "Filter")
+                    @Html.TextBoxFor(model => filter, new { @class = "form-control" })
+                </div>
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" name="noActiveRecordsLink" value="true" />
+                        Only display records that are Active
+                    </label>
+                </div>
+            </div>
+
+            <div class="col-sm-6">
+                <div class="form-group">
+                    @Html.Label("Tags")
+                    @{Html.RenderAction("GetTagSelect", "Tag", new { tagName = "tagFilter" });}
+                    <p class="help-block">Separate multiple tags with a comma.</p>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => divisionId, "Division")
+                    @Html.DropDownListFor(model => divisionId, new SelectList(Model.OrderBy(x => x.Name), "Id", "Name"), string.Empty, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => divisionId)
+                </div>
+            </div>
+
+            @Html.Partial("_NotesFilter")
+        </div>
+        <button class="btn btn-primary pull-right" type="submit">Filter</button>
+    </div>
+}
+
+<p></p>
+@Html.Partial("_Loader", "entitledUserLoader")
+<div id="entitledUserList">
+    @Html.Partial("_List", new List<MigrationTool.Models.EntitledUser>())
+    @Html.Partial("_SearchFirst")
+</div>

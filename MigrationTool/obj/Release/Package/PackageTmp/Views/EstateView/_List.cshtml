@@ -1,0 +1,16 @@
+﻿@model IEnumerable<MigrationTool.Models.BusinessSolution>
+@foreach (var item in Model.OrderBy(x => x.Name))
+{
+    <div class="row">
+        <div class="col-md-3 wf-progress-bar-label">
+            @Html.DisplayFor(model => item) @if (item.BusinessAction_Id != null) { <text>(@Html.DisplayFor(model => item.BusinessAction))</text> }
+        </div>
+        <div class="col-md-9">
+            @if (item.WorkflowInstance != null)
+            {
+                @Html.Partial("_WorkflowProgressBar", item.WorkflowInstance)
+            }
+        </div>
+    </div>
+}
+@Html.Partial("_RecordCount", Model == null ? 0 : Model.Count())

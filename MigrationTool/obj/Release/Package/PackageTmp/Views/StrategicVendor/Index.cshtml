@@ -1,0 +1,30 @@
+﻿@model IEnumerable<MigrationTool.Models.StrategicVendor>
+@using MigrationTool.ViewModels
+
+@{
+    ViewBag.Title = "Index";
+}
+
+@Html.Partial("_Breadcrumb", new Breadcrumb("Strategic Vendors"))
+<h2>Index of Strategic Vendors</h2>
+
+@using (Ajax.BeginForm("FilterIndex", "StrategicVendor", new AjaxOptions {
+    InsertionMode = InsertionMode.Replace,
+    UpdateTargetId = "StrategicVendorList",
+    LoadingElementId = "StrategicVendorLoader",
+    OnBegin = "$(\"#StrategicVendorLoader .spinner\").spin();",
+    OnComplete = "$(\"#StrategicVendorLoader .spinner\").spin(false);"
+})) {
+    @Html.Partial("_StandardFilter")
+}
+
+<p></p>
+@if (User.IsInRole(MigrationTool.Roles.Edit) || User.IsInRole(MigrationTool.Roles.Admin))
+{
+    @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-default" })
+    <p></p>
+}
+@Html.Partial("_Loader", "StrategicVendorLoader")
+<div id="StrategicVendorList">
+    @Html.Partial("_List", Model)
+</div>

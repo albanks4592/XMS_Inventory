@@ -1,0 +1,32 @@
+﻿@model PublishedApplicationDetailslViewModel
+@using MigrationTool.ViewModels
+
+@if (Model.BusinessSolution != null)
+{
+    <div class="col-md-6">
+        <dl>
+            <dt>@Html.DisplayNameFor(model => Model.BusinessSolution)</dt>
+            <dd>@Html.DisplayFor(model => Model.BusinessSolution)</dd>
+        </dl>
+    </div>
+    
+    if (User.IsInRole(MigrationTool.Roles.Edit) || User.IsInRole(MigrationTool.Roles.Admin))
+    {
+        <div class="col-md-6 text-center">
+            <button type="button" class="btn btn-default" data-toggle="modal" data-target="#removeBusinessSolutionConfirm">Remove Link</button>
+        </div>
+    }
+}
+else
+{
+    <div class="col-md-6">
+        <h3>None</h3>
+    </div>
+    
+    if (User.IsInRole(MigrationTool.Roles.Edit) || User.IsInRole(MigrationTool.Roles.Admin))
+    {
+        <div class="col-md-6 text-center">
+            <button type="button" class="btn btn-default" data-toggle="modal" data-target="#addBusinessSolutionDialog">Link Business Solution</button>
+        </div>
+    }
+}

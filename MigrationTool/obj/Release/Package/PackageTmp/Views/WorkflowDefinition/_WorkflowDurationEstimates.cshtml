@@ -1,0 +1,26 @@
+﻿@model IEnumerable<MigrationTool.Models.WorkflowDurationEstimate>
+<table class="table table-striped">
+    <tr>
+        <th>@Html.DisplayNameFor(model => model.Name)</th>
+        @if (User.IsInRole(MigrationTool.Roles.Edit) || User.IsInRole(MigrationTool.Roles.Admin))
+        {
+            <th></th>
+        }
+    </tr>
+    @if (Model != null && Model.Count() > 0)
+    {
+        foreach (var item in Model.OrderBy(a => a.Name))
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                @if (User.IsInRole(MigrationTool.Roles.Edit) || User.IsInRole(MigrationTool.Roles.Admin))
+                {
+                    <td>
+                        <button class="btn btn-default" id="@item.Id" data-toggle="modal" data-target="#editDurationEstimateDialog">Edit</button>
+                        <button class="btn btn-default" type="submit" name="workflowDurationEstimateId" value="@item.Id">Remove</button>
+                    </td>
+                }
+            </tr>
+        }
+    }
+</table>

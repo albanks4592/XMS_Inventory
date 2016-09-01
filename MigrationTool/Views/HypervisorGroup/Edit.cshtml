@@ -1,0 +1,27 @@
+﻿@model MigrationTool.Models.HypervisorGroup
+@using MigrationTool.ViewModels
+
+@{
+    ViewBag.Title = MigrationTool.Strings.EditAction;
+}
+
+@Html.Partial("_Breadcrumb", new Breadcrumb(ViewBag.Title, new BreadcrumbItem { LinkText = MigrationTool.Strings.HypervisorGroupPlural, ControllerName = "HypervisorGroup" }))
+<h2>@ViewBag.Title</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.Partial("_Form", Model)
+        
+    <button type="submit" class="btn btn-primary">@MigrationTool.Strings.Save</button>
+    @Html.ActionLink(MigrationTool.Strings.Cancel, "Details", new { Id = Model.Id }, new { @class = "btn btn-default" })
+        if (User.IsInRole(MigrationTool.Roles.Admin))
+        {
+        <div class="pull-right">
+            @Html.ActionLink(MigrationTool.Strings.DeleteAction, "Delete", new { Id = Model.Id }, new { @class = "btn btn-danger" })
+        </div>
+        }
+}
+
+@section Scripts {
+    @Html.Partial("_FormJavaScript")
+}

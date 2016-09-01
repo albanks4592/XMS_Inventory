@@ -1,0 +1,28 @@
+﻿@model MigrationTool.Models.WorkflowDefinition
+
+@{
+    string Name = "";
+}
+
+@Html.Hidden("WorkflowDefinition_Id", Model.Id)
+
+<div class="form-group">
+    @Html.Label("Name", "Name")
+    @Html.EditorFor(model => Name)
+    @Html.ValidationMessageFor(model => Name)
+</div>
+
+<hr />
+
+@foreach (var step in Model.WorkflowStepDefinitions.OrderBy(x => x.SortOrder))
+{
+    <div class="form-group">
+        @Html.Hidden("details[" + step.SortOrder.ToString() + "].WorkflowStepDefinition_Id", step.Id)
+        @Html.Label(step.Name)
+        <div class="input-group">
+            @Html.TextBox("details[" + step.SortOrder.ToString() + "].EstimatedDuration", "0", new { @class="form-control", type="number"})
+            <span class="input-group-addon">days</span>
+        </div>
+        @Html.ValidationMessage("details[" + step.SortOrder.ToString() + "].EstimatedDuration")
+    </div>
+}

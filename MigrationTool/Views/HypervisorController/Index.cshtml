@@ -1,0 +1,38 @@
+﻿@using MigrationTool.ViewModels
+@model IEnumerable<HypervisorControllerListIndexViewModel>
+
+@{
+    ViewBag.Title = MigrationTool.Strings.IndexAction;
+}
+
+<!-- Header and breadcrumbs -->
+@Html.Partial("_Breadcrumb", new Breadcrumb(MigrationTool.Strings.HypervisorControllerPlural))
+
+<h2>@string.Format(MigrationTool.Strings.IndexOf_P0, MigrationTool.Strings.HypervisorControllerPlural)</h2>
+
+@using (Ajax.BeginForm("FilterIndex", "HypervisorController", new AjaxOptions
+{
+    InsertionMode = InsertionMode.Replace,
+    UpdateTargetId = "HypervisorControllerList",
+    LoadingElementId = "HypervisorControllerListLoader",
+    OnBegin = "$('#HypervisorControllerListLoader .spinner').spin(true);",
+    OnComplete = "$('#HypervisorControllerListLoader .spinner').spin(false);"
+}))
+{
+    @Html.Partial("_StandardFilter")
+}
+
+<p></p>
+@if (User.IsInRole(MigrationTool.Roles.Edit) || User.IsInRole(MigrationTool.Roles.Admin))
+{
+    @Html.ActionLink(MigrationTool.Strings.CreateAction, "Create", null, new { @class = "btn btn-default" })
+}
+
+@Html.Partial("_Loader", "HypervisorControllerListLoader")
+<div id="HypervisorControllerList">
+    @Html.Partial("_ListIndex", Model)
+    @if (Model == null)
+    {
+        @Html.Partial("_SearchFirst")
+    }
+</div>

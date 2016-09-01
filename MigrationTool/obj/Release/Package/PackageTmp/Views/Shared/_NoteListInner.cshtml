@@ -1,0 +1,5 @@
+﻿@model MigrationTool.Models.IHasNotes
+@foreach (var note in Model.Notes.OrderByDescending(x => x.CreatedAt))
+{
+    @Html.Partial("_note", note)
+}

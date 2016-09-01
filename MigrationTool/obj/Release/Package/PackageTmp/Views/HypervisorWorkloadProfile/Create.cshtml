@@ -1,0 +1,92 @@
+﻿@model MigrationTool.Models.HypervisorWorkloadProfile
+@using MigrationTool.ViewModels
+
+@{
+    ViewBag.Title = "Create";
+}
+
+@Html.Partial("_Breadcrumb", new Breadcrumb(ViewBag.Title, new BreadcrumbItem { LinkText = "Hypervisor Workload Profiles", ControllerName = "HypervisorWorkloadProfile" }))
+<h2>@ViewBag.Title</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.ValidationSummary(true)
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Name)
+        @Html.EditorFor(model => model.Name)
+        @Html.ValidationMessageFor(model => model.Name)
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Type)
+        <div class="radio">
+            <label>
+                @Html.RadioButtonFor(model => model.Type, 0)
+                Virtual Processors per Physical CPU
+            </label>
+            <div class="row">
+                <div class="col-xs-4 col-sm-3 col-lg-2 col-xs-offset-1">
+                    @Html.DisplayNameFor(model => model.VirtualProcessorsPerCore)
+                    @Html.EditorFor(model => model.VirtualProcessorsPerCore)
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-11 col-xs-offset-1">
+                    @Html.ValidationMessageFor(model => model.VirtualProcessorsPerCore)
+                </div>
+            </div>
+        </div>
+
+        <div class="radio">
+            <label>
+                @Html.RadioButtonFor(model => model.Type, 1)
+                Maximum Virtual Machine Limit
+            </label>
+            <div class="row">
+                <div class="col-xs-4 col-sm-3 col-lg-2 col-xs-offset-1">
+                    @Html.DisplayNameFor(model => model.MaxVirtualMachines)
+                    @Html.EditorFor(model => model.MaxVirtualMachines)
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-11 col-xs-offset-1">
+                    @Html.ValidationMessageFor(model => model.MaxVirtualMachines)
+                </div>
+            </div>
+        </div>
+        @Html.ValidationMessageFor(model => model.Type)
+    </div>
+    
+    <button type="submit" class="btn btn-primary">Create</button>
+    @Html.ActionLink("Cancel", "Index", null, new { @class = "btn btn-default" });
+}
+
+@section Scripts {
+    <script type="text/javascript">
+        $(function () {
+            $("#VirtualProcessorsPerCore").val(0);
+            $("#MaxVirtualMachines").val(0);
+
+            $("input:radio[name='Type']").click(function () {
+                dimOptions();
+            });
+
+            dimOptions();
+        });
+
+        function dimOptions() {
+            var selected = $("input:radio[name='Type']:checked").val();
+            if (selected == 0) {
+                $("#VirtualProcessorsPerCore").prop('disabled', false);
+                $("#MaxVirtualMachines").prop('disabled', true);
+            } else if (selected == 1) {
+                $("#VirtualProcessorsPerCore").prop('disabled', true);
+                $("#MaxVirtualMachines").prop('disabled', false);
+            } else {
+                $("#VirtualProcessorsPerCore").prop('disabled', true);
+                $("#MaxVirtualMachines").prop('disabled', true);
+            }
+        }
+    </script>
+}

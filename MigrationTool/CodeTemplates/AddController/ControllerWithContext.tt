@@ -1,0 +1,232 @@
+﻿<#@ template language="C#" HostSpecific="True" #>
+<#
+var Model = (MvcTextTemplateHost)Host;
+MvcTextTemplateHost mvcHost = (MvcTextTemplateHost)(Host);
+var modelName = Model.ModelType.Name;
+#>
+//------------------------------------------------------------------------------
+// <copyright file="<#= modelName #>.cs" company="Novartis">
+//      Copyright (c) Novartis AG
+// </copyright>
+//------------------------------------------------------------------------------
+
+namespace <#= mvcHost.Namespace #>
+{
+	using System;
+    using System.Collections.Generic;
+    using System.Data;
+    using System.Data.Entity;
+    using System.Linq;
+    using System.Web.Mvc;
+    using MigrationTool.Models;
+    using MigrationTool.ViewModels;
+
+	/// <summary>
+    /// MVC Controller for the <#= modelName #> entity.
+    /// </summary>
+    [Authorize(Roles = MigrationTool.Roles.View + ", " + MigrationTool.Roles.Edit + ", " + MigrationTool.Roles.Admin)]
+    public class <#= mvcHost.ControllerName #> : Controller
+    {
+        /// <summary>
+        /// The database context that all class methods will use for data
+        /// gathering.
+        /// </summary>
+        private MigrationToolEntities db = new MigrationToolEntities();
+
+        /// <summary>
+        /// Index action (GET).
+        /// </summary>
+        /// <returns>The index listing of the <#= modelName #> entity.</returns>
+        public ActionResult Index()
+        {
+            return View();
+        }
+
+		/// <summary>
+        /// AJAX action for filtering the index listing.
+        /// </summary>
+        /// <param name="filter">A string to use to filter the Name property of
+        /// the <#= modelName #> returned.</param>
+        /// <param name="tagFilter">A list of tags to apply as a filter.</param>
+        /// <param name="noteInfo">A flag indicating that only records that have
+        /// one or more info type notes linked should be included.</param>
+        /// <param name="noteSuccess">A flag indicating that only records that
+        /// have one or more success type notes linked should be
+        /// included.</param>
+        /// <param name="noteWarning">A flag indicating that only records that
+        /// have one or more warning type notes linked should be
+        /// included.</param>
+        /// <param name="noteDanger">A flag indicating that only records that
+        /// have one or more danger type notes linked should be
+        /// included.</param>
+        /// <param name="noActiveRecordsLink">A flag indicating that only 
+        /// records that are active will be displayed.</param>
+        /// <returns>The filtered index listing.</returns>
+        public PartialViewResult FilterIndex(string filter, string[] tagFilter, bool noteInfo, bool noteSuccess, bool noteWarning, bool noteDanger, bool noActiveRecordsLink = false)
+        {
+            var results = this.db.<#= modelName #>s
+                .AsNoTracking()
+                .AsQueryable()
+                .Include("TagsMetas")
+                .Include("TagsMetas.Tag")
+                .Include("Notes");
+
+            if (!string.IsNullOrEmpty(filter))
+            {
+                results = results.Where(x => x.Name.Contains(filter));
+            }
+
+            if (tagFilter != null)
+            {
+                foreach (string tag in tagFilter)
+                {
+                    string trimTag = tag.Trim().ToLower();
+                    results = results.Where(x => x.TagsMetas.Any(m => m.Tag.Name == trimTag));
+                }
+            }
+
+            if (noteInfo)
+            {
+                results = results.Where(x => x.Notes.Any(n => n.NoteType == 0));
+            }
+
+            if (noteSuccess)
+            {
+                results = results.Where(x => x.Notes.Any(n => n.NoteType == 1));
+            }
+
+            if (noteWarning)
+            {
+                results = results.Where(x => x.Notes.Any(n => n.NoteType == 2));
+            }
+
+            if (noteDanger)
+            {
+                results = results.Where(x => x.Notes.Any(n => n.NoteType == 3));
+            }
+
+            if (noActiveRecordsLink)
+            {
+                results = results.Where(a => a.Inactive == false);
+            }
+
+            var viewModel = results
+                .OrderBy(x => x.Name)
+                .ThenBy(x => x.Name)
+                .AsEnumerable()
+                .Select(x => new _________(x))
+                .ToList();
+
+            return this.PartialView("_ListIndex", viewModel);
+        }
+<#
+if(mvcHost.AddActionMethods) {
+#>
+        /// <summary>
+        /// Details action (GET).
+        /// </summary>
+        /// <param name="id">The ID of the <#= modelName #> to view.</param>
+        /// <returns>The details view for the specified <#= modelName #>.</returns>
+        public ActionResult Details(Guid id)
+        {
+            return View();
+        }
+
+        /// <summary>
+        /// Create action (GET).
+        /// </summary>
+        /// <returns>A blank create form for adding a new <#= modelName #>.</returns>
+        [Authorize(Roles = MigrationTool.Roles.Edit + ", " + MigrationTool.Roles.Admin)]
+        public ActionResult Create()
+        {
+            return View();
+        }
+
+        /// <summary>
+        /// Create action (POST).
+        /// </summary>
+        /// <param name="_________">The <#= modelName #> to
+        /// create.</param>
+        /// <returns>If creation is successful, redirects to the details page
+        /// for the newly created <#= modelName #>. If there are any errors the
+        /// create form is shown again with appropriate validation
+        /// messages.</returns>
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = MigrationTool.Roles.Edit + ", " + MigrationTool.Roles.Admin)]
+        [HttpPost]
+        public ActionResult Create(FormCollection collection)
+        {
+            
+        }
+
+        /// <summary>
+        /// Edit action (GET).
+        /// </summary>
+        /// <param name="id">The ID of the <#= modelName #> to edit.</param>
+        /// <returns>The edit form for the specified <#= modelName #>.</returns>
+        [Authorize(Roles = MigrationTool.Roles.Edit + ", " + MigrationTool.Roles.Admin)]
+        public ActionResult Edit(Guid id)
+        {
+            return View();
+        }
+
+        /// <summary>
+        /// Edit action (POST).
+        /// </summary>
+        /// <param name="_________">The modified <#= modelName #> to record to
+        /// the database.</param>
+        /// <returns>If the update is successful, redirects to the details page
+        /// for the <#= modelName #>. If there are any errors the edit form is shown
+        /// again with appropriate validation messages.</returns>
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = MigrationTool.Roles.Edit + ", " + MigrationTool.Roles.Admin)]
+        [HttpPost]
+        public ActionResult Edit(FormCollection collection)
+        {
+           
+        }
+
+        /// <summary>
+        /// Delete action (GET).
+        /// </summary>
+        /// <param name="id">The ID of the <#= modelName #> to
+        /// delete.</param>
+        /// <returns>The delete confirmation page for the specified
+        /// <#= modelName #>.</returns>
+        [Authorize(Roles = MigrationTool.Roles.Admin)]
+        public ActionResult Delete(Guid id)
+        {
+            return View();
+        }
+
+        /// <summary>
+        /// Delete action (POST).
+        /// </summary>
+        /// <param name="id">The ID of the <#= modelName #> to
+        /// delete.</param>
+        /// <returns>Redirects to the index action.</returns>
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = MigrationTool.Roles.Admin)]
+        public ActionResult DeleteConfirmed(Guid id)
+        {
+           
+        }
+
+		/// <summary>
+        /// Cleanly disposes of resources used by the controller.
+        /// </summary>
+        /// <param name="disposing">A flag indicating whether the call is coming
+        /// from a Dispose method (true) or a finalize process (false).</param>
+        protected override void Dispose(bool disposing)
+        {
+            this.db.Dispose();
+            base.Dispose(disposing);
+        }
+<#
+}
+#>
+    }
+}

@@ -1,0 +1,24 @@
+﻿@model IEnumerable<MigrationTool.ViewModels.CapacityRuleListCalculationViewModel>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.Name)</th>
+            <th>@Html.DisplayNameFor(model => model.Summary)</th>
+            <th>@Html.DisplayNameFor(model => model.Calculation)</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null)
+        {
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(model => item)</td>
+                    <td>@Html.DisplayFor(model => item.Summary)</td>
+                    <td>@Html.DisplayFor(model => item.Calculation)</td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+@Html.Partial("_RecordCount", Model == null ? 0 : Model.Count())

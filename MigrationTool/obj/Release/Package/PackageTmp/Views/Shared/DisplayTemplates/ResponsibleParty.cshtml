@@ -1,0 +1,5 @@
+﻿@model MigrationTool.Models.ResponsibleParty
+@if (Model != null)
+{
+    @Html.ActionLink(Model.Name, "Details", "ResponsibleParty", new { id = Model.Id }, null)
+}

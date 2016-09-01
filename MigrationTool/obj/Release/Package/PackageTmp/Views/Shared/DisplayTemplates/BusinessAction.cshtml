@@ -1,0 +1,5 @@
+﻿@model MigrationTool.Models.BusinessAction
+@if (Model != null)
+{
+    @Html.ActionLink(Model.Name, "Details", "BusinessAction", new { Id = Model.Id }, null)
+}

@@ -1,0 +1,19 @@
+﻿@model IEnumerable<MigrationTool.Models.IqDocument>
+<table class="table table-striped">
+    <tr>
+        <th>@Html.DisplayNameFor(model => model.Name)</th>
+    </tr>
+    @foreach (var item in Model.OrderBy(x => x.Name)) {
+        <tr>
+            <td>
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" name="selectedIqDocuments" id="@item.Id" value="@item.Id" />
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </label>
+                </div>
+            </td>
+        </tr>
+    }
+</table>
+@Html.Partial("_RecordCount", Model == null ? 0 : Model.Count())

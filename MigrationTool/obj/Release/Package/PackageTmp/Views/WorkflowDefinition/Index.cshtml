@@ -1,0 +1,30 @@
+﻿@model IEnumerable<MigrationTool.Models.WorkflowDefinition>
+@using MigrationTool.ViewModels
+
+@{
+    ViewBag.Title = "Index";
+}
+@Html.Partial("_Breadcrumb", new Breadcrumb("Workflow Definitions"))
+<h2>@ViewBag.Title</h2>
+
+@using (Ajax.BeginForm("FilterIndex", "WorkflowDefinition", new AjaxOptions {
+    InsertionMode = InsertionMode.Replace,
+    UpdateTargetId = "WorkflowDefinitionList",
+    LoadingElementId = "WorkflowDefinitionLoader",
+    OnBegin = "$(\"#WorkflowDefinitionLoader .spinner\").spin();",
+    OnComplete = "$(\"#WorkflowDefinitionLoader .spinner\").spin(false); $(\"#filterTextBox\").focus();"
+})) {
+    @Html.Partial("_StandardFilter")
+}
+
+
+<p></p>
+@if (User.IsInRole(MigrationTool.Roles.Edit) || User.IsInRole(MigrationTool.Roles.Admin))
+{
+    @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-default" })
+    <p></p>
+}
+@Html.Partial("_Loader", "WorkflowDefinitionLoader")
+<div id="WorkflowDefinitionList">
+    @Html.Partial("_List", Model)
+</div>

@@ -1,0 +1,29 @@
+﻿@model IEnumerable<MigrationTool.Models.Division>
+@using MigrationTool.ViewModels
+
+@{
+    ViewBag.Title = "Index";
+}
+
+@Html.Partial("_Breadcrumb", new Breadcrumb("Divisions"))
+
+@using (Ajax.BeginForm("FilterIndex", "Division", new AjaxOptions {
+    InsertionMode = InsertionMode.Replace,
+    UpdateTargetId = "divisionList",
+    LoadingElementId = "divisionLoader",
+    OnBegin = "$(\"#divisionLoader .spinner\").spin();",
+    OnComplete = "$(\"#divisionLoader .spinner\").spin(false);"
+})) {
+    @Html.Partial("_StandardFilterNoActive")
+}
+
+<p></p>
+@if (User.IsInRole(MigrationTool.Roles.Edit) || User.IsInRole(MigrationTool.Roles.Admin))
+{
+    @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-default" })
+    <p></p>
+}
+@Html.Partial("_Loader", "divisionLoader")
+<div id="divisionList">
+    @Html.Partial("_List", Model)
+</div>

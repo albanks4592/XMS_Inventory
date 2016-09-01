@@ -1,0 +1,23 @@
+﻿@model MigrationTool.ViewModels.NoteCollectionListViewModel
+@if (Model != null)
+{
+    if (Model.InfoCount > 0)
+    {
+        <span class="label label-info">@Html.DisplayFor(model => model.InfoCount)</span>
+    }
+
+    if (Model.SuccessCount > 0)
+    {
+        <span class="label label-success">@Html.DisplayFor(model => model.SuccessCount)</span>
+    }
+
+    if (Model.WarningCount > 0)
+    {
+        <span class="label label-warning">@Html.DisplayFor(model => model.WarningCount)</span>
+    }
+
+    if (Model.DangerCount > 0)
+    {
+        <span class="label label-danger">@Html.DisplayFor(model => model.DangerCount)</span>
+    }
+}

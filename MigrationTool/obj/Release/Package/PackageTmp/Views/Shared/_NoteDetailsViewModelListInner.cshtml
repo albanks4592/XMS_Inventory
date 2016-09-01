@@ -1,0 +1,25 @@
+﻿@model IEnumerable<MigrationTool.ViewModels.NoteDetailsViewModel>
+@foreach (var note in Model)
+{
+    <div class="panel @note.PanelClass">
+        <div class="panel-heading clearfix">
+            <div class="pull-left">
+                <h3 class="panel-title">
+                    <span class="glyphicon @note.GlyphIconClass"></span>
+                    @note.PanelTitle
+                </h3>
+            </div>
+            <div class="pull-right">
+                @note.UserDisplayName - @Html.DisplayFor(model => note.CreatedAt)
+                @if (note.Username.Equals(User.Identity.Name, StringComparison.InvariantCultureIgnoreCase) && (User.IsInRole(MigrationTool.Roles.Edit) || User.IsInRole(MigrationTool.Roles.Admin)))
+                {
+                    <text>&nbsp;</text>
+                    <button type="submit" class="close" name="noteId" value="@note.Id"><span>&times;</span><span class="sr-only">Delete</span></button>
+                }
+            </div>
+        </div>
+        <div class="panel-body">
+            @note.Body
+        </div>
+    </div>
+}

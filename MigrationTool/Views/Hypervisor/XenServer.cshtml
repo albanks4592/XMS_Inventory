@@ -1,0 +1,32 @@
+﻿@model IEnumerable<MigrationTool.Models.Hypervisor>
+@using MigrationTool.ViewModels
+
+@{
+    ViewBag.Title = "XenServer";
+}
+
+@Html.Partial("_Breadcrumb", new Breadcrumb("XenServer"))
+<h2>Xen Server</h2>
+
+@using (Ajax.BeginForm("FilterIndex", "XenServer", new AjaxOptions
+{
+    InsertionMode = InsertionMode.Replace,
+    UpdateTargetId = "XenServerList",
+    LoadingElementId = "XenServerLoader",
+    OnBegin = "$(\"#XenServerLoader .spinner\").spin();",
+    OnComplete = "$(\"#XenServerLoader .spinner\").spin(false);"
+}))
+{
+    @Html.Partial("_StandardFilterNoNotes")
+}
+
+<p></p>
+@if (User.IsInRole(MigrationTool.Roles.Edit) || User.IsInRole(MigrationTool.Roles.Admin))
+{
+    @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-default" })
+    <p></p>
+}
+@Html.Partial("_Loader", "XenServerLoader")
+<div id="XenServerList">
+    @Html.Partial("_ListXen", Model)
+</div>

@@ -1,0 +1,26 @@
+﻿@model IEnumerable<MigrationTool.Models.ApplicationOwner>
+<table class="table table-striped">
+    <tr>
+        <th>@Html.DisplayNameFor(model => model.FullName)</th>
+        <th>@Html.DisplayNameFor(model => model.Division.Name)</th>
+    </tr>
+    @foreach (var item in Model.OrderBy(x => x.LastName).ThenBy(x => x.FirstName))
+    {
+        <tr>
+            <td>
+                <div class="radio">
+                    <label>
+                        <input type="radio" name="selectedApplicationOwner" id="@item.Id" value="@item.Id" />
+                        @Html.DisplayFor(modelItem => item.FullName)
+                    </label>
+                </div>
+            </td>
+            <td>
+                <div class="radio">
+                    @Html.DisplayFor(modelItem => item.Division.Name)
+                </div>
+            </td>
+        </tr>
+    }
+</table>
+@Html.Partial("_RecordCount", Model == null ? 0 : Model.Count())

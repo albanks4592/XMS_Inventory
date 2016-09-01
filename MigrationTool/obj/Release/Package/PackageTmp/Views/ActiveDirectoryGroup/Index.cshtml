@@ -1,0 +1,30 @@
+﻿@model IEnumerable<MigrationTool.Models.ActiveDirectoryGroup>
+@using MigrationTool.ViewModels
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<!-- Header and breadcrumbs -->
+@Html.Partial("_Breadcrumb", new Breadcrumb("Active Directory Groups"))
+<h2>Index of Active Directory Groups</h2>
+
+@using (Ajax.BeginForm("FilterIndex", "ActiveDirectoryGroup", new AjaxOptions {
+    InsertionMode = InsertionMode.Replace,
+    UpdateTargetId = "activeDirectoryGroupList",
+    LoadingElementId = "activeDirectoryGroupLoader",
+    OnBegin = "$(\"#activeDirectoryGroupLoader .spinner\").spin();",
+    OnComplete = "$(\"#activeDirectoryGroupLoader .spinner\").spin(false);"
+})) {
+    @Html.Partial("_StandardFilter")
+}
+    
+<p></p>
+@Html.Partial("_Loader", "activeDirectoryGroupLoader")
+<div id="activeDirectoryGroupList">
+    @Html.Partial("_List", Model)
+    @if (Model == null || Model.Count() == 0)
+    {
+        @Html.Partial("_SearchFirst")
+    }
+</div>

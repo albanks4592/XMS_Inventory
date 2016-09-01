@@ -1,0 +1,13 @@
+﻿@model TimeSpan
+@{
+    string output;
+    int totalDays = (int)Model.TotalDays;
+    if (totalDays > 0)
+    {
+        output = Html.DisplayFor(model => totalDays, "IntThousands") + "d " + Model.Hours.ToString() + "h";
+    }
+    else
+    {
+        output = Model.Hours.ToString() + "h";
+    }
+}@output

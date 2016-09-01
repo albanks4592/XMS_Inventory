@@ -1,0 +1,5 @@
+﻿@model MigrationTool.ViewModels.CapacityRuleReferenceViewModel
+@if (Model != null)
+{
+    @Html.ActionLink(Model.Name, "Details", "CapacityRule", new { Id = Model.Id }, null)
+}

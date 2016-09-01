@@ -1,0 +1,832 @@
+﻿@model MigrationTool.Models.BusinessSolution
+@using MigrationTool.ViewModels
+
+@{
+    ViewBag.Title = "Details";
+}
+
+@Html.Partial("_Breadcrumb", new Breadcrumb(ViewBag.Title, new BreadcrumbItem { LinkText = "Business Solutions", ControllerName = "BusinessSolution" }))
+@if (User.IsInRole(MigrationTool.Roles.Edit) || User.IsInRole(MigrationTool.Roles.Admin))
+{
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }, new { @class = "btn btn-default btn-lg pull-right" })
+}
+<h2>@ViewBag.Title</h2>
+
+<dl class="dl-horizontal">
+    <dt>@Html.DisplayNameFor(model => model.Name)</dt>
+    <dd>@Html.DisplayFor(model => model.Name)</dd>
+
+    <dt>@Html.DisplayNameFor(model => model.WorkflowDefinition.Name)</dt>
+    <dd>@Html.DisplayFor(model => model.WorkflowDefinition)</dd>
+
+    <dt>@Html.DisplayNameFor(model => model.BusinessAction.Name)</dt>
+    <dd>@Html.DisplayFor(model => model.BusinessAction)</dd>
+</dl>
+
+<p></p>
+
+<ul class="nav nav-tabs">
+    <li class="active"><a href="#activity" data-toggle="tab">Activity</a></li>
+    <li><a href="#users" data-toggle="tab">Users</a></li>
+    <li><a href="#applications" data-toggle="tab">Applications</a></li>
+    <li><a href="#publishedApplications" data-toggle="tab">Published Applications</a></li>
+    <li><a href="#binaries" data-toggle="tab">Binaries</a></li>
+    <li><a href="#iqDocuments" data-toggle="tab">IQ Documents</a></li>
+</ul>
+
+<div class="tab-content">
+    <!-- Selected Business Action -->
+    <!-- Selected Duration Estimate/Complexity -->
+    <div class="tab-pane active" id="activity">
+        @Html.Partial("_Loader", "activityLoader")
+        <div id="activityContainer">
+            @Html.Partial("_Activity", Model)
+        </div>
+    </div>
+
+    <!-- Linked Strategic Vendors -->
+    <!-- Linked Divisions -->
+    <div class="tab-pane" id="users">
+        <h2>Users</h2>
+        <div class="row">
+            <div class="col-md-6">
+                <h3>Strategic Vendors</h3>
+                @using (Ajax.BeginForm("RemoveLinkedStrategicVendors", new AjaxOptions
+                {
+                    InsertionMode = InsertionMode.Replace,
+                    UpdateTargetId = "linkedStrategicVendorList",
+                    LoadingElementId = "linkedStrategicVendorLoader",
+                    OnBegin = "$(\"#linkedStrategicVendorLoader .spinner\").spin();",
+                    OnComplete = "$(\"#linkedStrategicVendorLoader .spinner\").spin(false);",
+                    HttpMethod = "POST"
+                }))
+                {
+                    @Html.Hidden("businessSolutionId", Model.Id)
+                    <div id="linkedStrategicVendorList">
+                        @Html.Partial("_LinkedStrategicVendors", Model.StrategicVendors)
+                    </div>
+                    @Html.Partial("_Loader", "linkedStrategicVendorLoader")
+                    if (User.IsInRole(MigrationTool.Roles.Edit) || User.IsInRole(MigrationTool.Roles.Admin))
+                    {
+                        <button type="submit" class="btn btn-default">Remove Selected</button>
+                        <button type="button" class="btn btn-default" data-toggle="modal" data-target="#addStrategicVendorDialog" id="addStrategicVendorButton">Add</button>
+                    }
+                }
+
+                <div class="modal fade" id="addStrategicVendorDialog">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal"><span>&times;</span><span class="sr-only">Close</span></button>
+                                <h4 class="modal-title">Link Strategic Vendor</h4>
+                            </div>
+                            <div class="modal-body">
+                                @using (Ajax.BeginForm("SearchStrategicVendorForBusinessSolutionSelectMultiple", "StrategicVendor", null, new AjaxOptions
+                                {
+                                    InsertionMode = InsertionMode.Replace,
+                                    UpdateTargetId = "strategicVendorSearchResults",
+                                    LoadingElementId = "strategicVendorSearchLoader",
+                                    OnBegin = "$(\"#strategicVendorSearchLoader .spinner\").spin();",
+                                    OnComplete = "$(\"#strategicVendorSearchLoader .spinner\").spin(false);"
+                                }, new { id = "strategicVendorSearchForm" }))
+                                {
+                                    string search = "";
+                                    @Html.Hidden("businessSolutionId", Model.Id)
+                                    <div class="input-group">
+                                        @Html.TextBoxFor(model => search, new { @class = "form-control", id = "strategicVendorSearchBox" })
+                                        <span class="input-group-btn">
+                                            <button class="btn btn-default" type="submit">Search</button>
+                                        </span>
+                                    </div>
+                                    <p></p>
+                                    @Html.Partial("_Loader", "strategicVendorSearchLoader")
+                                    <div id="strategicVendorSearchResults"></div>
+                                }
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                                <button type="button" class="btn btn-primary" data-dismiss="modal" id="addStrategicVendorSubmitButton">Link</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <h3>Divisions</h3>
+                @using (Ajax.BeginForm("RemoveLinkedDivisions", new AjaxOptions
+                {
+                    InsertionMode = InsertionMode.Replace,
+                    UpdateTargetId = "linkedDivisionList",
+                    LoadingElementId = "linkedDivisionLoader",
+                    OnBegin = "$(\"#linkedDivisionLoader .spinner\").spin();",
+                    OnComplete = "$(\"#linkedDivisionLoader .spinner\").spin(false);",
+                    HttpMethod = "POST"
+                }))
+                {
+                    @Html.Hidden("businessSolutionId", Model.Id)
+                    <div id="linkedDivisionList">
+                        @Html.Partial("_LinkedDivisions", Model.Divisions)
+                    </div>
+                    @Html.Partial("_Loader", "linkedDivisionLoader")
+                    if (User.IsInRole(MigrationTool.Roles.Edit) || User.IsInRole(MigrationTool.Roles.Admin))
+                    {
+                        <button type="submit" class="btn btn-default">Remove Selected</button>
+                        <button type="button" class="btn btn-default" data-toggle="modal" data-target="#addDivisionDialog" id="addDivisionButton">Add</button>
+                    }
+                }
+
+                <div class="modal fade" id="addDivisionDialog">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal"><span>&times;</span><span class="sr-only">Close</span></button>
+                                <h4 class="modal-title">Link Division</h4>
+                            </div>
+                            <div class="modal-body">
+                                @using (Ajax.BeginForm("SearchDivisionForBusinessSolutionSelectMultiple", "Division", null, new AjaxOptions
+                                {
+                                    InsertionMode = InsertionMode.Replace,
+                                    UpdateTargetId = "divisionSearchResults",
+                                    LoadingElementId = "divisionSearchLoader",
+                                    OnBegin = "$(\"#divisionSearchLoader .spinner\").spin();",
+                                    OnComplete = "$(\"#divisionSearchLoader .spinner\").spin(false);"
+                                }, new { id = "divisionSearchForm" }))
+                                {
+                                    string search = "";
+                                    @Html.Hidden("businessSolutionId", Model.Id)
+                                    <div class="input-group">
+                                        @Html.TextBoxFor(model => search, new { @class = "form-control", id = "divisionSearchBox" })
+                                        <span class="input-group-btn">
+                                            <button class="btn btn-default" type="submit">Search</button>
+                                        </span>
+                                    </div>
+                                    <p></p>
+                                    @Html.Partial("_Loader", "divisionSearchLoader")
+                                    <div id="divisionSearchResults"></div>
+                                }
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                                <button type="button" class="btn btn-primary" data-dismiss="modal" id="addDivisionSubmitButton">Link</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h2>All Entitled Users</h2>
+        @{
+            var users = Model.PublishedApplications.SelectMany(x => x.ActiveDirectoryGroups).SelectMany(x => x.EntitledUsers).Union(Model.PublishedApplications.SelectMany(x => x.EntitledUsers)).Distinct().ToList();
+            var entitlement = from u in users
+                      group u by u.Division into g
+                      select new { Division = g.Key, Count = g.Count()};
+            
+            DateTime now = DateTime.Now.AddDays(-30);
+            var launches = (from l in Model.PublishedApplications.SelectMany(x => x.PublishedApplicationLaunches)
+                      where l.StartTime >= now
+                      group l by l.EntitledUser.Division into g
+                      select new { Division = g.Key, Duration = TimeSpan.FromSeconds(g.Sum(x => x.Duration)) }).ToList();
+                      
+        }          
+        <table class="table table-striped">
+            <tr>
+                <th>Division</th>
+                <th class="text-right">Entitled Users</th>
+                <th class="text-right">Usage Time (Past 30 Days)</th>
+            </tr>
+            @foreach (var item in entitlement.OrderByDescending(e => e.Count))
+            {
+                <tr>
+                    <th>@(item.Division == null ? "none" : item.Division.Name)</th>
+                    <td class="text-right">@Html.DisplayFor(model => item.Count, "IntThousands")</td>
+                    <td class="text-right">
+                        @{
+                            var launchData = launches.Where(x => x.Division == item.Division).FirstOrDefault();
+                            if (launchData != null)
+                            {
+                                int hours = (int)Math.Floor(launchData.Duration.TotalHours);
+                                <text>@Html.DisplayFor(modelItem => hours, "IntThousands")h @(launchData.Duration.Minutes)m</text>
+                            }
+                            else
+                            {
+                                <text>0h 0m</text>
+                            }
+                        }
+                    </td>
+                </tr>
+            }
+            <tr>
+                <th>Total</th>
+                <th class="text-right">@Html.DisplayFor(modelItem => users.Count, "IntThousands")</th>
+                <th class="text-right">
+                    @{
+                        TimeSpan totalTime = TimeSpan.FromSeconds(launches.Sum(x => x.Duration.TotalSeconds));
+                        int totalHours = (int)Math.Floor(totalTime.TotalHours);
+                    }
+                    @Html.DisplayFor(modelItem => totalHours, "IntThousands")h @(totalTime.Minutes)m
+                </th>
+            </tr>
+        </table>
+
+        @using (Ajax.BeginForm("GetUserList", new AjaxOptions
+        {
+            InsertionMode = InsertionMode.Replace,
+            UpdateTargetId = "userListContainer",
+            LoadingElementId = "userListLoader",
+            OnBegin = "$(\"#userListLoader .spinner\").spin();",
+            OnComplete = "$(\"#userListLoader .spinner\").spin(false);"
+        }))
+        {
+            @Html.Hidden("businessSolutionId", Model.Id)
+            <button type="submit" class="btn btn-default">Full User List</button>
+            <p></p>
+        }
+        @Html.Partial("_Loader", "userListLoader")
+        <div id="userListContainer">
+        </div>
+        <p></p>
+    </div>
+
+    <!-- Linked Applications (direct and indirect through Published Apps or Binaries) -->
+    <div class="tab-pane" id="applications">
+        <h2>Applications</h2>
+        @using (Ajax.BeginForm("RemoveLinkedApplications", new AjaxOptions
+        {
+            InsertionMode = InsertionMode.Replace,
+            UpdateTargetId = "linkedApplicationList",
+            LoadingElementId = "linkedApplicationLoader",
+            OnBegin = "$(\"#linkedApplicationLoader .spinner\").spin();",
+            OnComplete = "$(\"#linkedApplicationLoader .spinner\").spin(false);",
+            HttpMethod = "POST"
+        }))
+        {
+            @Html.Hidden("businessSolutionId", Model.Id)
+            <div id="linkedApplicationList">
+                @Html.Partial("_LinkedApplications", Model.Applications)
+            </div>
+            @Html.Partial("_Loader", "linkedApplicationLoader")
+            if (User.IsInRole(MigrationTool.Roles.Edit) || User.IsInRole(MigrationTool.Roles.Admin))
+            {
+                <button type="submit" class="btn btn-default">Remove Selected</button>
+                <button type="button" class="btn btn-default" data-toggle="modal" data-target="#addApplicationDialog" id="addApplicationButton">Add</button>
+            }
+        }
+
+        <h2>Referenced Applications</h2>
+        <p>This list contains additional applications referenced either through the linked Published Applications or through the linked Binaries on the other tabs. They are only listed here so that they can easily be added to the list above.</p>
+
+        @{    
+            var list = Model.PublishedApplications
+                    .Where(x => x.ApplicationVersion_Id != null)
+                    .Select(x => x.ApplicationVersion.Application)
+                    .Union(Model.Binaries.SelectMany(x => x.Applications))
+                    .Where(x => !Model.Applications.Contains(x))
+                    .Distinct().ToList();
+        }
+
+        <table class="table table-striped">
+            <tr>
+                <th>@Html.Label("Application")</th>
+                <th>@Html.Label("Notes")</th>
+                @if (User.IsInRole(MigrationTool.Roles.Edit) || User.IsInRole(MigrationTool.Roles.Admin))
+                {
+                    <th></th>
+                }
+            </tr>
+
+            @foreach (var item in list.OrderBy(x => x.Name)) {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => item)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Notes, "NoteCounts")</td>
+                    @if (User.IsInRole(MigrationTool.Roles.Edit) || User.IsInRole(MigrationTool.Roles.Admin))
+                    {
+                        <td><button class="btn btn-default btn-add-application" type="submit" value="@item.Id" name="applicationId">Add</button></td>
+                    }
+                </tr>
+            }
+        </table>
+        @Html.Partial("_RecordCount", Model == null ? 0 : list.Count())
+
+        <div class="modal fade" id="addApplicationDialog">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"><span>&times;</span><span class="sr-only">Close</span></button>
+                        <h4 class="modal-title">Link Applications</h4>
+                    </div>
+                    <div class="modal-body">
+                        @using (Ajax.BeginForm("SearchApplicationForBusinessSolutionSelectMultiple", "Application", null, new AjaxOptions
+                        {
+                            InsertionMode = InsertionMode.Replace,
+                            UpdateTargetId = "applicationSearchResults",
+                            LoadingElementId = "applicationSearchLoader",
+                            OnBegin = "$(\"#applicationSearchLoader .spinner\").spin();",
+                            OnComplete = "$(\"#applicationSearchLoader .spinner\").spin(false);"
+                        }, new { id = "applicationSearchForm" }))
+                        {
+                            string search = "";
+                            @Html.Hidden("businessSolutionId", Model.Id)
+                            <div class="input-group">
+                                @Html.TextBoxFor(model => search, new { @class = "form-control", id = "applicationSearchBox" })
+                                <span class="input-group-btn">
+                                    <button class="btn btn-default" type="submit">Search</button>
+                                </span>
+                            </div>
+                            <p></p>
+                            @Html.Partial("_Loader", "applicationSearchLoader")
+                            <div id="applicationSearchResults"></div>
+                        }
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-primary" data-dismiss="modal" id="addApplicationSubmitButton">Link</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Linked Published Applications -->
+    <div class="tab-pane" id="publishedApplications">
+        <h2>Published Applications</h2>
+        @using (Ajax.BeginForm("RemoveLinkedPublishedApplications", new AjaxOptions
+        {
+            InsertionMode = InsertionMode.Replace,
+            UpdateTargetId = "linkedPublishedApplicationList",
+            LoadingElementId = "linkedPublishedApplicationLoader",
+            OnBegin = "$(\"#linkedPublishedApplicationLoader .spinner\").spin();",
+            OnComplete = "$(\"#linkedPublishedApplicationLoader .spinner\").spin(false);",
+            HttpMethod = "POST"
+        }))
+        {
+            @Html.Hidden("businessSolutionId", Model.Id)
+            <div id="linkedPublishedApplicationList">
+                @Html.Partial("_LinkedPublishedApplications", Model.PublishedApplications)
+            </div>
+            @Html.Partial("_Loader", "linkedPublishedApplicationLoader")
+            if (User.IsInRole(MigrationTool.Roles.Edit) || User.IsInRole(MigrationTool.Roles.Admin))
+            {
+                <button type="submit" class="btn btn-default">Remove Selected</button>
+                <button type="button" class="btn btn-default" data-toggle="modal" data-target="#addPublishedApplicationDialog" id="addPublishedApplicationButton">Add</button>
+            }
+        }
+
+        <div class="modal fade" id="addPublishedApplicationDialog">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"><span>&times;</span><span class="sr-only">Close</span></button>
+                        <h4 class="modal-title">Link Published Applications</h4>
+                    </div>
+                    <div class="modal-body">
+                        @using (Ajax.BeginForm("SearchPublishedApplicationForBusinessSolutionSelectMultiple", "PublishedApplication", null, new AjaxOptions
+                        {
+                            InsertionMode = InsertionMode.Replace,
+                            UpdateTargetId = "publishedApplicationSearchResults",
+                            LoadingElementId = "publishedApplicationSearchLoader",
+                            OnBegin = "$(\"#publishedApplicationSearchLoader .spinner\").spin();",
+                            OnComplete = "$(\"#publishedApplicationSearchLoader .spinner\").spin(false);"
+                        }, new { id = "publishedApplicationSearchForm" }))
+                        {
+                            string search = "";
+                            @Html.Hidden("businessSolutionId", Model.Id)
+                            <div class="input-group">
+                                @Html.TextBoxFor(model => search, new { @class = "form-control", id = "publishedApplicationSearchBox" })
+                                <span class="input-group-btn">
+                                    <button class="btn btn-default" type="submit">Search</button>
+                                </span>
+                            </div>
+                            <div class="input-group">
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" name="includeLinked" value="true" />
+                                        Include Published Applications that are already linked to another Business Solution
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" name="searchBy" value="publishedApplications" checked />
+                                    Search by Published Application Name
+                                </label>
+                            </div>
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" name="searchBy" value="applications" />
+                                    Search by Application Name
+                                </label>
+                            </div>
+                            <p></p>
+                            @Html.Partial("_Loader", "publishedApplicationSearchLoader")
+                            <div id="publishedApplicationSearchResults"></div>
+                        }
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-primary" data-dismiss="modal" id="addPublishedApplicationSubmitButton">Link</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Linked Binaries -->
+    <div class="tab-pane" id="binaries">
+        <h2>Binaries</h2>
+        @using (Ajax.BeginForm("RemoveLinkedBinaries", new AjaxOptions
+        {
+            InsertionMode = InsertionMode.Replace,
+            UpdateTargetId = "linkedBinaryList",
+            LoadingElementId = "linkedBinaryLoader",
+            OnBegin = "$(\"#linkedBinaryLoader .spinner\").spin();",
+            OnComplete = "$(\"#linkedBinaryLoader .spinner\").spin(false);",
+            HttpMethod = "POST"
+        }))
+        {
+            @Html.Hidden("businessSolutionId", Model.Id)
+            <div id="linkedBinaryList">
+                @Html.Partial("_LinkedBinaries", Model.Binaries)
+            </div>
+            @Html.Partial("_Loader", "linkedBinaryLoader")
+            if (User.IsInRole(MigrationTool.Roles.Edit) || User.IsInRole(MigrationTool.Roles.Admin))
+            {
+                <button type="submit" class="btn btn-default">Remove Selected</button>
+                <button type="button" class="btn btn-default" data-toggle="modal" data-target="#addBinaryDialog" id="addBinaryButton">Add</button>
+            }
+        }
+
+        <div class="modal fade" id="addBinaryDialog">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"><span>&times;</span><span class="sr-only">Close</span></button>
+                        <h4 class="modal-title">Link Binaries</h4>
+                    </div>
+                    <div class="modal-body">
+                        @using (Ajax.BeginForm("SearchBinaryForBusinessSolutionSelectMultiple", "Binary", null, new AjaxOptions
+                        {
+                            InsertionMode = InsertionMode.Replace,
+                            UpdateTargetId = "binarySearchResults",
+                            LoadingElementId = "binarySearchLoader",
+                            OnBegin = "$(\"#binarySearchLoader .spinner\").spin();",
+                            OnComplete = "$(\"#binarySearchLoader .spinner\").spin(false);"
+                        }, new { id = "binarySearchForm" }))
+                        {
+                            string search = "";
+                            @Html.Hidden("businessSolutionId", Model.Id)
+                            <div class="input-group">
+                                @Html.TextBoxFor(model => search, new { @class = "form-control", id = "binarySearchBox" })
+                                <span class="input-group-btn">
+                                    <button class="btn btn-default" type="submit">Search</button>
+                                </span>
+                            </div>
+                            <p></p>
+                            @Html.Partial("_Loader", "binarySearchLoader")
+                            <div id="binarySearchResults"></div>
+                        }
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-primary" data-dismiss="modal" id="addBinarySubmitButton">Link</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Linked IQ Documents -->
+    <div class="tab-pane" id="iqDocuments">
+        <h2>IQ Documents</h2>
+        @using (Ajax.BeginForm("RemoveLinkedIqDocuments", new AjaxOptions
+        {
+            InsertionMode = InsertionMode.Replace,
+            UpdateTargetId = "linkedIqDocumentList",
+            LoadingElementId = "linkedIqDocumentLoader",
+            OnBegin = "$(\"#linkedIqDocumentLoader .spinner\").spin();",
+            OnComplete = "$(\"#linkedIqDocumentLoader .spinner\").spin(false);",
+            HttpMethod = "POST"
+        }))
+        {
+            @Html.Hidden("businessSolutionId", Model.Id)
+            <div id="linkedIqDocumentList">
+                @Html.Partial("_LinkedIqDocuments", Model.IqDocuments)
+            </div>
+            @Html.Partial("_Loader", "linkedIqDocumentLoader")
+            if (User.IsInRole(MigrationTool.Roles.Edit) || User.IsInRole(MigrationTool.Roles.Admin))
+            {
+                <button type="submit" class="btn btn-default">Remove Selected</button>
+                <button type="button" class="btn btn-default" data-toggle="modal" data-target="#addIqDocumentDialog" id="addIqDocumentButton">Add</button>
+            }
+        }
+
+        <div class="modal fade" id="addIqDocumentDialog">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"><span>&times;</span><span class="sr-only">Close</span></button>
+                        <h4 class="modal-title">Link IQ Documents</h4>
+                    </div>
+                    <div class="modal-body">
+                        @using (Ajax.BeginForm("SearchIqDocumentForBusinessSolutionSelectMultiple", "IqDocument", null, new AjaxOptions
+                        {
+                            InsertionMode = InsertionMode.Replace,
+                            UpdateTargetId = "iqDocumentSearchResults",
+                            LoadingElementId = "iqDocumentSearchLoader",
+                            OnBegin = "$(\"#iqDocumentSearchLoader .spinner\").spin();",
+                            OnComplete = "$(\"#iqDocumentSearchLoader .spinner\").spin(false);"
+                        }, new { id = "iqDocumentSearchForm" }))
+                        {
+                            string search = "";
+                            @Html.Hidden("businessSolutionId", Model.Id)
+                            <div class="input-group">
+                                @Html.TextBoxFor(model => search, new { @class = "form-control", id = "iqDocumentSearchBox" })
+                                <span class="input-group-btn">
+                                    <button class="btn btn-default" type="submit">Search</button>
+                                </span>
+                            </div>
+                            <p></p>
+                            @Html.Partial("_Loader", "iqDocumentSearchLoader")
+                            <div id="iqDocumentSearchResults"></div>
+                        }
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-primary" data-dismiss="modal" id="addIqDocumentSubmitButton">Link</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<p></p>
+
+<div class="row">
+    @if (User.IsInRole(MigrationTool.Roles.Edit) || User.IsInRole(MigrationTool.Roles.Admin))
+    {
+        <div class="col-md-6">
+            @Html.Partial("_NoteForm", Model)
+        </div>
+    }
+
+    <div class="col-md-6">
+        @Html.Partial("_TagForm", Model)
+    </div>
+</div>
+
+@Html.Partial("_NoteList", Model)
+
+@section Scripts {
+    <script type="text/javascript">
+        $("#addPublishedApplicationDialog").on("show.bs.modal", function () {
+            $("#publishedApplicationSearchResults").html("");
+            $("#publishedApplicationSearchForm").each(function () {
+                this.reset();
+            });
+        });
+
+        $("#addPublishedApplicationDialog").on("shown.bs.modal", function () {
+            $("#publishedApplicationSearchBox").focus();
+        });
+
+        $("#addPublishedApplicationSubmitButton").click(function () {
+            var selectedApplications = $("input[name=selectedPublishedApplications]:checked", "#publishedApplicationSearchForm");
+            if (selectedApplications.length > 0) {
+                var guidList = [];
+                selectedApplications.toArray().forEach(function (item) {
+                    guidList.push(item.value);
+                });
+
+                $.ajax({
+                    type: "POST",
+                    url: "/BusinessSolution/SetPublishedApplicationLinks",
+                    traditional: true,
+                    data: {
+                        publishedApplicationIds: guidList,
+                        businessSolutionId: "@Model.Id"
+                    },
+
+                    success: function (data) {
+                        $("#linkedPublishedApplicationList").html(data);
+                    }
+                });
+            }
+        });
+
+        $("#addBinaryDialog").on("show.bs.modal", function () {
+            $("#binarySearchResults").html("");
+            $("#binarySearchForm").each(function () {
+                this.reset();
+            });
+        });
+
+        $("#addBinaryDialog").on("shown.bs.modal", function () {
+            $("#binarySearchBox").focus();
+        });
+
+        $("#addBinarySubmitButton").click(function () {
+            var selectedBinaries = $("input[name=selectedBinaries]:checked", "#binarySearchForm");
+            if (selectedBinaries.length > 0) {
+                var guidList = [];
+                selectedBinaries.toArray().forEach(function (item) {
+                    guidList.push(item.value);
+                });
+
+                $.ajax({
+                    type: "POST",
+                    url: "/BusinessSolution/SetBinaryLinks",
+                    traditional: true,
+                    data: {
+                        binaryIds: guidList,
+                        businessSolutionId: "@Model.Id"
+                    },
+
+                    success: function (data) {
+                        $("#linkedBinaryList").html(data);
+                    }
+                });
+            }
+        });
+
+        $("#addIqDocumentDialog").on("show.bs.modal", function () {
+            $("#iqDocumentSearchResults").html("");
+            $("#iqDocumentSearchForm").each(function () {
+                this.reset();
+            });
+        });
+
+        $("#addIqDocumentDialog").on("shown.bs.modal", function () {
+            $("#iqDocumentSearchBox").focus();
+        });
+
+        $("#addIqDocumentSubmitButton").click(function () {
+            var selectedIqDocuments = $("input[name=selectedIqDocuments]:checked", "#iqDocumentSearchForm");
+            if (selectedIqDocuments.length > 0) {
+                var guidList = [];
+                selectedIqDocuments.toArray().forEach(function (item) {
+                    guidList.push(item.value);
+                });
+
+                $.ajax({
+                    type: "POST",
+                    url: "/BusinessSolution/SetIqDocumentLinks",
+                    traditional: true,
+                    data: {
+                        iqDocumentIds: guidList,
+                        businessSolutionId: "@Model.Id"
+                    },
+
+                    success: function (data) {
+                        $("#linkedIqDocumentList").html(data);
+                    }
+                });
+            }
+        });
+
+        $("#addStrategicVendorDialog").on("show.bs.modal", function () {
+            $("#strategicVendorSearchResults").html("");
+            $("#strategicVendorSearchForm").each(function () {
+                this.reset();
+            });
+        });
+
+        $("#addStrategicVendorDialog").on("shown.bs.modal", function () {
+            $("#strategicVendorSearchBox").focus();
+        });
+
+        $("#addStrategicVendorSubmitButton").click(function () {
+            var selectedStrategicVendors = $("input[name=selectedStrategicVendors]:checked", "#strategicVendorSearchForm");
+            if (selectedStrategicVendors.length > 0) {
+                var guidList = [];
+                selectedStrategicVendors.toArray().forEach(function (item) {
+                    guidList.push(item.value);
+                });
+
+                $.ajax({
+                    type: "POST",
+                    url: "/BusinessSolution/SetStrategicVendorLinks",
+                    traditional: true,
+                    data: {
+                        strategicVendorIds: guidList,
+                        businessSolutionId: "@Model.Id"
+                    },
+
+                    success: function (data) {
+                        $("#linkedStrategicVendorList").html(data);
+                    }
+                });
+            }
+        });
+
+        $("#addDivisionDialog").on("show.bs.modal", function () {
+            $("#divisionSearchResults").html("");
+            $("#divisionSearchForm").each(function () {
+                this.reset();
+            });
+        });
+
+        $("#addDivisionDialog").on("shown.bs.modal", function () {
+            $("#divisionSearchBox").focus();
+        });
+
+        $("#addDivisionSubmitButton").click(function () {
+            var selectedDivisions = $("input[name=selectedDivisions]:checked", "#divisionSearchForm");
+            if (selectedDivisions.length > 0) {
+                var guidList = [];
+                selectedDivisions.toArray().forEach(function (item) {
+                    guidList.push(item.value);
+                });
+
+                $.ajax({
+                    type: "POST",
+                    url: "/BusinessSolution/SetDivisionLinks",
+                    traditional: true,
+                    data: {
+                        divisionIds: guidList,
+                        businessSolutionId: "@Model.Id"
+                    },
+
+                    success: function (data) {
+                        $("#linkedDivisionList").html(data);
+                    }
+                });
+            }
+        });
+
+
+        $("#addApplicationDialog").on("show.bs.modal", function () {
+            $("#applicationSearchResults").html("");
+            $("#applicationSearchForm").each(function () {
+                this.reset();
+            });
+        });
+
+        $("#addApplicationDialog").on("shown.bs.modal", function () {
+            $("#applicationSearchBox").focus();
+        });
+
+        $("#addApplicationSubmitButton").click(function () {
+            var selectedApplications = $("input[name=selectedApplications]:checked", "#applicationSearchForm");
+            if (selectedApplications.length > 0) {
+                var guidList = [];
+                selectedApplications.toArray().forEach(function (item) {
+                    guidList.push(item.value);
+                });
+
+                $.ajax({
+                    type: "POST",
+                    url: "/BusinessSolution/SetApplicationLinks",
+                    traditional: true,
+                    data: {
+                        applicationIds: guidList,
+                        businessSolutionId: "@Model.Id"
+                    },
+
+                    success: function (data) {
+                        $("#linkedApplicationList").html(data);
+                    }
+                });
+            }
+        });
+
+
+        $(function () {
+            configurePickers();
+        });
+
+        function configurePickers() {
+            $(".datetimepicker").each(function () {
+                var $this = $(this);
+                $this.datetimepicker({
+                    useCurrent: false,
+                    useSeconds: false,
+                    minDate: new Date($this.data("min-date")),
+                    showToday: false,
+                    sideBySide: true
+                });
+            });
+        }
+
+        $("[data-toggle='popover']").popover();
+
+        $(".btn-add-application").click(function () {
+            $(this).parent().parent().remove();
+
+            $.ajax({
+                type: "POST",
+                url: "/BusinessSolution/SetApplicationLinks",
+                traditional: true,
+                data: {
+                    applicationIds: [this.value],
+                    businessSolutionId: "@Model.Id"
+                },
+
+                success: function (data) {
+                    $("#linkedApplicationList").html(data);
+                }
+            });
+        });
+    </script>
+}

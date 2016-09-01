@@ -1,0 +1,248 @@
+﻿@model MigrationTool.Models.Binary
+@using MigrationTool.ViewModels
+
+@{
+    ViewBag.Title = "Details";
+}
+
+@Html.Partial("_Breadcrumb", new Breadcrumb(ViewBag.Title, new BreadcrumbItem { LinkText = "Binaries", ControllerName = "Binary" }))
+@if (User.IsInRole(MigrationTool.Roles.Edit) || User.IsInRole(MigrationTool.Roles.Admin))
+{
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }, new { @class = "btn btn-default btn-lg pull-right" })
+}
+<h2>@ViewBag.Title</h2>
+
+<dl class="dl-horizontal">
+    <dt>@Html.DisplayNameFor(model => Model.Name)</dt>
+    <dd>@Html.DisplayFor(model =>model.Name)</dd>
+
+    <dt>@Html.DisplayNameFor(model => model.Version)</dt>
+    <dd>@Html.DisplayFor(model => model.Version)</dd>
+
+    <dt>@Html.DisplayNameFor(model => model.SccmPackage)</dt>
+    <dd>@Html.DisplayFor(model => model.SccmPackage)</dd>
+
+    <dt>@Html.DisplayNameFor(model => model.PackageName)</dt>
+    <dd>@Html.DisplayFor(model => model.PackageName)</dd>
+
+    <dt>@Html.DisplayNameFor(model => model.Virtualized)</dt>
+    <dd>@Html.DisplayFor(model => model.Virtualized)</dd>
+</dl>
+
+<h2>Targeted Platforms</h2>
+@using (Ajax.BeginForm("RemoveLinkedPlatform", new AjaxOptions
+{
+    InsertionMode = InsertionMode.Replace,
+    UpdateTargetId = "linkedPlatformList",
+    LoadingElementId = "linkedPlatformLoader",
+    OnBegin = "$(\"#linkedPlatformLoader .spinner\").spin();",
+    OnComplete = "$(\"#linkedPlatformLoader .spinner\").spin(false);",
+    HttpMethod = "POST"
+}))
+{
+    @Html.Hidden("binaryId", Model.Id)
+    <div id="linkedPlatformList">
+        @Html.Partial("_LinkedPlatforms", Model.Platforms)
+    </div>
+    @Html.Partial("_Loader", "linkedPlatformLoader")
+    if (User.IsInRole(MigrationTool.Roles.Edit) || User.IsInRole(MigrationTool.Roles.Admin))
+    {
+        <button type="button" class="btn btn-default" data-toggle="modal" data-target="#addPlatformDialog" id="addPlatformButton">Add</button>
+    }
+}
+
+<div class="modal fade" id="addPlatformDialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span>&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title">Link Platforms</h4>
+            </div>
+            <div class="modal-body">
+                @using (Ajax.BeginForm("SearchPlatformForBinarySelectMultiple", "Platform", null, new AjaxOptions
+                {
+                    InsertionMode = InsertionMode.Replace,
+                    UpdateTargetId = "platformSearchResults",
+                    LoadingElementId = "platformSearchLoader",
+                    OnBegin = "$(\"#platformSearchLoader .spinner\").spin();",
+                    OnComplete = "$(\"#platformSearchLoader .spinner\").spin(false);"
+                }, new { id = "platformSearchForm" }))
+                {
+                    string search = "";
+                    <div class="input-group">
+                        @Html.Hidden("binaryId", Model.Id)
+                        @Html.TextBoxFor(model => search, new { @class = "form-control", id = "platformSearchBox" })
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" type="submit">Search</button>
+                        </span>
+                    </div>
+                    <p></p>
+                    @Html.Partial("_Loader", "platformSearchLoader")
+                    <div id="platformSearchResults"></div>
+                }
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" id="linkPlatformsButton">Link</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<h2>Applications</h2>
+@using (Ajax.BeginForm("RemoveLinkedApplication", new AjaxOptions
+{
+    InsertionMode = InsertionMode.Replace,
+    UpdateTargetId = "linkedApplicationList",
+    LoadingElementId = "linkedApplicationLoader",
+    OnBegin = "$(\"#linkedApplicationLoader .spinner\").spin();",
+    OnComplete = "$(\"#linkedApplicationLoader .spinner\").spin(false);",
+    HttpMethod = "POST"
+}))
+{
+    @Html.Hidden("binaryId", Model.Id)
+    <div id="linkedApplicationList">
+        @Html.Partial("_LinkedApplications", Model.Applications)
+    </div>
+    @Html.Partial("_Loader", "linkedApplicationLoader")
+    if (User.IsInRole(MigrationTool.Roles.Edit) || User.IsInRole(MigrationTool.Roles.Admin))
+    {
+        <button type="button" class="btn btn-default" data-toggle="modal" data-target="#addApplicationDialog" id="addApplicationButton">Add</button>
+    }
+}
+
+<div class="modal fade" id="addApplicationDialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span>&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title">Link Applications</h4>
+            </div>
+            <div class="modal-body">
+                @using (Ajax.BeginForm("SearchApplicationForBinarySelectMultiple", "Application", null, new AjaxOptions
+                {
+                    InsertionMode = InsertionMode.Replace,
+                    UpdateTargetId = "ApplicationSearchResults",
+                    LoadingElementId = "ApplicationSearchLoader",
+                    OnBegin = "$(\"#ApplicationSearchLoader .spinner\").spin();",
+                    OnComplete = "$(\"#ApplicationSearchLoader .spinner\").spin(false);"
+                }, new { id = "ApplicationSearchForm" }))
+                {
+                    string search = "";
+                    <div class="input-group">
+                        @Html.Hidden("binaryId", Model.Id)
+                        @Html.TextBoxFor(model => search, new { @class = "form-control", id = "ApplicationSearchBox" })
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" type="submit">Search</button>
+                        </span>
+                    </div>
+                    <p></p>
+                    @Html.Partial("_Loader", "ApplicationSearchLoader")
+                    <div id="ApplicationSearchResults"></div>
+                }
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" id="linkApplicationsButton">Link</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="row">
+    <p></p>
+    @if (User.IsInRole(MigrationTool.Roles.Edit) || User.IsInRole(MigrationTool.Roles.Admin))
+    {
+        <div class="col-md-6">
+            @Html.Partial("_NoteForm", Model)
+        </div>
+    }
+    
+    <div class="col-md-6">
+        @Html.Partial("_TagForm", Model)
+    </div>
+</div>
+
+@Html.Partial("_NoteList", Model)
+
+@section Scripts {
+    <script type="text/javascript">
+        $("#addPlatformDialog").on("show.bs.modal", function () {
+            $("#platformSearchResults").html("");
+            $("#platformSearchForm").each(function () {
+                this.reset();
+            });
+        });
+
+        $("#addPlatformDialog").on("shown.bs.modal", function () {
+            $("#platformSearchBox").focus();
+        });
+
+        $("#linkPlatformsButton").click(function () {
+            var selectedPlatforms = $("input[name=selectedPlatforms]:checked", "#platformSearchForm");
+            if (selectedPlatforms) {
+                var guidList = [];
+                selectedPlatforms.toArray().forEach(function (item) {
+                    guidList.push(item.value);
+                });
+                addLinkedPlatforms(guidList);
+            }
+        });
+
+        function addLinkedPlatforms(guids) {
+            $.ajax({
+                type: "POST",
+                url: "/Binary/AddPlatformLinks",
+                traditional: true,
+                data: {
+                    platformIds: guids,
+                    binaryId: "@Model.Id"
+                },
+
+                success: function (data) {
+                    $("#linkedPlatformList").html(data);
+                }
+            });
+        }
+
+        $("#addApplicationDialog").on("show.bs.modal", function () {
+            $("#ApplicationSearchResults").html("");
+            $("#ApplicationSearchForm").each(function () {
+                this.reset();
+            });
+        });
+
+        $("#addApplicationDialog").on("shown.bs.modal", function () {
+            $("#ApplicationSearchBox").focus();
+        });
+
+        $("#linkApplicationsButton").click(function () {
+            var selectedApplications = $("input[name=selectedApplications]:checked", "#ApplicationSearchForm");
+            if (selectedApplications) {
+                var guidList = [];
+                selectedApplications.toArray().forEach(function (item) {
+                    guidList.push(item.value);
+                });
+                addLinkedApplications(guidList);
+            }
+        });
+
+        function addLinkedApplications(guids) {
+            $.ajax({
+                type: "POST",
+                url: "/Binary/AddApplicationLinks",
+                traditional: true,
+                data: {
+                    applicationIds: guids,
+                    binaryId: "@Model.Id"
+                },
+
+                success: function (data) {
+                    $("#linkedApplicationList").html(data);
+                }
+            });
+        }
+    </script>
+}

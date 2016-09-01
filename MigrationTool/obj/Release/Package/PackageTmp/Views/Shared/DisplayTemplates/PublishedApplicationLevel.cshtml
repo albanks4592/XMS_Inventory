@@ -1,0 +1,5 @@
+﻿@model MigrationTool.Models.PublishedApplicationLevel
+@if (Model != null)
+{
+    @Html.ActionLink(Model.PublishedApplicationName, "Details", "PublishedApplicationLevel", new { id = Model.Id }, null)
+}

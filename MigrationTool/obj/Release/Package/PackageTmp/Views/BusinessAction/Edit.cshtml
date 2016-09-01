@@ -1,0 +1,45 @@
+﻿@model MigrationTool.Models.BusinessAction
+@using MigrationTool.ViewModels
+
+@{
+    ViewBag.Title = "Edit";
+    int count = Model.BusinessSolutions.Count();
+    bool canDelete = count == 0;
+}
+
+@Html.Partial("_Breadcrumb", new Breadcrumb(ViewBag.Title, new BreadcrumbItem { LinkText = "Business Actions", ControllerName = "BusinessAction" }))
+<h2>@ViewBag.Title</h2>
+
+@if (!canDelete && User.IsInRole(MigrationTool.Roles.Admin))
+{
+    string label;
+    if (count == 1)
+    {
+        label = "Business Solution";
+    }
+    else
+    {
+        label = "Business Solutions";
+    }
+    <div class="alert alert-warning">
+        This Workflow is being used by @Html.DisplayFor(model => count, "IntThousands") @(label). It cannot be deleted.
+    </div>
+}
+
+@using (Html.BeginForm()) {
+    @Html.ValidationSummary(true)
+    <div class="form-group">
+        @Html.LabelFor(model => model.Name)
+        @Html.EditorFor(model => model.Name)
+        @Html.ValidationMessageFor(model => model.Name)
+    </div>
+    
+    <button type="submit" class="btn btn-primary">Save</button>
+    @Html.ActionLink("Cancel", "Details", new { Id = Model.Id }, new { @class = "btn btn-default" })
+    if (canDelete && User.IsInRole(MigrationTool.Roles.Admin))
+    {
+        <div class="pull-right">
+            @Html.ActionLink("Delete", "Delete", new { Id = Model.Id }, new { @class = "btn btn-danger" })
+        </div>
+    }
+}

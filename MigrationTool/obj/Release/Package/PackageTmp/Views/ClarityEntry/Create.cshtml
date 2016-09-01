@@ -1,0 +1,19 @@
+﻿@model MigrationTool.Models.ClarityEntry
+@using MigrationTool.ViewModels
+
+@{
+    ViewBag.Title = "Create";
+}
+
+@Html.Partial("_Breadcrumb", new Breadcrumb(ViewBag.Title, new BreadcrumbItem { LinkText = "Clarity Entries", ControllerName = "ClarityEntry" }))
+<h2>@ViewBag.Title</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.ValidationSummary(true)
+
+    @Html.Partial("_Create", Model)
+
+    <button type="submit" class="btn btn-primary">Create</button>
+    @Html.ActionLink("Cancel", "Index", null, new { @class = "btn btn-default" });
+}

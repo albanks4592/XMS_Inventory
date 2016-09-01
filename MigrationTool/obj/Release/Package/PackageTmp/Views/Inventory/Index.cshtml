@@ -1,0 +1,402 @@
+﻿@model MigrationTool.Models.MigrationToolEntities
+@using MigrationTool.ViewModels
+
+@{
+    ViewBag.Title = "Inventory and Capacity Dashboard";
+
+    // XenApp
+    int xenAppFarmCount = Model.XenAppFarms.Where(x => !x.Inactive).Count();
+    int xenAppServerCount = Model.XenAppServers.Where(x => !x.Inactive).Count();
+    int xenAppPublishedApplicationCount = Model.PublishedApplications.Where(x => !x.Inactive).Count();
+    
+    // XenDesktop
+    int xenDesktopSiteCount = Model.XenDesktopSites.Where(x => !x.Inactive).Count();
+    int xenDesktopServerCount = Model.XenDesktopServers.Where(x => !x.Inactive).Count();
+    int xenDesktopCatalogCount = Model.XenDesktopCatalogs.Where(x => !x.Inactive).Count();
+    int xenDesktopBrokerDesktopCount = Model.XenDesktopBrokerDesktops.Where(x => !x.Inactive).Count();
+    
+    // Virtualization Infrastructure
+    int hypervisorCount = Model.Hypervisors.Where(x => !x.Inactive).Count();
+    int virtualMachineCount = Model.VirtualMachines.Where(x => !x.Inactive).Count();
+}
+
+@Html.Partial("_Breadcrumb", new Breadcrumb(ViewBag.Title))
+
+<h1>Inventory</h1>
+<div class="row">
+    @* XenApp Servers *@
+    <div class="col-sm-4">
+        <h2>XenApp</h2>
+        <table class="table">
+            <tr>
+                <th colspan=2>
+                    <button type="button" class="btn btn-link btn-xs" data-toggle="collapse" data-target=".farm-collapse" id="farm_CollapseButton"><span class="glyphicon glyphicon-plus"></span></button>
+                    @Html.ActionLink("Farms", "Index", "Farm")
+                </th>
+                <th class="text-right">@Html.DisplayFor(model => xenAppFarmCount, "IntThousands")</th>
+            </tr>
+
+            @foreach (var farm in Model.XenAppFarms.Where(x => !x.Inactive).OrderBy(x => x.Name))
+            {
+                <tr class="farm-collapse collapse-content collapse" data-collapse-button="farm_CollapseButton">
+                    <td></td>
+                    <td>@Html.DisplayFor(model => farm)</td>
+                    <td></td>
+                </tr>
+            }
+
+            <tr>
+                <th colspan=2>
+                    <button type="button" class="btn btn-link btn-xs" data-toggle="collapse" data-target=".xenapp-server-collapse" id="xenAppServer_CollapseButton"><span class="glyphicon glyphicon-plus"></span></button>
+                    @Html.ActionLink("Servers", "Index", "Server")
+                </th>
+                <th class="text-right">@Html.DisplayFor(model => xenAppServerCount, "IntThousands")</th>
+            </tr>
+
+            @foreach (var farm in Model.XenAppFarms.Where(x => !x.Inactive).OrderBy(x => x.Name))
+            {
+                int serverCount = farm.XenAppServers.Where(x => !x.Inactive).Count();
+                <tr class="xenapp-server-collapse collapse-content collapse" data-collapse-button="xenAppServer_CollapseButton">
+                    <td></td>
+                    <td>@Html.DisplayFor(model => farm)</td>
+                    <td class="text-right">@Html.DisplayFor(model => serverCount, "IntThousands")</td>
+                </tr>
+            }
+
+            <tr>
+                <th colspan=2>
+                    <button type="button" class="btn btn-link btn-xs" data-toggle="collapse" data-target=".published-application-collapse" id="publishedApplication_CollapseButton"><span class="glyphicon glyphicon-plus"></span></button>
+                    @Html.ActionLink("Published Applications", "Index", "PublishedApplication")
+                </th>
+                <th class="text-right">@Html.DisplayFor(model => xenAppPublishedApplicationCount, "IntThousands")</th>
+            </tr>
+
+            @foreach (var farm in Model.XenAppFarms.Where(x => !x.Inactive).OrderBy(x => x.Name))
+            {
+                int publishedApplicationCount = farm.PublishedApplications.Where(x => !x.Inactive).Count();
+                <tr class="published-application-collapse collapse-content collapse" data-collapse-button="publishedApplication_CollapseButton">
+                    <td></td>
+                    <td>@Html.DisplayFor(model => farm)</td>
+                    <td class="text-right">@Html.DisplayFor(model => publishedApplicationCount, "IntThousands")</td>
+                </tr>
+            }
+        </table>
+    </div>
+
+    <div class="col-sm-4">
+        <h2>XenDesktop</h2>
+        <table class="table">
+            <tr>
+                <th colspan=2>
+                    <button type="button" class="btn btn-link btn-xs" data-toggle="collapse" data-target=".xd-site-collapse" id="xdSite_CollapseButton"><span class="glyphicon glyphicon-plus"></span></button>
+                    @Html.ActionLink("Sites", "Index", "XenDesktopSite")
+                </th>
+                <th class="text-right">@Html.DisplayFor(model => xenDesktopSiteCount, "IntThousands")</th>
+            </tr>
+
+            @foreach (var site in Model.XenDesktopSites.Where(x => !x.Inactive).OrderBy(x => x.Name))
+            {
+                <tr class="xd-site-collapse collapse collapse-content" data-collapse-button="xdSite_CollapseButton">
+                    <td></td>
+                    <td>@Html.DisplayFor(model => site)</td>
+                    <td></td>
+                </tr>
+            }
+
+            <tr>
+                <th colspan=2>
+                    <button type="button" class="btn btn-link btn-xs" data-toggle="collapse" data-target=".xd-server-collapse" id="xdServer_CollapseButton"><span class="glyphicon glyphicon-plus"></span></button>
+                    @Html.ActionLink("Servers", "Index", "XenDesktopServer")
+                </th>
+                <th class="text-right">@Html.DisplayFor(model => xenDesktopServerCount, "IntThousands")</th>
+            </tr>
+
+            @foreach (var site in Model.XenDesktopSites.Where(x => !x.Inactive).OrderBy(x => x.Name))
+            {
+                int serverCount = site.XenDesktopServers.Where(x => !x.Inactive).Count();
+                <tr class="xd-server-collapse collapse collapse-content" data-collapse-button="xdServer_CollapseButton">
+                    <td></td>
+                    <td>@Html.DisplayFor(model => site)</td>
+                    <td class="text-right">@Html.DisplayFor(model => serverCount, "IntThousands")</td>
+                </tr>
+            }
+
+            <tr>
+                <th colspan=2>
+                    <button type="button" class="btn btn-link btn-xs" data-toggle="collapse" data-target=".xd-catalog-collapse" id="xdCatalog_CollapseButton"><span class="glyphicon glyphicon-plus"></span></button>
+                    @Html.ActionLink("Catalogs", "Index", "XenDesktopCatalog")
+                </th>
+                <th class="text-right">@Html.DisplayFor(model => xenDesktopCatalogCount, "IntThousands")</th>
+            </tr>
+
+            @foreach (var site in Model.XenDesktopSites.Where(x => !x.Inactive).OrderBy(x => x.Name))
+            {
+                int catalogCount = site.XenDesktopCatalogs.Where(x => !x.Inactive).Count();
+                <tr class="xd-catalog-collapse collapse collapse-content" data-collapse-button="xdCatalog_CollapseButton">
+                    <td></td>
+                    <td>@Html.DisplayFor(model => site)</td>
+                    <td class="text-right">@Html.DisplayFor(model => catalogCount, "IntThousands")</td>
+                </tr>
+            }
+
+            <tr>
+                <th colspan=2>
+                    <button type="button" class="btn btn-link btn-xs" data-toggle="collapse" data-target=".xd-broker-desktop-collapse" id="xdBrokerDesktop_CollapseButton"><span class="glyphicon glyphicon-plus"></span></button>
+                    @Html.ActionLink("Brokered Desktops", "Index", "XenDesktopBrokerDesktop")
+                </th>
+                <th class="text-right">@Html.DisplayFor(model => xenDesktopBrokerDesktopCount, "IntThousands")</th>
+            </tr>
+
+            <tr class="xd-broker-desktop-collapse collapse collapse-content" data-collapse-button="xdBrokerDesktop_CollapseButton">
+                <td></td>
+                <th colspan=2>By Site</th>
+            <tr></tr>
+
+            @foreach (var site in Model.XenDesktopSites.Where(x => !x.Inactive).OrderBy(x => x.Name))
+            {
+                int brokerDesktopCount = site.XenDesktopCatalogs.SelectMany(x => x.XenDesktopBrokerDesktops).Where(x => !x.Inactive).Count();
+                <tr class="xd-broker-desktop-collapse collapse collapse-content" data-collapse-button="xdBrokerDesktop_CollapseButton">
+                    <td></td>
+                    <td>@Html.DisplayFor(model => site)</td>
+                    <td class="text-right">@Html.DisplayFor(model => brokerDesktopCount, "IntThousands")</td>
+                </tr>
+            }
+
+            <tr class="xd-broker-desktop-collapse collapse collapse-content" data-collapse-button="xdBrokerDesktop_CollapseButton">
+                <td></td>
+                <th colspan=2>By Catalog Type</th>
+            <tr></tr>
+
+            @{
+                var xenDesktopCatalogTypeCounts = from b in Model.XenDesktopBrokerDesktops.Where(x => !x.Inactive)
+                             group b by b.XenDesktopCatalog.XenDesktopCatalogType into g
+                             orderby g.Key.Name
+                             select new { XenDesktopCatalogType = g.Key, Count = g.Count() };
+                
+                foreach (var item in xenDesktopCatalogTypeCounts) {
+                   <tr class="xd-broker-desktop-collapse collapse collapse-content" data-collapse-button="xdBrokerDesktop_CollapseButton">
+                        <td></td>
+                        <td>
+                            @if (item.XenDesktopCatalogType == null)
+                            {
+                                <text>&lt;no type&gt;</text>
+                            }
+                            else
+                            {
+                                @Html.DisplayFor(model => item.XenDesktopCatalogType)
+                            }
+                        </td>
+                        <td class="text-right">@Html.DisplayFor(model => item.Count, "IntThousands")</td>
+                    </tr> 
+                }
+            }
+        </table>
+    </div>
+
+    @* Virtual Machine Pools *@
+    <div class="col-sm-4">
+        <h2>Virtualization Infrastructure</h2>
+        <table class="table">
+            <tr>
+                <th colspan=2>
+                    <button type="button" class="btn btn-link btn-xs" data-toggle="collapse" data-target=".hypervisor-collapse" id="hypervisor_CollapseButton"><span class="glyphicon glyphicon-plus"></span></button>
+                    @Html.ActionLink("Hypervisors", "Index", "Hypervisor")
+                </th>
+                <th class="text-right">@Html.DisplayFor(model => hypervisorCount, "IntThousands")</th>
+            </tr>
+
+            <tr class="hypervisor-collapse collapse collapse-content" data-collapse-button="hypervisor_CollapseButton">
+                <td></td>
+                <th colspan=2>By Hypervisor Type</th>
+            </tr>
+
+            @foreach (var type in Model.HypervisorTypes.OrderBy(x => x.Name))
+            {
+                int typeCount = type.Hypervisors.Where(x => !x.Inactive).Count();
+                <tr class="hypervisor-collapse collapse collapse-content" data-collapse-button="hypervisor_CollapseButton">
+                    <td></td>
+                    <td>@Html.DisplayFor(model => type)</td>
+                    <td class="text-right">@Html.DisplayFor(model => typeCount, "IntThousands")</td>
+                </tr>
+            }
+
+            <tr class="hypervisor-collapse collapse collapse-content" data-collapse-button="hypervisor_CollapseButton">
+                <td></td>
+                <th colspan=2>By Hypervisor Group Type</th>
+            </tr>
+
+            @{
+                var hostHypervisorGroupTypeCounts = from b in Model.Hypervisors.Where(x => !x.Inactive)
+                                                  group b by b.HypervisorGroup.HypervisorGroupType into g
+                                                  orderby g.Key.Name
+                                                  select new { HypervisorGroupType = g.Key, Count = g.Count() };
+                
+                foreach (var item in hostHypervisorGroupTypeCounts) {
+                    <tr class="hypervisor-collapse collapse collapse-content" data-collapse-button="hypervisor_CollapseButton">
+                        <td></td>
+                        <td>
+                            @if (item.HypervisorGroupType == null)
+                            {
+                                <text>&lt;no type&gt;</text>
+                            }
+                            else
+                            {
+                                @Html.DisplayFor(model => item.HypervisorGroupType)
+                            }    
+                        </td>
+                        <td class="text-right">@Html.DisplayFor(model => item.Count, "IntThousands")</td>
+                    </tr>
+                }
+            }
+
+            <tr class="hypervisor-collapse collapse collapse-content" data-collapse-button="hypervisor_CollapseButton">
+                <td></td>
+                <th colspan=2>By Hypervisor Workload Profile</th>
+            </tr>
+
+            @{
+                var hostHypervisorWorkloadProfileCounts = from b in Model.Hypervisors.Where(x => !x.Inactive)
+                                                  group b by b.HypervisorWorkloadProfile into g
+                                                  orderby g.Key.Name
+                                                  select new { HypervisorWorkloadProfile = g.Key, Count = g.Count() };
+
+                foreach (var item in hostHypervisorWorkloadProfileCounts)
+                {
+                    <tr class="hypervisor-collapse collapse collapse-content" data-collapse-button="hypervisor_CollapseButton">
+                        <td></td>
+                        <td>
+                            @if (item.HypervisorWorkloadProfile == null)
+                            {
+                                <text>&lt;no profile&gt;</text>
+                            }
+                            else
+                            {
+                                @Html.DisplayFor(model => item.HypervisorWorkloadProfile)
+                            }    
+                        </td>
+                        <td class="text-right">@Html.DisplayFor(model => item.Count, "IntThousands")</td>
+                    </tr>
+                }
+            }
+
+            <tr>
+                <th colspan=2>
+                    <button type="button" class="btn btn-link btn-xs" data-toggle="collapse" data-target=".virtual-machine-collapse" id="virtualMachine_CollapseButton"><span class="glyphicon glyphicon-plus"></span></button>
+                    @Html.ActionLink("Virtual Machines", "Index", "VirtualMachine")
+                </th>
+                <th class="text-right">@Html.DisplayFor(model => virtualMachineCount, "IntThousands")</th>
+            </tr>
+
+            <tr class="virtual-machine-collapse collapse collapse-content" data-collapse-button="virtualMachine_CollapseButton">
+                <td></td>
+                <th colspan=2>By Virtual Machine Type</th>
+            </tr>
+            @foreach (var type in Model.VirtualMachineTypes.Where(x => x.VirtualMachines.Where(y => !y.Inactive).Count() > 0).OrderBy(x => x.Name))
+            {
+                int typeCount = type.VirtualMachines.Where(x => !x.Inactive).Count();
+                <tr class="virtual-machine-collapse collapse collapse-content" data-collapse-button="virtualMachine_CollapseButton">
+                    <td></td>
+                    <td>@Html.DisplayFor(model => type)</td>
+                    <td class="text-right">@Html.DisplayFor(model => typeCount, "IntThousands")</td>
+                </tr>
+            }
+
+            <tr class="virtual-machine-collapse collapse collapse-content" data-collapse-button="virtualMachine_CollapseButton">
+                <td></td>
+                <th colspan=2>By Hypervisor Group Type</th>
+            </tr>
+
+            @{
+                var vmHypervisorGroupTypeCounts = from b in Model.VirtualMachines.Where(x => !x.Inactive)
+                                                  group b by b.Hypervisor.HypervisorGroup.HypervisorGroupType into g
+                                                  orderby g.Key.Name
+                                                  select new { HypervisorGroupType = g.Key, Count = g.Count() };
+                
+                foreach (var item in vmHypervisorGroupTypeCounts) {
+                    <tr class="virtual-machine-collapse collapse collapse-content" data-collapse-button="virtualMachine_CollapseButton">
+                        <td></td>
+                        <td>
+                            @if (item.HypervisorGroupType == null)
+                            {
+                                <text>&lt;no type&gt;</text>
+                            }
+                            else
+                            {
+                                @Html.DisplayFor(model => item.HypervisorGroupType)
+                            }    
+                        </td>
+                        <td class="text-right">@Html.DisplayFor(model => item.Count, "IntThousands")</td>
+                    </tr>
+                }
+            }
+
+            <tr class="virtual-machine-collapse collapse collapse-content" data-collapse-button="virtualMachine_CollapseButton">
+                <td></td>
+                <th colspan=2>By Hypervisor Workload Profile</th>
+            </tr>
+
+            @{
+                var vmHypervisorWorkloadProfileCounts = from b in Model.VirtualMachines.Where(x => !x.Inactive)
+                                                  group b by b.Hypervisor.HypervisorWorkloadProfile into g
+                                                  orderby g.Key.Name
+                                                  select new { HypervisorWorkloadProfile = g.Key, Count = g.Count() };
+
+                foreach (var item in vmHypervisorWorkloadProfileCounts)
+                {
+                    <tr class="virtual-machine-collapse collapse collapse-content" data-collapse-button="virtualMachine_CollapseButton">
+                        <td></td>
+                        <td>
+                            @if (item.HypervisorWorkloadProfile == null)
+                            {
+                                <text>&lt;no profile&gt;</text>
+                            }
+                            else
+                            {
+                                @Html.DisplayFor(model => item.HypervisorWorkloadProfile)
+                            }    
+                        </td>
+                        <td class="text-right">@Html.DisplayFor(model => item.Count, "IntThousands")</td>
+                    </tr>
+                }
+            }
+        </table>
+    </div>
+</div>
+
+<h1>Capacity</h1>
+@foreach (var group in Model.HypervisorGroups.Where(x => !x.Inactive).ToList().OrderByDescending(x => x.UsedCapacityPercent))
+{
+    <div class="row">
+        <div class="col-sm-4 col-md-3">
+            <button type="button" class="btn btn-link btn-xs" data-toggle="collapse" data-target="#@group.Id" id="@(group.Id)_CollapseButton"><span class="glyphicon glyphicon-plus"></span></button>
+            @Html.DisplayFor(model => group)
+            <p></p>
+        </div>
+        <div class="col-sm-8 col-md-9">@Html.Partial("_ProgressBar_VmCapacity", group)</div>
+    </div>
+    <div class="collapse collapse-content" id="@group.Id" data-collapse-button="@(group.Id)_CollapseButton">
+        @foreach (var hypervisor in group.Hypervisors.Where(x => !x.Inactive).ToList().OrderByDescending(x => x.UsedCapacityPercent))
+        {
+            <div class="row">
+                <div class="col-xs-4 col-sm-3 col-md-2 col-xs-offset-1">
+                    @Html.DisplayFor(model => hypervisor)
+                </div>
+                <div class="col-xs-7 col-sm-8 col-md-9">
+                    @Html.Partial("_ProgressBar_VmCapacity", hypervisor)
+                </div>
+            </div>
+        }
+    </div>
+}
+
+@section Scripts {
+    <script type="text/javascript">
+        $(".collapse-content").on("show.bs.collapse", function () {
+            $("#" + $(this).data("collapse-button") + " span.glyphicon").removeClass("glyphicon-plus").addClass("glyphicon-minus");
+        });
+
+        $(".collapse-content").on("hide.bs.collapse", function () {
+            $("#" + $(this).data("collapse-button") + " span.glyphicon").removeClass("glyphicon-minus").addClass("glyphicon-plus");
+        });
+    </script>
+}

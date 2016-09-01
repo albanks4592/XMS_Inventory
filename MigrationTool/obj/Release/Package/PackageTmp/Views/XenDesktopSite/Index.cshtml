@@ -1,0 +1,30 @@
+﻿@model IEnumerable<MigrationTool.Models.XenDesktopSite>
+@using MigrationTool.ViewModels
+
+@{
+    ViewBag.Title = "Index";
+}
+
+@Html.Partial("_Breadcrumb", new Breadcrumb("XenDesktop Sites"))
+<h2>Index of XenDesktop Sites</h2>
+
+@using (Ajax.BeginForm("FilterIndex", "XenDesktopSite", new AjaxOptions {
+    InsertionMode = InsertionMode.Replace,
+    UpdateTargetId = "XenDesktopSiteList",
+    LoadingElementId = "XenDesktopSiteLoader",
+    OnBegin = "$(\"#XenDesktopSiteLoader .spinner\").spin();",
+    OnComplete = "$(\"#XenDesktopSiteLoader .spinner\").spin(false);"
+})) {
+    @Html.Partial("_StandardFilter")
+}
+
+<p></p>
+@if (User.IsInRole(MigrationTool.Roles.Edit) || User.IsInRole(MigrationTool.Roles.Admin))
+{
+    @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-default" })
+    <p></p>
+}
+@Html.Partial("_Loader", "XenDesktopSiteLoader")
+<div id="XenDesktopSiteList">
+    @Html.Partial("_List", Model)
+</div>

@@ -1,0 +1,29 @@
+﻿@model IEnumerable<MigrationTool.Models.IqDocument>
+@using MigrationTool.ViewModels
+
+@{
+    ViewBag.Title = "Index";
+}
+@Html.Partial("_Breadcrumb", new Breadcrumb("IQ Documents"))
+<h2>Index of IQ Documents</h2>
+
+@using (Ajax.BeginForm("FilterIndex", "IqDocument", new AjaxOptions {
+    InsertionMode = InsertionMode.Replace,
+    UpdateTargetId = "IqDocumentList",
+    LoadingElementId = "IqDocumentLoader",
+    OnBegin = "$(\"#IqDocumentLoader .spinner\").spin();",
+    OnComplete = "$(\"#IqDocumentLoader .spinner\").spin(false);"
+})) {
+    @Html.Partial("_StandardFilter")
+}
+
+<p></p>
+@if (User.IsInRole(MigrationTool.Roles.Edit) || User.IsInRole(MigrationTool.Roles.Admin))
+{
+    @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-default" })
+    <p></p>
+}
+@Html.Partial("_Loader", "IqDocumentLoader")
+<div id="IqDocumentList">
+    @Html.Partial("_List", Model)
+</div>

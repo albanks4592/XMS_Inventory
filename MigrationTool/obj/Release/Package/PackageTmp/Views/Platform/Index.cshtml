@@ -1,0 +1,30 @@
+﻿@model IEnumerable<MigrationTool.Models.Platform>
+@using MigrationTool.ViewModels
+
+@{
+    ViewBag.Title = "Index";
+}
+
+@Html.Partial("_Breadcrumb", new Breadcrumb("Platforms"))
+
+@using (Ajax.BeginForm("FilterIndex", "Platform", new AjaxOptions {
+    InsertionMode = InsertionMode.Replace,
+    UpdateTargetId = "platformList",
+    LoadingElementId = "platformLoader",
+    OnBegin = "$(\"#platformLoader .spinner\").spin();",
+    OnComplete = "$(\"#platformLoader .spinner\").spin(false);"
+})) {
+    @Html.Partial("_StandardFilter")
+}
+
+
+<p></p>
+@if (User.IsInRole(MigrationTool.Roles.Edit) || User.IsInRole(MigrationTool.Roles.Admin))
+{
+    @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-default" })
+    <p></p>
+}
+@Html.Partial("_Loader", "platformLoader")
+<div id="platformList">
+    @Html.Partial("_List", Model)
+</div>

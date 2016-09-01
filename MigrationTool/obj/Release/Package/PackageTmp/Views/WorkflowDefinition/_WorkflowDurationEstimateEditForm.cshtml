@@ -1,0 +1,26 @@
+﻿@model MigrationTool.Models.WorkflowDurationEstimate
+@Html.HiddenFor(model => model.Id)
+@Html.HiddenFor(model => model.WorkflowDefinition_Id)
+@Html.ValidationSummary(true)
+
+<div class="form-group">
+    @Html.LabelFor(model => model.Name)
+    @Html.EditorFor(model => model.Name)
+    @Html.ValidationMessageFor(model => model.Name)
+</div>
+
+<hr />
+
+@foreach (var step in Model.WorkflowDurationEstimateDetails.OrderBy(x => x.WorkflowStepDefinition.SortOrder))
+{
+    <div class="form-group">
+        @Html.Hidden("details[" + step.WorkflowStepDefinition.SortOrder.ToString() + "].Id", step.Id)
+        @Html.Hidden("details[" + step.WorkflowStepDefinition.SortOrder.ToString() + "].WorkflowStepDefinition_Id", step.WorkflowStepDefinition_Id)
+        @Html.Label(step.WorkflowStepDefinition.Name)
+        <div class="input-group">
+            @Html.TextBox("details[" + step.WorkflowStepDefinition.SortOrder.ToString() + "].EstimatedDuration", step.EstimatedDuration, new { @class = "form-control", type = "number" })
+            <span class="input-group-addon">days</span>
+        </div>
+        @Html.ValidationMessage("details[" + step.WorkflowStepDefinition.SortOrder.ToString() + "].EstimatedDuration")
+    </div>
+}

@@ -1,0 +1,24 @@
+﻿@model MigrationTool.Models.IStorageCapacity
+@{
+    int percent = (int)Math.Floor(Model.UsedStorageCapacityPercent * 100);
+    int width = Math.Min(percent, 100);
+
+    string color = "";
+    if (percent >= 95)
+    {
+        color = "progress-bar-danger";
+    }
+    else if (percent >= 80)
+    {
+        color = "progress-bar-warning";
+    }
+    else
+    {
+        color = "progress-bar-success";
+    }
+}
+<div class="progress">
+    <div class="progress-bar @color" role="progressbar" style="width: @width%">
+        @Html.DisplayFor(model => percent, "IntThousands")%
+    </div>
+</div>

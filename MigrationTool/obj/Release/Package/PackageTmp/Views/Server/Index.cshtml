@@ -1,0 +1,25 @@
+﻿@model IEnumerable<MigrationTool.Models.XenAppServer>
+@using MigrationTool.ViewModels
+
+@{
+    ViewBag.Title = "Index";
+}
+
+@Html.Partial("_Breadcrumb", new Breadcrumb("Servers"))
+<h2>Index of Servers</h2>
+
+@using (Ajax.BeginForm("FilterIndex", "Server", new AjaxOptions {
+    InsertionMode = InsertionMode.Replace,
+    UpdateTargetId = "serverList",
+    LoadingElementId = "serverLoader",
+    OnBegin = "$(\"#serverLoader .spinner\").spin();",
+    OnComplete = "$(\"#serverLoader .spinner\").spin(false);"
+})) {
+    @Html.Partial("_StandardFilter")
+}
+
+<p></p>
+@Html.Partial("_Loader", "serverLoader")
+<div id="serverList">
+    @Html.Partial("_List", Model)
+</div>

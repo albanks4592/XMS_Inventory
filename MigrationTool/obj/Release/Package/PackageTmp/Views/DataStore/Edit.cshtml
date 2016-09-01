@@ -1,0 +1,118 @@
+﻿@model MigrationTool.Models.DataStore
+@using MigrationTool.ViewModels
+
+@{
+    ViewBag.Title = MigrationTool.Strings.EditAction;
+}
+
+@Html.Partial("_Breadcrumb", new Breadcrumb(ViewBag.Title, new BreadcrumbItem { LinkText = MigrationTool.Strings.DataStorePlural, ControllerName = "DataStore" }))
+<h2>@ViewBag.Title</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    @Html.HiddenFor(model => model.Id)
+    @Html.HiddenFor(model => model.LastUpdated)
+
+    <!-- Name -->
+    <div class="form-group">
+        @Html.LabelFor(model => model.Name)
+        @Html.EditorFor(model => model.Name)
+        @Html.ValidationMessageFor(model => model.Name)
+    </div>
+
+    <!-- Data  Store Group -->
+    <div class="form-group">
+        @Html.LabelFor(model => model.DataStoreGroup_Id, MigrationTool.Strings.DataStoreGroup)
+        @Html.DropDownList(MigrationTool.Strings.DataStoreGroup_Id, (SelectList)ViewBag.DataStoreGroup_Id_Select, string.Empty, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.DataStoreGroup_Id)
+    </div>
+
+    <!-- DataStore Category -->
+    <div class="form-group">
+        @Html.LabelFor(model => model.DataStoreCategory_Id, MigrationTool.Strings.DataStoreCategory)
+        @Html.DropDownList(MigrationTool.Strings.DataStoreCategory_Id, (SelectList)ViewBag.DataStoreCategory_Id_Select, string.Empty, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.DataStoreCategory_Id)
+    </div>
+
+    <!-- Local Storage -->
+    <div class="form-group">
+        @Html.EditorFor(model => model.LocalStorage)
+        @Html.ValidationMessageFor(model => model.LocalStorage)
+    </div>
+
+    <!-- Capacity -->
+    <div class="form-group">
+        @Html.LabelFor(model => model.Capacity)
+        @Html.EditorFor(model => model.Capacity)
+        @Html.ValidationMessageFor(model => model.Capacity)
+    </div>
+
+    <!-- Free Space -->
+    <div class="form-group">
+        @Html.LabelFor(model => model.FreeSpace)
+        @Html.EditorFor(model => model.FreeSpace)
+        @Html.ValidationMessageFor(model => model.FreeSpace)
+    </div>
+
+    <div class="well">
+
+        <!-- Created Date -->
+        @if (User.IsInRole(MigrationTool.Roles.Admin))
+        {
+            <div class="form-group">
+                @Html.LabelFor(model => model.CreatedDate)
+                @Html.EditorFor(model => model.CreatedDate)
+                @Html.ValidationMessageFor(model => model.CreatedDate)
+            </div>
+        }
+        else
+        {
+            @Html.HiddenFor(model => model.CreatedDate)
+        }
+
+        <!-- Inactive -->
+        <div class="form-group">
+            @Html.EditorFor(model => model.Inactive)
+            @Html.ValidationMessageFor(model => model.Inactive)
+        </div>
+
+        <!-- Inactive Date -->
+        <div class="form-group">
+            @Html.LabelFor(model => model.InactiveDate)
+            @Html.EditorFor(model => model.InactiveDate)
+            @Html.ValidationMessageFor(model => model.InactiveDate)
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save</button>
+    @Html.ActionLink(MigrationTool.Strings.Cancel, "Details", new { Id = Model.Id }, new { @class = "btn btn-default" })
+    if (User.IsInRole(MigrationTool.Roles.Admin))
+    {
+        <div class="pull-right">
+            @Html.ActionLink(MigrationTool.Strings.DeleteAction, "Delete", new { Id = Model.Id }, new { @class = "btn btn-danger" })
+        </div>
+    }
+}
+
+@section Scripts {
+    <script type="text/javascript">
+        $(function () {
+            configurePickers();
+        });
+
+        function configurePickers() {
+            $(".datetimepicker").each(function () {
+                var $this = $(this);
+                $this.datetimepicker({
+                    useCurrent: false,
+                    useSeconds: false,
+                    showToday: true,
+                    sideBySide: true
+                });
+            });
+        }
+    </script>
+}

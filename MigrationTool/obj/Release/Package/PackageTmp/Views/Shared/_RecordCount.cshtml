@@ -1,0 +1,25 @@
+﻿@model int?
+@{
+    int count;
+    if (Model.HasValue)
+    {
+        count = Model.Value;
+    }
+    else
+    {
+        count = 0;
+    }
+    string label;
+    if (count == 1)
+    {
+        label = "Record";
+    }
+    else
+    {
+        label = "Records";
+    }
+}
+<div class="text-right">
+    <span class="text-muted">@Html.DisplayFor(model => count, "IntThousands") @label</span>
+</div>
+<p></p>

@@ -1,0 +1,7 @@
+﻿@model MigrationTool.Models.BusinessSolution
+
+@if (Model.WorkflowInstance != null)
+{
+    <p></p>
+    @Html.Partial("_Workflow", Model.WorkflowInstance)
+}

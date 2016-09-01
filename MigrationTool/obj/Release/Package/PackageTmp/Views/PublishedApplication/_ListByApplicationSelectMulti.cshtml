@@ -1,0 +1,47 @@
+﻿@model IEnumerable<IGrouping<MigrationTool.Models.ApplicationVersion, MigrationTool.Models.PublishedApplication>>
+
+<table class="table table-striped">
+    @foreach (var item in Model) {
+        <tr>
+            <th colspan=3>
+                Application: @item.Key.Application.Name, Version: @item.Key.Name
+            </th>
+        </tr>
+        <tr>
+            <th>Published Application</th>
+            <th>Farm</th>
+            <th>Folder</th>
+        </tr>
+        
+        foreach (var publishedApp in item)
+        {
+            <tr>
+                <td>
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" name="selectedPublishedApplications" id="@publishedApp.Id" value="@publishedApp.Id" />
+                            @if (publishedApp.Inactive)
+                            {
+                                <s>@Html.DisplayFor(modelItem => publishedApp.Name)</s>
+                            }
+                            else
+                            {
+                                @Html.DisplayFor(modelItem => publishedApp.Name)
+                            }
+                        </label>
+                    </div>
+                </td>
+                <td>
+                    <div class="checkbox">
+                        @Html.DisplayFor(modelItem => publishedApp.XenAppFarm.Name)
+                    </div>
+                </td>
+                <td>
+                    <div class="checkbox">
+                        @Html.DisplayFor(modelItem => publishedApp.XenAppFarmFolder)
+                    </div>
+                </td>
+            </tr>
+        }
+    }
+</table>

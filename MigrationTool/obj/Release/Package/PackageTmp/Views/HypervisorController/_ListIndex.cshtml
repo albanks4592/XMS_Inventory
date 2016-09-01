@@ -1,0 +1,26 @@
+﻿@model IEnumerable<MigrationTool.ViewModels.HypervisorControllerListIndexViewModel>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.Name)</th>
+            <th>@Html.DisplayNameFor(model => model.ActiveHypervisorGroupCount)</th>
+            <th>@Html.DisplayNameFor(model => model.Notes)</th>
+            <th>@Html.DisplayNameFor(model => model.Tags)</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null)
+        {
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(model => item)</td>
+                    <td>@Html.DisplayFor(model => item.ActiveHypervisorGroupCount)</td>
+                    <td>@Html.DisplayFor(model => item.Notes)</td>
+                    <td>@Html.DisplayFor(model => item.Tags)</td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+@Html.Partial("_RecordCount", Model == null ? 0 : Model.Count())

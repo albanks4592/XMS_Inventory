@@ -1,0 +1,26 @@
+﻿@model MigrationTool.Models.BusinessSolution
+@using MigrationTool.ViewModels
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+@Html.Partial("_Breadcrumb", new Breadcrumb(ViewBag.Title, new BreadcrumbItem {LinkText = "Business Solutions", ControllerName = "BusinessSolution"}))
+<h2>@ViewBag.Title</h2>
+
+<h3>Are you sure you want to delete this Business Solution?</h3>
+<dl>
+    <dt>@Html.DisplayNameFor(model => model.Name)</dt>
+    <dd>@Html.DisplayFor(model => model.Name)</dd>
+
+    <dt>@Html.DisplayNameFor(model => model.WorkflowDefinition.Name)</dt>
+    <dd>@Html.DisplayFor(model => model.WorkflowDefinition)</dd>
+
+    <dt>@Html.DisplayNameFor(model => model.BusinessAction.Name)</dt>
+    <dd>@Html.DisplayFor(model => model.BusinessAction)</dd>
+</dl>
+
+@using (Html.BeginForm()) {
+    <button type="submit" class="btn btn-danger">Delete</button>
+    @Html.ActionLink("Cancel", "Details", new { Id = Model.Id }, new { @class = "btn btn-default" })
+}

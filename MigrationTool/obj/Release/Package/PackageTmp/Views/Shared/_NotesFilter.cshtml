@@ -1,0 +1,17 @@
+﻿<div class="col-sm-6">
+    <div>
+        @Html.Label("Notes")
+    </div>
+
+    <div class="form-group">
+        <label class="checkbox-inline"><input type="checkbox" value="true" name="noteInfo" /> Info</label>
+        <label class="checkbox-inline"><input type="checkbox" value="true" name="noteSuccess" /> Success</label>
+        <label class="checkbox-inline"><input type="checkbox" value="true" name="noteWarning" /> Warning</label>
+        <label class="checkbox-inline"><input type="checkbox" value="true" name="noteDanger" /> Danger</label>
+    </div>
+
+    @Html.Hidden("noteInfo", false)
+    @Html.Hidden("noteSuccess", false)
+    @Html.Hidden("noteWarning", false)
+    @Html.Hidden("noteDanger", false)
+</div>

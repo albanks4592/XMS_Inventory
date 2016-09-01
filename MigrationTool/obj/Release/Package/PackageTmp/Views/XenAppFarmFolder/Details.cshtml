@@ -1,0 +1,84 @@
+﻿@model MigrationTool.Models.XenAppFarmFolder
+@using MigrationTool.ViewModels
+
+@{
+    ViewBag.Title = "Details";
+    IEnumerable<MigrationTool.Models.XenAppFarmFolder> rootPath = Model.PathFromRoot();
+    MigrationTool.Models.XenAppFarm farm = rootPath.First().XenAppFarm;
+}
+
+<!-- Header and breadcrumbs -->
+<p></p>
+<ol class="breadcrumb">
+    <li>@Html.ActionLink("Home", "Index", "Home")</li>
+    <li>@Html.DisplayFor(modelItem => farm)</li>
+    @foreach (var item in rootPath)
+    {
+        <li>
+            @if (item == Model)
+            {
+                @item.Name
+            }
+            else
+            {
+                @Html.ActionLink(item.Name, "Details", "XenAppFarmFolder", new { Id = item.Id }, null)
+            }
+        </li>
+    }
+</ol>
+@if (User.IsInRole(MigrationTool.Roles.Edit) || User.IsInRole(MigrationTool.Roles.Admin))
+{
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }, new { @class = "btn btn-default btn-lg pull-right" })
+}
+<h2>Details for Folder: @Model.Name</h2>
+
+<dl class="dl-horizontal">
+    <dt>@Html.DisplayNameFor(model => model.Name)</dt>
+    <dd>@Html.DisplayFor(model => model.Name)</dd>
+
+    <dt>@Html.DisplayNameFor(model => model.CreatedDate)</dt>
+    <dd>@Html.DisplayFor(model => model.CreatedDate)</dd>
+
+    <dt>@Html.DisplayNameFor(model => model.LastUpdated)</dt>
+    <dd>@Html.DisplayFor(model => model.LastUpdated)</dd>
+
+    <dt>@Html.DisplayNameFor(model => model.Inactive)</dt>
+    <dd>@Html.DisplayFor(model => model.Inactive)</dd>
+
+    @if (Model.Inactive && Model.InactiveDate != null)
+    {
+        <dt>@Html.DisplayNameFor(model => model.InactiveDate)</dt>
+        <dd>@Html.DisplayFor(model => model.InactiveDate)</dd>
+    }
+</dl>
+
+
+<h2>Subfolders</h2>
+@Html.Partial("_List", Model.XenAppFarmFolders)
+                
+@if (Model.XenAppServers.Count() > 0)
+{
+    <h2>Servers</h2>
+    @Html.Partial("../Server/_List", Model.XenAppServers)
+}
+
+@if (Model.PublishedApplications.Count() > 0)
+{
+    <h2>Published Applications</h2>
+    @Html.Partial("../PublishedApplication/_List", Model.PublishedApplications)
+}
+
+<div class="row">
+    @if (User.IsInRole(MigrationTool.Roles.Edit) || User.IsInRole(MigrationTool.Roles.Admin))
+    {
+        <div class="col-md-6">
+            @Html.Partial("_NoteForm", Model)
+        </div>
+    }
+
+    <div class="col-md-6">
+        @Html.Partial("_TagForm", Model)
+    </div>
+</div>
+
+@Html.Partial("_NoteList", Model)

@@ -1,0 +1,40 @@
+﻿@model MigrationTool.Models.ApplicationVersion
+@using MigrationTool.ViewModels
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+@Html.Partial("_Breadcrumb", new Breadcrumb(ViewBag.Title, new BreadcrumbItem { LinkText = "Application Versions", ControllerName = "ApplicationVersion" }))
+<h2>@ViewBag.Title</h2>
+
+@using (Html.BeginForm()) {
+    @Html.ValidationSummary(true)
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Application_Id, "Application")
+        @Html.DropDownListFor(model => model.Application_Id, (SelectList)ViewBag.Application_Id_Select, string.Empty, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.Application_Id)
+    </div>
+            
+    <div class="form-group">
+        @Html.LabelFor(model => model.Name)
+        @Html.EditorFor(model => model.Name)
+        @Html.ValidationMessageFor(model => model.Name)
+    </div>
+            
+    <div class="form-group">
+        @Html.LabelFor(model => model.EndOfLifeDate)
+        @Html.EditorFor(model => model.EndOfLifeDate)
+        @Html.ValidationMessageFor(model => model.EndOfLifeDate)
+    </div>
+        
+    <button type="submit" class="btn btn-primary">Save</button>
+    @Html.ActionLink("Cancel", "Details", new { Id = Model.Id }, new { @class = "btn btn-default" })
+    if (User.IsInRole(MigrationTool.Roles.Admin))
+    {
+        <div class="pull-right">
+            @Html.ActionLink("Delete", "Delete", new { Id = Model.Id }, new { @class = "btn btn-danger" })
+        </div>
+    }
+}

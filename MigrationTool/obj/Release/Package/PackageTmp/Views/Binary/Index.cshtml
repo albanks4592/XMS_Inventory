@@ -1,0 +1,29 @@
+﻿@model IEnumerable<MigrationTool.Models.Binary>
+@using MigrationTool.ViewModels
+
+@{
+    ViewBag.Title = "Index";
+}
+
+@Html.Partial("_Breadcrumb", new Breadcrumb("Binaries"))
+
+@using (Ajax.BeginForm("FilterIndex", "Binary", new AjaxOptions {
+    InsertionMode = InsertionMode.Replace,
+    UpdateTargetId = "BinaryList",
+    LoadingElementId = "BinaryLoader",
+    OnBegin = "$(\"#BinaryLoader .spinner\").spin();",
+    OnComplete = "$(\"#BinaryLoader .spinner\").spin(false);"
+})) {
+    @Html.Partial("_StandardFilter")
+}
+
+<p></p>
+@if (User.IsInRole(MigrationTool.Roles.Edit) || User.IsInRole(MigrationTool.Roles.Admin))
+{
+    @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-default" })
+    <p></p>
+}
+@Html.Partial("_Loader", "BinaryLoader")
+<div id="BinaryList">
+    @Html.Partial("_List", Model)
+</div>

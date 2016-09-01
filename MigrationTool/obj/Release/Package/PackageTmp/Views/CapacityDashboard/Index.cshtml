@@ -1,0 +1,204 @@
+﻿@model MigrationTool.ViewModels.CapacityDashboardViewModel
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Traditional Infrastructure</h2>
+
+<table class="table table-condensed">
+    <thead>
+        <tr>
+            <th class="col-sm-2">Type/Cluster Name</th>
+            <th class="col-xs-1">New Builds</th>
+            <th class="col-xs-1 text-right">Virtual Machines</th>
+            <th class="col-xs-1 text-right">Capacity</th>
+            <th class="col-xs-2">Constraint</th>
+            <th>Usage</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.MachineCategories)
+        {
+            <tr>
+                <td>
+                    <button type="button" class="btn btn-link btn-xs" data-toggle="collapse" data-target=".@(item.ReferenceName)" id="@(item.ReferenceName)_CollapseButton">
+                        <span class="glyphicon glyphicon-plus"></span>
+                    </button>
+                    @Html.DisplayFor(model => item.Name)
+                </td>
+                <td>
+                    @if (item.AcceptingNewBuilds)
+                    {
+                        <span class="glyphicon glyphicon-ok" style="color:green"></span>
+                    }
+                    else
+                    {
+                        <span class="glyphicon glyphicon-remove" style="color:gray"></span>
+                    }
+                </td>
+                <td class="text-right">@Html.DisplayFor(model => item.ActiveVirtualMachineCount)</td>
+                <td class="text-right">@Html.DisplayFor(model => item.TotalCapacity)</td>
+                <td>
+                    @if (item.UsedCapacityPercent >= 0.8)
+                    {
+                        @Html.DisplayFor(model => item.CapacityConstraint)
+                    }
+                </td>
+                <td>@Html.Partial("_ProgressBar_VmCapacity", item)</td>
+            </tr>
+
+            foreach (var child in item.HypervisorGroups)
+            {
+                <tr class="@(item.ReferenceName) info collapse collapse-content" data-collapse-button="@(item.ReferenceName)_CollapseButton">
+                    <td>@Html.DisplayFor(model => child.Name)</td>
+                    <td>
+                        @if (child.AcceptingNewBuilds)
+                        {
+                            <span class="glyphicon glyphicon-ok" style="color:green"></span>
+                        }
+                        else
+                        {
+                            <span class="glyphicon glyphicon-remove" style="color:gray"></span>
+                        }
+                    </td>
+                    <td class="text-right">@Html.DisplayFor(model => child.ActiveVirtualMachineCount)</td>
+                    <td class="text-right">@Html.DisplayFor(model => child.TotalCapacity)</td>
+                    <td>
+                        @if (child.UsedCapacityPercent >= 0.8)
+                        {
+                            @Html.DisplayFor(model => child.CapacityConstraint)
+                        }
+                    </td>
+                    <td>@Html.Partial("_ProgressBar_VmCapacity", child)</td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+<h2>Hyperconverged Infrastructure</h2>
+<table class="table table-condensed">
+    <thead>
+        <tr>
+            <th class="col-sm-2">Cluster Name</th>
+            <th class="col-xs-1 text-right">Virtual Machines</th>
+            <th class="col-xs-1 text-right">Capacity</th>
+            <th class="col-sm-3" colspan="2">Machine Types</th>
+            <th class="col-xs-2">Constraint</th>
+            <th>Usage</th>
+
+            @*<th class="col-sm-2">Cluster Name</th>
+            <th class="col-xs-1 text-right">Virtual Machines</th>
+            <th class="col-sm-3" colspan="2">Machine Types</th>
+            <th class="col-xs-1">Constraint</th>
+            <th>Usage</th>
+            <th class="col-sm-2" colspan="2">Maximum Machines</th>*@
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.NutanixClusters)
+        {
+            int span = item.VirtualMachines.Count();
+            <tr>
+                <td rowspan="@span">@Html.DisplayFor(model => item.Name)</td>
+                <td rowspan="@span" class="text-right">@Html.DisplayFor(model => item.ActiveVirtualMachineCount)</td>
+                <td rowspan="@span" class="text-right">@Html.DisplayFor(model => item.TotalCapacity)</td>
+                @if (span > 0)
+                {
+                    var first = item.VirtualMachines.First();
+                    <td>@Html.DisplayFor(model => first.Name)</td>
+                    <td class="text-right">@Html.DisplayFor(model => first.Count)</td>
+                }
+                else
+                {
+                    <td>None</td>
+                    <td></td>
+                }
+                <td>
+                    @if (item.UsedCapacityPercent >= 0.8)
+                    {
+                        @Html.DisplayFor(model => item.CapacityConstraint)
+                    }
+                </td>
+                <td rowspan="@span">@Html.Partial("_ProgressBar_VmCapacity", item)</td>
+            </tr>
+
+            foreach (var child in item.VirtualMachines.Skip(1))
+            {
+                <tr>
+                    <td>@Html.DisplayFor(model => child.Name)</td>
+                    <td class="text-right">@Html.DisplayFor(model => child.Count)</td>
+                </tr>
+            }
+            
+            @*int span = Math.Max(item.VirtualMachines.Count(), 2);
+
+            @// First row
+            <tr>
+                <td rowspan="@span">@Html.DisplayFor(model => item.Name)</td>
+                <td rowspan="@span" class="text-right">@Html.DisplayFor(model => item.ActiveVirtualMachineCount)</td>
+                @if (item.VirtualMachines.Count() > 0)
+                {
+                    var first = item.VirtualMachines.First();
+                    <td>@Html.DisplayFor(model => first.Name)</td>
+                    <td class="text-right">@Html.DisplayFor(model => first.Count)</td>
+                }
+                else
+                {
+                    <td>None</td>
+                    <td></td>
+                }
+                <td rowspan="@span">
+                    @if (item.UsedCapacityPercent >= 0.8)
+                    {
+                        @Html.DisplayFor(model => item.CapacityConstraint)
+                    }
+                </td>
+                <td rowspan="@span">@Html.Partial("_ProgressBar_VmCapacity", item)</td>
+                <td>Level 5</td>
+                <td>@Html.DisplayFor(model => item.TotalL5Capacity)</td>
+            </tr>
+
+            @// Additional rows
+            for (int i = 1; i < span; i++)
+            {
+                <tr>
+                    @if (item.VirtualMachines.Count() > i)
+                    {
+                        var child = item.VirtualMachines.Skip(i).First();
+                        <td>@Html.DisplayFor(model => child.Name)</td>
+                        <td class="text-right">@Html.DisplayFor(model => child.Count)</td>
+                    }
+                    else
+                    {
+                        <td></td>
+                        <td></td>
+                    }
+
+                    @if (i == 1)
+                    {
+                        <td>Level 4</td>
+                        <td>@Html.DisplayFor(model => item.TotalL4Capacity)</td>
+                    }
+                    else
+                    {
+                        <td></td>
+                        <td></td>
+                    }
+                </tr>
+            }*@
+        }
+    </tbody>
+</table>
+
+@section Scripts {
+    <script type="text/javascript">
+        $(".collapse-content").on("show.bs.collapse", function () {
+            $("#" + $(this).data("collapse-button") + " span.glyphicon").removeClass("glyphicon-plus").addClass("glyphicon-minus");
+        });
+
+        $(".collapse-content").on("hide.bs.collapse", function () {
+            $("#" + $(this).data("collapse-button") + " span.glyphicon").removeClass("glyphicon-minus").addClass("glyphicon-plus");
+        });
+    </script>
+}

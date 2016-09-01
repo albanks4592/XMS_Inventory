@@ -1,0 +1,25 @@
+﻿@model IEnumerable<MigrationTool.Models.Hypervisor>
+
+<table class="table table-striped">
+    <tr>
+        <th>@Html.DisplayNameFor(model => model.Name)</th>
+        <th>@Html.DisplayNameFor(model => model.IPAddress)</th>
+        <th>@Html.DisplayNameFor(model => model.Status)</th>
+        <th>@Html.DisplayNameFor(model => model.HypervisorGroup)</th>
+        <th>@Html.DisplayNameFor(model => model.SiteLocation)</th>
+        <th>@Html.DisplayNameFor(model => model.HyperVisorVersion)</th>
+    </tr>
+    @foreach (var item in Model)
+    {
+
+        <tr>
+            <td>@Html.DisplayFor(modelItem => item)</td>
+            <td>@Html.DisplayFor(modelItem => item.IPAddress)</td>
+            <td>@Html.DisplayFor(modelItem => item.Status)</td>
+            <td>@Html.DisplayFor(modelItem => item.HypervisorGroup)</td>
+            <td>@Html.DisplayFor(modelItem => item.SiteLocation)</td>
+            <td>@Html.DisplayFor(modelItem => item.HyperVisorVersion)</td>
+        </tr>
+    }
+</table>
+@Html.Partial("_RecordCount", Model == null ? 0 : Model.Count())

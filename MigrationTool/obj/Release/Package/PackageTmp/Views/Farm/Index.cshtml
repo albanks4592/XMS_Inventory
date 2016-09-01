@@ -1,0 +1,28 @@
+﻿@model IEnumerable<MigrationTool.Models.XenAppFarm>
+@using MigrationTool.ViewModels
+
+@{
+    ViewBag.Title = "Index";
+}
+
+@Html.Partial("_Breadcrumb", new Breadcrumb("Farms"))
+<h2>Index of Farms</h2>
+
+@using (Ajax.BeginForm("FilterIndex", "Farm", new AjaxOptions
+{
+    InsertionMode = InsertionMode.Replace,
+    UpdateTargetId = "farmList",
+    LoadingElementId = "farmLoader",
+    OnBegin = "$(\"#farmLoader .spinner\").spin();",
+    OnComplete = "$(\"#farmLoader .spinner\").spin(false);"
+}))
+{
+
+    @Html.Partial("_StandardFilter")
+}
+
+<p></p>
+@Html.Partial("_Loader", "farmLoader")
+<div id="farmList">
+    @Html.Partial("_List", Model)
+</div>

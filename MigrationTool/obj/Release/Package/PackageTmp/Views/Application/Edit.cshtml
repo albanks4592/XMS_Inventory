@@ -1,0 +1,56 @@
+﻿@model MigrationTool.Models.Application
+@using MigrationTool.ViewModels
+@{
+    ViewBag.Title = "Edit";
+}
+
+@Html.Partial("_Breadcrumb", new Breadcrumb(ViewBag.Title, new BreadcrumbItem { LinkText = "Applications", ControllerName = "Application" }))
+
+@using (Html.BeginForm())
+{
+    @Html.ValidationSummary(true)
+    @Html.HiddenFor(model => model.Id)
+    <div class="form-group">
+        @Html.LabelFor(model => model.Name)
+        @Html.EditorFor(model => model.Name)
+        @Html.ValidationMessageFor(model => model.Name)
+    </div>
+        
+    @*<div class="form-group">
+        @Html.LabelFor(model => model.ApplicationGroup_Id, "Application Group")
+        @Html.DropDownListFor(model => model.ApplicationGroup_Id, (SelectList)ViewBag.ApplicationGroup_Id_Select, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.ApplicationGroup_Id)
+    </div>*@
+            
+    <div class="form-group">
+        @Html.LabelFor(model => model.Complexity_Id, "Complexity")
+        @Html.DropDownListFor(model => model.Complexity_Id, (SelectList)ViewBag.Complexity_Id_Select, string.Empty, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.Complexity_Id)
+    </div>
+    
+    <div class="form-group">
+        @Html.EditorFor(model => model.BinariesVerified)
+        @Html.ValidationMessageFor(model => model.BinariesVerified)
+    </div>
+            
+    <div class="form-group">
+        @Html.LabelFor(model => model.NewestVendorVersion_Id, "Newest Vendor Version")
+        @Html.DropDownListFor(model => model.NewestVendorVersion_Id, (SelectList)ViewBag.NewestVendorVersion_Id_Select, string.Empty, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.NewestVendorVersion_Id)
+    </div>
+            
+    <div class="form-group">
+        @Html.LabelFor(model => model.NewestOrganizationVersion_Id, "Newest Organization Supported Version")
+        @Html.DropDownListFor(model => model.NewestOrganizationVersion_Id, (SelectList)ViewBag.NewestOrganizationVersion_Id_Select, string.Empty, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.NewestOrganizationVersion_Id)
+    </div>
+        
+    <button type="submit" class="btn btn-primary">Save</button>
+    @Html.ActionLink("Cancel", "Details", new { Id = Model.Id }, new { @class = "btn btn-default" })
+    if (User.IsInRole(MigrationTool.Roles.Admin))
+    {
+        <div class="pull-right">
+            @Html.ActionLink("Delete", "Delete", new { Id = Model.Id }, new { @class = "btn btn-danger" })
+        </div>
+    }
+}

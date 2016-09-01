@@ -1,0 +1,22 @@
+﻿@model IEnumerable<MigrationTool.Models.ClarityEntry>
+<table class="table table-striped">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Name)
+        </th>
+    </tr>
+
+    @foreach (var item in Model.OrderBy(x => x.Name).ThenBy(x => x.Name)) {
+        <tr>
+            <td>
+                <div class="radio">
+                    <label>
+                        <input type="radio" name="selectedClarityEntry" id="@item.Id" value="@item.Id" />
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </label>
+                </div>
+            </td>
+        </tr>
+    }
+</table>
+@Html.Partial("_RecordCount", Model == null ? 0 : Model.Count())

@@ -1,0 +1,5 @@
+﻿@model MigrationTool.ViewModels.DataStoreCategoryReferenceViewModel
+@if (Model != null)
+{
+    @Html.ActionLink(Model.Name, "Details", "DataStoreCategory", new { Id = Model.Id }, null)
+}

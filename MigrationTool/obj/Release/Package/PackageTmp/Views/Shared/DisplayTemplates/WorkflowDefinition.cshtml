@@ -1,0 +1,5 @@
+﻿@model MigrationTool.Models.WorkflowDefinition
+@if (Model != null)
+{
+    @Html.ActionLink(Model.Name, "Details", "WorkflowDefinition", new { id = Model.Id }, null)
+}

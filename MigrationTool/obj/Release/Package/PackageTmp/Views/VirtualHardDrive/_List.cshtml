@@ -1,0 +1,31 @@
+﻿@model IEnumerable<MigrationTool.ViewModels.VirtualHardDriveListViewModel>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.Name)</th>
+            <th>@Html.DisplayNameFor(model => model.DataStore)</th>
+            <th>@Html.DisplayNameFor(model => model.Provisioned)</th>
+            <th>@Html.DisplayNameFor(model => model.Capacity)</th>
+            <th>Usage</th>
+            <th>@Html.DisplayNameFor(model => model.Notes)</th>
+            <th>@Html.DisplayNameFor(model => model.Tags)</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null) {
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => item)</td>
+                    <td>@Html.DisplayFor(modelItem => item.DataStore)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Provisioned, "MemoryGB")</td>
+                    <td>@Html.DisplayFor(modelItem => item.Capacity, "MemoryGB")</td>
+                    <td>@Html.Partial("_ProgressBar_VmCapacity", item)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Notes)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Tags)</td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+@Html.Partial("_RecordCount", Model == null ? 0 : Model.Count())

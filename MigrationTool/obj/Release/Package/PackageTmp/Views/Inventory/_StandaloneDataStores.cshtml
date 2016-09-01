@@ -1,0 +1,28 @@
+﻿@model IEnumerable<MigrationTool.ViewModels.DataStoreListViewModel>
+
+<table class="table table-condensed">
+    <thead>
+        <tr>
+            <th class="col-sm-2">Data Store</th>
+            <th class="col-xs-1">Capacity</th>
+            <th class="col-xs-1">Free Space</th>
+            <th class="col-xs-1">Virtual Machines</th>
+            <th>Usage</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if(Model != null) {
+            foreach (var dataStore in Model)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(model => dataStore)</td>
+                    <td>@Html.DisplayFor(model => dataStore.Capacity, "MemoryGB")</td>
+                    <td>@Html.DisplayFor(model => dataStore.FreeSpace, "MemoryGB")</td>
+                    <td>@Html.DisplayFor(model => dataStore.ActiveVirtualMachineCount)</td>
+                    <td>@Html.Partial("_ProgressBar_VmCapacity", dataStore)</td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+@Html.Partial("_RecordCount", Model == null ? 0 : Model.Count())

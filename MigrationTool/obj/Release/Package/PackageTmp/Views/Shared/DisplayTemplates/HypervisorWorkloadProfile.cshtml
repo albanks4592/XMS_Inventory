@@ -1,0 +1,5 @@
+﻿@model MigrationTool.Models.HypervisorWorkloadProfile
+@if (Model != null)
+{
+    @Html.ActionLink(Model.Name, "Details", "HypervisorWorkloadProfile", new { Id = Model.Id }, null)
+}

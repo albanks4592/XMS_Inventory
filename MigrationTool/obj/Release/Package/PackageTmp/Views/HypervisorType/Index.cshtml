@@ -1,0 +1,30 @@
+﻿@model IEnumerable<MigrationTool.Models.HypervisorType>
+@using MigrationTool.ViewModels
+
+@{
+    ViewBag.Title = "Index";
+}
+
+@Html.Partial("_Breadcrumb", new Breadcrumb("Hypervisor Types"))
+
+@using (Ajax.BeginForm("FilterIndex", "HypervisorType", new AjaxOptions {
+    InsertionMode = InsertionMode.Replace,
+    UpdateTargetId = "HypervisorTypeList",
+    LoadingElementId = "HypervisorTypeLoader",
+    OnBegin = "$(\"#HypervisorTypeLoader .spinner\").spin();",
+    OnComplete = "$(\"#HypervisorTypeLoader .spinner\").spin(false);"
+})) {
+    @Html.Partial("_StandardFilterNoActive")
+}
+
+
+<p></p>
+@if (User.IsInRole(MigrationTool.Roles.Edit) || User.IsInRole(MigrationTool.Roles.Admin))
+{
+    @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-default" })
+    <p></p>
+}
+@Html.Partial("_Loader", "HypervisorTypeLoader")
+<div id="HypervisorTypeList">
+    @Html.Partial("_List", Model)
+</div>

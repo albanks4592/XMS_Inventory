@@ -1,0 +1,46 @@
+﻿@model MigrationTool.Models.BusinessSolution
+@using MigrationTool.ViewModels
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+@Html.Partial("_Breadcrumb", new Breadcrumb(ViewBag.Title, new BreadcrumbItem {LinkText = "Business Solutions", ControllerName = "BusinessSolution" }))
+<div class="alert alert-warning">
+    Changing the Workflow will delete all existing Workflow data for this Business Solution.
+</div>
+<h2>@ViewBag.Title</h2>
+
+@using (Html.BeginForm()) {
+    @Html.ValidationSummary(true)
+    @Html.HiddenFor(model => model.Id)
+    @Html.HiddenFor(model => model.WorkflowInstance_Id)
+    @Html.HiddenFor(model => model.ClarityEntry_Id)
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Name)
+        @Html.EditorFor(model => model.Name)
+        @Html.ValidationMessageFor(model => model.Name)
+    </div>
+    
+    <div class="form-group">
+        @Html.LabelFor(model => model.WorkflowDefinition_Id, "Workflow")
+        @Html.DropDownList("WorkflowDefinition_Id", (SelectList)ViewBag.WorkflowDefinition_Id_Select, String.Empty, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.WorkflowDefinition_Id)
+    </div>
+    
+    <div class="form-group">
+        @Html.LabelFor(model => model.BusinessAction_Id, "Business Action")
+        @Html.DropDownList("BusinessAction_Id", (SelectList)ViewBag.BusinessAction_Id_Select, String.Empty, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.BusinessAction_Id)
+    </div>
+        
+    <button type="submit" class="btn btn-primary">Save</button>
+    @Html.ActionLink("Cancel", "Details", new { Id = Model.Id }, new { @class = "btn btn-default" });
+                                                                                                    if (User.IsInRole(MigrationTool.Roles.Admin))
+                                                                                                    {
+        <div class="pull-right">
+            @Html.ActionLink("Delete", "Delete", new { Id = Model.Id }, new { @class = "btn btn-danger" })
+        </div>
+    }                                                                                                            
+}

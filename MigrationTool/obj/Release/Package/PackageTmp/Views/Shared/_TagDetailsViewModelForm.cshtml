@@ -1,0 +1,40 @@
+﻿@model MigrationTool.ViewModels.IHasTagsViewModel
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">Tags</h3>
+    </div>
+    <div class="panel-body">
+        @if (User.IsInRole(MigrationTool.Roles.Edit) || User.IsInRole(MigrationTool.Roles.Admin))
+        {
+            using (Ajax.BeginForm("UpdateTagDetailsViewModel", "Tag", null, new AjaxOptions
+            {
+                InsertionMode = InsertionMode.Replace,
+                UpdateTargetId = Model.Id.ToString() + "_tagsContainer",
+                OnBegin = "$(\"#" + Model.Id.ToString() + "_tagsFormAddButton\").prop(\"disabled\", true);$(\"button:submit\", \"#" + Model.Id.ToString() + "_tagsContainer\").prop(\"disabled\", true);",
+                OnComplete = "$(\"#" + Model.Id.ToString() + "_tagsForm\")[0].reset();$(\"#" + Model.Id.ToString() + "_tagsFormTextBox\").focus();$(\"#" + Model.Id.ToString() + "_tagsFormAddButton\").prop(\"disabled\", false);$(\"button:submit\", \"#" + Model.Id.ToString() + "_tagsContainer\").prop(\"disabled\", false);$(\"#" + Model.Id.ToString() + "_tagsForm .select2-tagselect\").trigger(\"change\");"
+            }, new { id = Model.Id.ToString() + "_tagsForm" }))
+            {
+                @Html.HiddenFor(model => Model.Id)
+            <div class="form-group">
+                <div class="input-group">
+                    @{Html.RenderAction("GetTagSelect", "Tag");}
+                    <span class="input-group-btn">
+                        <button class="btn btn-default" type="submit" id="@(Model.Id.ToString())_tagsFormAddButton">Add</button>
+                    </span>
+                </div>
+            </div>
+            }
+        }
+        @using (Ajax.BeginForm("RemoveTagDetailsViewModel", "Tag", new AjaxOptions
+        {
+            InsertionMode = InsertionMode.Replace,
+            UpdateTargetId = Model.Id.ToString() + "_tagsContainer",
+            OnBegin = "$(\"#" + Model.Id.ToString() + "_tagsFormAddButton\").prop(\"disabled\", true);$(\"button:submit\", \"#" + Model.Id.ToString() + "_tagsContainer\").prop(\"disabled\", true);",
+            OnComplete = "$(\"#" + Model.Id.ToString() + "_tagsFormAddButton\").prop(\"disabled\", false);$(\"button:submit\", \"#" + Model.Id.ToString() + "_tagsContainer\").prop(\"disabled\", false);"
+        }))
+        {
+            @Html.HiddenFor(model => Model.Id)
+            <div id="@(Model.Id.ToString())_tagsContainer">@Html.Partial("_TagDetailsViewModelList", Model.Tags)</div>
+        }
+    </div>
+</div>

@@ -1,0 +1,35 @@
+﻿@model MigrationTool.Models.XenDesktopBrokerDesktop
+@using MigrationTool.ViewModels
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+@Html.Partial("_Breadcrumb", new Breadcrumb(ViewBag.Title, new BreadcrumbItem {LinkText = "XenDesktop Brokered Desktops", ControllerName = "XenDesktopBrokerDesktop"}))
+<h2>@ViewBag.Title</h2>
+
+<h3>Are you sure you want to delete this XenDesktop Brokered Desktop?</h3>
+<dl>
+    <dt>@Html.DisplayNameFor(model => model.Name)</dt>
+    <dd>@Html.DisplayFor(model => model.Name)</dd>
+
+    <dt>@Html.DisplayNameFor(model => model.CreatedDate)</dt>
+    <dd>@Html.DisplayFor(model => model.CreatedDate)</dd>
+
+    <dt>@Html.DisplayNameFor(model => model.LastUpdated)</dt>
+    <dd>@Html.DisplayFor(model => model.LastUpdated)</dd>
+
+    <dt>@Html.DisplayNameFor(model => model.Inactive)</dt>
+    <dd>@Html.DisplayFor(model => model.Inactive)</dd>
+
+    @if (Model.Inactive && Model.InactiveDate != null)
+    {
+        <dt>@Html.DisplayNameFor(model => model.InactiveDate)</dt>
+        <dd>@Html.DisplayFor(model => model.InactiveDate)</dd>
+    }
+</dl>
+
+@using (Html.BeginForm()) {
+    <button type="submit" class="btn btn-danger">Delete</button>
+    @Html.ActionLink("Cancel", "Details", new { Id = Model.Id }, new { @class = "btn btn-default" })
+}

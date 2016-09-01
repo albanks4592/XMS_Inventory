@@ -1,0 +1,107 @@
+﻿@model MigrationTool.Models.HypervisorGroup
+
+@Html.AntiForgeryToken()
+@Html.ValidationSummary(true)
+
+@Html.HiddenFor(model => model.Id)
+@Html.HiddenFor(model => model.LastUpdated)
+
+<!-- Name -->
+<div class="form-group">
+    @Html.LabelFor(model => model.Name)
+    @Html.EditorFor(model => model.Name)
+    @Html.ValidationMessageFor(model => model.Name)
+</div>
+
+<!-- Hyperconverged flag -->
+<div class="form-group">
+    @Html.EditorFor(model => model.Hyperconverged)
+    @Html.ValidationMessageFor(model => model.Hyperconverged)
+</div>
+
+<!-- Hypervisor Group Type -->
+<div class="form-group">
+    @Html.LabelFor(model => model.HypervisorGroupType_Id, MigrationTool.Strings.HypervisorGroupType)
+    @Html.DropDownList(MigrationTool.Strings.HypervisorGroupTypeId, (SelectList)ViewBag.HypervisorGroupType_Id_Select, string.Empty, new { @class = "form-control" })
+    @Html.ValidationMessageFor(model => model.HypervisorGroupType_Id)
+</div>
+
+<!-- High Availability Calculation Type -->
+<div class="form-group">
+    @Html.LabelFor(model => model.HighAvailabilityCalculationType)
+    <div class="radio">
+        <label>
+            @Html.RadioButtonFor(model => model.HighAvailabilityCalculationType, 0)
+            None
+        </label>
+    </div>
+
+    <div class="radio">
+        <label>
+            @Html.RadioButtonFor(model => model.HighAvailabilityCalculationType, 1)
+            Reserve a number of Hypervisors
+        </label>
+        <div class="row">
+            <div class="col-xs-4 col-sm-3 col-lg-2 col-xs-offset-1">
+                @Html.DisplayNameFor(model => model.HighAvailabilityReservedHypervisors)
+                @Html.EditorFor(model => model.HighAvailabilityReservedHypervisors)
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-11 col-xs-offset-1">
+                @Html.ValidationMessageFor(model => model.HighAvailabilityReservedHypervisors)
+            </div>
+        </div>
+    </div>
+
+    <div class="radio">
+        <label>
+            @Html.RadioButtonFor(model => model.HighAvailabilityCalculationType, 2)
+            Reserve a percentage of total capacity
+        </label>
+        <div class="row">
+            <div class="col-xs-4 col-sm-3 col-lg-2 col-xs-offset-1">
+                @Html.DisplayNameFor(model => model.HighAvailabilityReservedPercentage)
+                <div class="input-group">
+                    @Html.EditorFor(model => model.HighAvailabilityReservedPercentage)
+                    <div class="input-group-addon">%</div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-11 col-xs-offset-1">
+                @Html.ValidationMessageFor(model => model.HighAvailabilityReservedPercentage)
+            </div>
+        </div>
+    </div>
+    @Html.ValidationMessageFor(model => model.HighAvailabilityCalculationType)
+</div>
+
+<!-- Created Date -->
+<div class="well">
+    @if (User.IsInRole(MigrationTool.Roles.Admin))
+    {
+        <div class="form-group">
+            @Html.LabelFor(model => model.CreatedDate)
+            @Html.EditorFor(model => model.CreatedDate)
+            @Html.ValidationMessageFor(model => model.CreatedDate)
+        </div>
+    }
+    else
+    {
+        @Html.HiddenFor(model => model.CreatedDate)
+    }
+
+    <!-- Inactive -->
+    <div class="form-group">
+        @Html.EditorFor(model => model.Inactive)
+        @Html.ValidationMessageFor(model => model.Inactive)
+    </div>
+
+    <!-- Inactive Date -->
+    <div class="form-group">
+        @Html.LabelFor(model => model.InactiveDate)
+        @Html.EditorFor(model => model.InactiveDate)
+        @Html.ValidationMessageFor(model => model.InactiveDate)
+    </div>
+</div>

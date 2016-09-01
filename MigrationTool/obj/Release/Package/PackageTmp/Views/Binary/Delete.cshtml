@@ -1,0 +1,32 @@
+﻿@model MigrationTool.Models.Binary
+@using MigrationTool.ViewModels
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+@Html.Partial("_Breadcrumb", new Breadcrumb(ViewBag.Title, new BreadcrumbItem {LinkText = "Binaries", ControllerName = "Binary"}))
+<h2>@ViewBag.Title</h2>
+
+<h3>Are you sure you want to delete this Binary?</h3>
+<dl>
+    <dt>@Html.DisplayNameFor(model => model.Name)</dt>
+    <dd>@Html.DisplayFor(model => model.Name)</dd>
+
+    <dt>@Html.DisplayNameFor(model => model.Version)</dt>
+    <dd>@Html.DisplayFor(model => model.Version)</dd>
+
+    <dt>@Html.DisplayNameFor(model => model.SccmPackage)</dt>
+    <dd>@Html.DisplayFor(model => model.SccmPackage)</dd>
+
+    <dt>@Html.DisplayNameFor(model => model.PackageName)</dt>
+    <dd>@Html.DisplayFor(model => model.PackageName)</dd>
+
+    <dt>@Html.DisplayNameFor(model => model.Virtualized)</dt>
+    <dd>@Html.DisplayFor(model => model.Virtualized)</dd>
+</dl>
+
+@using (Html.BeginForm()) {
+    <button type="submit" class="btn btn-danger">Delete</button>
+    @Html.ActionLink("Cancel", "Details", new { Id = Model.Id }, new { @class = "btn btn-default" })
+}

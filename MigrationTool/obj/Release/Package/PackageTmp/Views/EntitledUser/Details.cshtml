@@ -1,0 +1,74 @@
+﻿@model MigrationTool.Models.EntitledUser
+@using MigrationTool.ViewModels
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<!-- Header and breadcrumbs -->
+@Html.Partial("_Breadcrumb", new Breadcrumb(ViewBag.Title, new BreadcrumbItem { LinkText = "Entitled Users", ControllerName = "EntitledUser" }))
+@if (User.IsInRole(MigrationTool.Roles.Edit) || User.IsInRole(MigrationTool.Roles.Admin))
+{
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }, new { @class = "btn btn-default btn-lg pull-right" })
+}
+<h2>@ViewBag.Title</h2>
+
+
+<dl class="dl-horizontal">
+    <dt>@Html.DisplayNameFor(model => model.Username)</dt>
+    <dd>@Html.DisplayFor(model => model.Username)</dd>
+
+    <dt>@Html.DisplayNameFor(model => model.FullName)</dt>
+    <dd>@Html.DisplayFor(model => model.FullName)</dd>
+
+    <dt>@Html.DisplayNameFor(model => model.Division)</dt>
+    <dd>@Html.DisplayFor(model => model.Division)</dd>
+
+    <dt>@Html.DisplayNameFor(model => model.ToBeMigrated)</dt>
+    <dd>@Html.DisplayFor(model => model.ToBeMigrated)</dd>
+
+    <dt>@Html.DisplayNameFor(model => model.CreatedDate)</dt>
+    <dd>@Html.DisplayFor(model => model.CreatedDate)</dd>
+
+    <dt>@Html.DisplayNameFor(model => model.LastUpdated)</dt>
+    <dd>@Html.DisplayFor(model => model.LastUpdated)</dd>
+
+    <dt>@Html.DisplayNameFor(model => model.Inactive)</dt>
+    <dd>@Html.DisplayFor(model => model.Inactive)</dd>
+
+    @if (Model.Inactive && Model.InactiveDate != null)
+    {
+        <dt>@Html.DisplayNameFor(model => model.InactiveDate)</dt>
+        <dd>@Html.DisplayFor(model => model.InactiveDate)</dd>
+    }
+</dl>
+    
+<h2>Active Directory Groups</h2>
+@Html.Partial("../ActiveDirectoryGroup/_List", Model.ActiveDirectoryGroups)
+
+<h2>Static Assignments</h2>
+@Html.Partial("../PublishedApplication/_List", Model.PublishedApplications)
+    
+<h2>Entitled Applications</h2>
+<ul class="list-group">
+@{
+    var apps = Model.ActiveDirectoryGroups.SelectMany(f => f.PublishedApplications).Union(Model.PublishedApplications).Distinct();
+    @Html.Partial("../PublishedApplication/_List", apps);
+}
+</ul>
+
+
+<div class="row">
+    @if (User.IsInRole(MigrationTool.Roles.Edit) || User.IsInRole(MigrationTool.Roles.Admin))
+    {
+        <div class="col-md-6">
+            @Html.Partial("_NoteForm", Model)
+        </div>
+    }
+
+    <div class="col-md-6">
+        @Html.Partial("_TagForm", Model)
+    </div>
+</div>
+
+@Html.Partial("_NoteList", Model)

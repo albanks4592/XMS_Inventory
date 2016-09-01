@@ -1,0 +1,23 @@
+﻿@model MigrationTool.Models.WorkflowDefinition
+@using MigrationTool.ViewModels
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+@Html.Partial("_Breadcrumb", new Breadcrumb(ViewBag.Title, new BreadcrumbItem {LinkText = "Workflow Definitions", ControllerName = "WorkflowDefinition"}))
+<h2>@ViewBag.Title</h2>
+
+<h3>Are you sure you want to delete this Workflow Definition?</h3>
+<dl>
+    <dt>@Html.DisplayNameFor(model => model.Name)</dt>
+    <dd>@Html.DisplayFor(model => model.Name)</dd>
+
+    <dt>@Html.DisplayNameFor(model => model.DefaultWorkflow)</dt>
+    <dd>@Html.DisplayFor(model => model.DefaultWorkflow)</dd>
+</dl>
+
+@using (Html.BeginForm()) {
+    <button type="submit" class="btn btn-danger">Delete</button>
+    @Html.ActionLink("Cancel", "Details", new { Id = Model.Id }, new { @class = "btn btn-default" })
+}

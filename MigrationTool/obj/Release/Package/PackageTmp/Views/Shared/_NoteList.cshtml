@@ -1,0 +1,17 @@
+﻿@model MigrationTool.Models.IHasNotes
+@{
+    string qualifiedEntitySetName = Model.EntityKey.EntityContainerName + "." + Model.EntityKey.EntitySetName;
+}
+@Html.Partial("_Loader", Model.Id.ToString() + "_noteLoader")
+@using (Ajax.BeginForm("RemoveNote", "Note", new AjaxOptions
+{
+    InsertionMode = InsertionMode.Replace,
+    UpdateTargetId = Model.Id.ToString() + "_noteList"
+}))
+{
+    <input type="hidden" name="parentId" value="@Model.Id" />
+    @Html.HiddenFor(model => qualifiedEntitySetName)
+    <div id="@(Model.Id)_noteList">
+        @Html.Partial("_NoteListInner", Model)
+    </div>
+}

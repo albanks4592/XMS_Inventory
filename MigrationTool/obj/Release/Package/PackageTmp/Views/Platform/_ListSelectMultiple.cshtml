@@ -1,0 +1,23 @@
+﻿@model IEnumerable<MigrationTool.Models.Platform>
+<table class="table table-striped">
+    <tr>
+        <th>@Html.DisplayNameFor(model => model.Name)</th>
+    </tr>
+    @if (Model != null && Model.Count() > 0)
+    {
+        foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" name="selectedPlatforms" id="@item.Id" value="@item.Id" />
+                            @Html.DisplayFor(modelItem => item.Name)
+                        </label>
+                    </div>
+                </td>
+            </tr>
+        }
+    }
+</table>
+@Html.Partial("_RecordCount", Model == null ? 0 : Model.Count())

@@ -1,0 +1,165 @@
+﻿@using MigrationTool.ViewModels;
+@model HypervisorGroupDetailsViewModel
+
+@{
+    ViewBag.Title = MigrationTool.Strings.DetailsAction;
+}
+
+<!-- Header and breadcrumbs -->
+@Html.Partial("_Breadcrumb", new Breadcrumb(ViewBag.Title, new BreadcrumbItem { LinkText = MigrationTool.Strings.HypervisorGroupPlural, ControllerName = "HypervisorGroup" }))
+@if (User.IsInRole(MigrationTool.Roles.Edit) || User.IsInRole(MigrationTool.Roles.Admin))
+{
+    @Html.ActionLink(MigrationTool.Strings.EditAction, "Edit", new { id = Model.Id }, new { @class = "btn btn-default btn-lg pull-right" })
+}
+<h2>@ViewBag.Title</h2>
+
+<!-- Details -->
+@Html.Partial("_Details", Model)
+
+<!-- Tab headers -->
+<ul class="nav nav-tabs" role="tablist">
+    <li role="presentation" class="active"><a href="#DetailsTab" role="tab" data-toggle="tab">Details</a></li>
+    <li role="presentation"><a href="#CapacityTab" role="tab" data-toggle="tab">@MigrationTool.Strings.Capacity</a></li>
+    <li role="presentation"><a href="#HypervisorsTab" role="tab" data-toggle="tab">@MigrationTool.Strings.HypervisorPlural</a></li>
+    <li role="presentation"><a href="#VirtualMachineTab" role="tab" data-toggle="tab">@MigrationTool.Strings.VirtualMachinePlural</a></li>
+</ul>
+
+<!-- Tab content -->
+<div class="tab-content">
+
+    <!-- Details tab -->
+    <div role="tabpanel" class="tab-pane active" id="DetailsTab">
+        <!-- Notes and Tags -->
+        <div class="row">
+            @if (User.IsInRole(MigrationTool.Roles.Edit) || User.IsInRole(MigrationTool.Roles.Admin))
+            {
+                <div class="col-md-6">
+                    @Html.Partial("_NoteDetailsViewModelForm", Model)
+                </div>
+            }
+
+            <div class="col-md-6">
+                @Html.Partial("_TagDetailsViewModelForm", Model)
+            </div>
+
+        </div>
+
+        @Html.Partial("_NoteDetailsViewModelList", Model)
+    </div>
+
+    <!-- Capacity Tab -->
+    <div role="tabpanel" class="tab-pane" id="CapacityTab">
+
+        <h2>Capacity</h2>
+        <dl class="dl-horizontal">
+            <dt>@Html.DisplayNameFor(model => model.ComputeCapacity)</dt>
+            <dd>@Html.DisplayFor(model => model.ComputeCapacity)</dd>
+
+            <dt>@Html.DisplayNameFor(model => model.MemoryCapacity)</dt>
+            <dd>@Html.DisplayFor(model => model.MemoryCapacity)</dd>
+
+            <dt>@Html.DisplayNameFor(model => model.StorageCapacity)</dt>
+            <dd>@Html.DisplayFor(model => model.StorageCapacity)</dd>
+
+
+            <dt>@Html.DisplayNameFor(model => model.TotalCapacity)</dt>
+            <dd>@Html.DisplayFor(model => model.TotalCapacity)</dd>
+
+            <dt>@Html.DisplayNameFor(model => model.UsedCapacity)</dt>
+            <dd>@Html.DisplayFor(model => model.UsedCapacity)</dd>
+
+            <dt>@Html.DisplayNameFor(model => model.UsedCapacityPercent)</dt>
+            <dd>@Html.DisplayFor(model => model.UsedCapacityPercent)</dd>
+
+            <dt>@Html.DisplayNameFor(model => model.HighAvailabilityCalculationType)</dt>
+            @if (Model.HighAvailabilityCalculationType == 0)
+            {
+                <dd>None</dd>
+            }
+            else if (Model.HighAvailabilityCalculationType == 1)
+            {
+                <dd>Reserved Hypervisors</dd>
+
+                <dt>@Html.DisplayNameFor(model => model.HighAvailabilityReservedHypervisors)</dt>
+                <dd>@Html.DisplayFor(model => Model.HighAvailabilityReservedHypervisors)</dd>
+            }
+            else
+            {
+                <dd>Reserved Percentage</dd>
+
+                <dt>@Html.DisplayNameFor(model => model.HighAvailabilityReservedPercentage)</dt>
+                <dd>@Html.DisplayFor(model => model.HighAvailabilityReservedPercentage)</dd>
+            }
+        </dl>
+        @Html.Partial("_ProgressBar_VmCapacity", Model)
+
+        <h2>@Html.DisplayNameFor(model => model.CapacityRules)</h2>
+        @Html.Partial("../CapacityRule/_ListCalculation", Model.CapacityRules)
+    </div>
+
+    <!-- Hypervisors Tab-->
+    <div role="tabpanel" class="tab-pane" id="HypervisorsTab">
+        @Html.Partial("_Loader", "HypervisorsListLoader")
+        @using (Ajax.BeginForm("GetHypervisorsList", null, new AjaxOptions
+        {
+            InsertionMode = InsertionMode.Replace,
+            UpdateTargetId = "HypervisorsList",
+            LoadingElementId = "HypervisorsListLoader",
+            OnBegin = "$('#HypervisorsListLoader .spinner').spin(true);",
+            OnComplete = "$('#HypervisorsListLoader .spinner').spin(false);"
+        }, new { id = "HypervisorsListForm" }))
+        {
+            @Html.Hidden("id", Model.Id)
+        }
+        <div id="HypervisorsList"></div>
+    </div>
+
+    <!-- Virtual Machine Tab-->
+    <div role="tabpanel" class="tab-pane" id="VirtualMachineTab">
+        @Html.Partial("_Loader", "VirtualMachineListLoader")
+        @using (Ajax.BeginForm("GetVirtualMachineList", null, new AjaxOptions
+        {
+            InsertionMode = InsertionMode.Replace,
+            UpdateTargetId = "VirtualMachineList",
+            LoadingElementId = "VirtualMachineListLoader",
+            OnBegin = "$('#VirtualMachineListLoader .spinner').spin(true);",
+            OnComplete = "$('#VirtualMachineListLoader .spinner').spin(false);"
+        }, new { id = "VirtualMachineListForm" }))
+        {
+            @Html.Hidden("id", Model.Id)
+        }
+        <div id="VirtualMachineList"></div>
+    </div>
+</div>
+
+@section Scripts {
+    <script type="text/javascript">
+        // Track what has already been loaded.
+        var virtualMachineListLoaded = false;
+        var hypervisorListLoaded = false;
+
+        // Event handler for switching tabs.
+        $('a[data-toggle="tab"]').on('show.bs.tab', function (e) {
+            // Tab about to become active.
+            var target = $(e.target).attr('href');
+
+            switch (target) {
+                // VirtualMachineList
+                case '#VirtualMachineTab':
+                    if (!virtualMachineListLoaded) {
+                        virtualMachineListLoaded = true;
+                        $('form#VirtualMachineListForm').submit();
+                    }
+                    break;
+                    // HypervisorsList
+                case '#HypervisorsTab':
+                    if (!hypervisorListLoaded) {
+                        hypervisorListLoaded = true;
+                        $('form#HypervisorsListForm').submit();
+                    }
+                    break;
+            }
+        });
+    </script>
+}
+

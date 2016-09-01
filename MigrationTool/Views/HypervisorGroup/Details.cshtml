@@ -1,0 +1,233 @@
+﻿@using MigrationTool.ViewModels;
+@model HypervisorGroupDetailsViewModel
+
+@{
+    ViewBag.Title = MigrationTool.Strings.DetailsAction;
+}
+
+<!-- Header and breadcrumbs -->
+@Html.Partial("_Breadcrumb", new Breadcrumb(ViewBag.Title, new BreadcrumbItem { LinkText = MigrationTool.Strings.HypervisorGroupPlural, ControllerName = "HypervisorGroup" }))
+@if (User.IsInRole(MigrationTool.Roles.Edit) || User.IsInRole(MigrationTool.Roles.Admin))
+{
+    @Html.ActionLink(MigrationTool.Strings.EditAction, "Edit", new { id = Model.Id }, new { @class = "btn btn-default btn-lg pull-right" })
+}
+<h2>@ViewBag.Title</h2>
+
+<!-- Details -->
+@Html.Partial("_Details", Model)
+
+<!-- Tab headers -->
+<ul class="nav nav-tabs" role="tablist">
+    <li role="presentation" class="active"><a href="#DetailsTab" role="tab" data-toggle="tab">Details</a></li>
+    <li role="presentation"><a href="#CapacityTab" role="tab" data-toggle="tab">@MigrationTool.Strings.Capacity</a></li>
+    <li role="presentation"><a href="#HypervisorsTab" role="tab" data-toggle="tab">@MigrationTool.Strings.HypervisorPlural (@Html.DisplayFor(model => model.TotalHypervisorCount))</a></li>
+    <li role="presentation"><a href="#VirtualMachineTab" role="tab" data-toggle="tab">@MigrationTool.Strings.VirtualMachinePlural (@Html.DisplayFor(model => model.TotalVirtualMachineCount))</a></li>
+</ul>
+
+<!-- Tab content -->
+<div class="tab-content">
+
+    <!-- Details tab -->
+    <div role="tabpanel" class="tab-pane active" id="DetailsTab">
+        <!-- Notes and Tags -->
+        <div class="row">
+            @if (User.IsInRole(MigrationTool.Roles.Edit) || User.IsInRole(MigrationTool.Roles.Admin))
+            {
+                <div class="col-md-6">
+                    @Html.Partial("_NoteDetailsViewModelForm", Model)
+                </div>
+            }
+
+            <div class="col-md-6">
+                @Html.Partial("_TagDetailsViewModelForm", Model)
+            </div>
+
+        </div>
+
+        @Html.Partial("_NoteDetailsViewModelList", Model)
+    </div>
+
+    <!-- Capacity Tab -->
+    <div role="tabpanel" class="tab-pane" id="CapacityTab">
+
+        <!-- Virtual machine capacity -->
+        <h2>@MigrationTool.Strings.VmCapacity</h2>
+        <dl class="dl-horizontal">
+            <dt>@Html.DisplayNameFor(model => model.TotalCapacity)<sup>&dagger;</sup></dt>
+            <dd>@Html.DisplayFor(model => model.TotalCapacity)</dd>
+
+            <dt>@Html.DisplayNameFor(model => model.UsedCapacity)</dt>
+            <dd>@Html.DisplayFor(model => model.UsedCapacity)</dd>
+
+            <dt>@Html.DisplayNameFor(model => model.UsedCapacityPercent)<sup>&dagger;</sup></dt>
+            <dd>@Html.DisplayFor(model => model.UsedCapacityPercent)</dd>
+        </dl>
+        @Html.Partial("_ProgressBar_VmCapacity", Model)
+
+        <hr />
+
+        <!-- Capacity by rule type -->
+        <h2>@MigrationTool.Strings.VmCapacity_ByRuleType</h2>
+        <dl class="dl-horizontal">
+            <dt>@Html.DisplayNameFor(model => model.ComputeCapacity)<sup>&dagger;</sup></dt>
+            @if (Model.ComputeCapacity.HasValue)
+            {
+                <dd>@Html.DisplayFor(model => model.ComputeCapacity)</dd>
+            }
+            else
+            {
+                <dd>@MigrationTool.Strings.None</dd>
+            }
+
+            <dt>@Html.DisplayNameFor(model => model.MemoryCapacity)<sup>&dagger;</sup></dt>
+            @if (Model.MemoryCapacity.HasValue)
+            {
+                <dd>@Html.DisplayFor(model => model.MemoryCapacity)</dd>
+            }
+            else
+            {
+                <dd>@MigrationTool.Strings.None</dd>
+            }
+
+            <dt>@Html.DisplayNameFor(model => model.StorageCapacity)</dt>
+            @if (Model.StorageCapacity.HasValue)
+            {
+                <dd>@Html.DisplayFor(model => model.StorageCapacity)</dd>
+            }
+            else
+            {
+                <dd>@MigrationTool.Strings.None</dd>
+            }
+
+            <dt>@Html.DisplayNameFor(model => model.MaximumCapacity)</dt>
+            @if (Model.MaximumCapacity.HasValue)
+            {
+                <dd>@Html.DisplayFor(model => model.MaximumCapacity)</dd>
+            }
+            else
+            {
+                <dd>@MigrationTool.Strings.None</dd>
+            }
+        </dl>
+
+        <hr />
+
+        <!-- List of Capacity Rules -->
+        @if (User.IsInRole(MigrationTool.Roles.Edit) || User.IsInRole(MigrationTool.Roles.Admin))
+        {
+            <button type="button" class="btn btn-default pull-right" data-toggle="modal" data-target="#EditCapacityRulesDialog">@MigrationTool.Strings.EditAction</button>
+        }
+        <h2>@Html.DisplayNameFor(model => model.CapacityRules)</h2>
+
+        @Html.Partial("../CapacityRule/_ListCalculation", Model.CapacityRules)
+
+        <hr />
+
+        <sup>&dagger;</sup>@MigrationTool.Strings.IncludesHighAvailability
+
+        <!-- Modal for editing Capacity Rules -->
+        <div class="modal" id="EditCapacityRulesDialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    @using (Html.BeginForm("SetCapacityRules", "CapacityRule"))
+                    {
+                        @Html.Hidden("parentId", Model.Id)
+                        @Html.Hidden("returnController", "HypervisorGroup")
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal"><span>&times;</span><span class="sr-only">@MigrationTool.Strings.Close</span></button>
+                            <h4 class="modal-title">@MigrationTool.Strings.CapacityRulePlural</h4>
+                        </div>
+                        <div class="modal-body">
+                            @foreach (CapacityRuleReferenceViewModel item in ViewBag.CapacityRules)
+                            {
+                                <div class="checkbox">
+                                    <label>
+                                        @if (Model.CapacityRules.Any(x => x.Id == item.Id))
+                                        {
+                                            <input type="checkbox" name="capacityRuleIds" id="@item.Id" value="@item.Id" checked />
+                                        }
+                                        else
+                                        {
+                                            <input type="checkbox" name="capacityRuleIds" id="@item.Id" value="@item.Id" />
+                                        }
+                                        @Html.DisplayFor(modelItem => item.Name)
+                                    </label>
+                                </div>
+                            }
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary">@MigrationTool.Strings.Save</button>
+                            <button type="button" class="btn btn-default" data-dismiss="modal">@MigrationTool.Strings.Cancel</button>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hypervisors Tab-->
+    <div role="tabpanel" class="tab-pane" id="HypervisorsTab">
+        @Html.Partial("_Loader", "HypervisorsListLoader")
+        @using (Ajax.BeginForm("GetHypervisorsList", null, new AjaxOptions
+        {
+            InsertionMode = InsertionMode.Replace,
+            UpdateTargetId = "HypervisorsList",
+            LoadingElementId = "HypervisorsListLoader",
+            OnBegin = "$('#HypervisorsListLoader .spinner').spin(true);",
+            OnComplete = "$('#HypervisorsListLoader .spinner').spin(false);"
+        }, new { id = "HypervisorsListForm" }))
+        {
+            @Html.Hidden("id", Model.Id)
+        }
+        <div id="HypervisorsList"></div>
+    </div>
+
+    <!-- Virtual Machine Tab-->
+    <div role="tabpanel" class="tab-pane" id="VirtualMachineTab">
+        @Html.Partial("_Loader", "VirtualMachineListLoader")
+        @using (Ajax.BeginForm("GetVirtualMachineList", null, new AjaxOptions
+        {
+            InsertionMode = InsertionMode.Replace,
+            UpdateTargetId = "VirtualMachineList",
+            LoadingElementId = "VirtualMachineListLoader",
+            OnBegin = "$('#VirtualMachineListLoader .spinner').spin(true);",
+            OnComplete = "$('#VirtualMachineListLoader .spinner').spin(false);"
+        }, new { id = "VirtualMachineListForm" }))
+        {
+            @Html.Hidden("id", Model.Id)
+        }
+        <div id="VirtualMachineList"></div>
+    </div>
+</div>
+
+@section Scripts {
+    <script type="text/javascript">
+        // Track what has already been loaded.
+        var virtualMachineListLoaded = false;
+        var hypervisorListLoaded = false;
+
+        // Event handler for switching tabs.
+        $('a[data-toggle="tab"]').on('show.bs.tab', function (e) {
+            // Tab about to become active.
+            var target = $(e.target).attr('href');
+
+            switch (target) {
+                // VirtualMachineList
+                case '#VirtualMachineTab':
+                    if (!virtualMachineListLoaded) {
+                        virtualMachineListLoaded = true;
+                        $('form#VirtualMachineListForm').submit();
+                    }
+                    break;
+                    // HypervisorsList
+                case '#HypervisorsTab':
+                    if (!hypervisorListLoaded) {
+                        hypervisorListLoaded = true;
+                        $('form#HypervisorsListForm').submit();
+                    }
+                    break;
+            }
+        });
+    </script>
+}
+

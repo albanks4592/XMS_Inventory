@@ -1,0 +1,44 @@
+﻿@model IEnumerable<MigrationTool.Models.ApplicationsApplicationOwner>
+<table class="table table-striped">
+    <tr>
+        <th>@Html.DisplayNameFor(model => model.ApplicationOwner.FullName)</th>
+        <th>@Html.DisplayNameFor(model => model.ApplicationOwner.Division.Name)</th>
+        <th>@Html.DisplayNameFor(model => model.Role)</th>
+        @if (User.IsInRole(MigrationTool.Roles.Edit) || User.IsInRole(MigrationTool.Roles.Admin))
+        {
+            <th></th>
+            <th></th>
+        }
+    </tr>
+    @if (Model != null && Model.Count() > 0)
+    {
+        int max = Model.Max(a => a.SortOrder);
+        foreach (var item in Model.OrderBy(a => a.SortOrder))
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ApplicationOwner)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ApplicationOwner.Division.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Role)
+                </td>
+                @if (User.IsInRole(MigrationTool.Roles.Edit) || User.IsInRole(MigrationTool.Roles.Admin))
+                {
+                    <td>
+                        <div class="btn-group">
+                            <button class="btn btn-default @if(item.SortOrder == 0) {<text>disabled</text>}" type="submit" name="moveUp" value="@item.SortOrder"><span class="glyphicon glyphicon-chevron-up"></span></button>
+                            <button class="btn btn-default @if(item.SortOrder == max) {<text>disabled</text>}" type="submit" name="moveDown" value="@item.SortOrder"><span class="glyphicon glyphicon-chevron-down"></span></button>
+                        </div>
+                    </td>
+                    <td>
+                        <button class="btn btn-default" type="submit" name="remove" value="@item.SortOrder">Remove</button>
+                    </td>
+                }
+            </tr>
+        }
+    }
+</table>
+@Html.Partial("_RecordCount", Model == null ? 0 : Model.Count())

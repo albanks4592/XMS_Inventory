@@ -1,0 +1,5 @@
+﻿@model MigrationTool.Models.Binary
+@if (Model != null)
+{
+    @Html.ActionLink(Model.Name, "Details", "Binary", new { Id = Model.Id }, null)
+}

@@ -1,0 +1,10 @@
+﻿@model MigrationTool.ViewModels.Breadcrumb
+<p></p>
+<ol class="breadcrumb">
+    <li>@Html.ActionLink("Home", "Index", "Home")</li>
+    @foreach (var item in Model.Items)
+    {
+        <li>@Html.ActionLink(item.LinkText, "Index", item.ControllerName)</li>
+    }
+    <li>@Model.LastItemName</li>
+</ol>

@@ -1,0 +1,23 @@
+﻿<script type="text/javascript">
+        $(function () {
+            $("input:radio[name='HighAvailabilityCalculationType']").click(function () {
+                dimHaOptions();
+            });
+
+            dimHaOptions();
+        });
+
+        function dimHaOptions() {
+            var selected = $("input:radio[name='HighAvailabilityCalculationType']:checked").val();
+            if (selected == 1) {
+                $("#HighAvailabilityReservedHypervisors").prop('disabled', false);
+                $("#HighAvailabilityReservedPercentage").prop('disabled', true);
+            } else if (selected == 2) {
+                $("#HighAvailabilityReservedHypervisors").prop('disabled', true);
+                $("#HighAvailabilityReservedPercentage").prop('disabled', false);
+            } else {
+                $("#HighAvailabilityReservedHypervisors").prop('disabled', true);
+                $("#HighAvailabilityReservedPercentage").prop('disabled', true);
+            }
+        }
+</script>

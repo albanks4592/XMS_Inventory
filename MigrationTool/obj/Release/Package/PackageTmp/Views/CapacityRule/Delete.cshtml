@@ -1,0 +1,22 @@
+﻿@using MigrationTool.ViewModels
+@model CapacityRuleDetailsViewModel
+
+@{
+    ViewBag.Title = MigrationTool.Strings.DeleteAction;
+}
+
+<!-- Header and breadcrumbs -->
+@Html.Partial("_Breadcrumb", new Breadcrumb(ViewBag.Title, new BreadcrumbItem { LinkText = MigrationTool.Strings.CapacityRulePlural, ControllerName = "CapacityRule" }))
+
+<h2>@ViewBag.Title</h2>
+
+<h3>@string.Format(MigrationTool.Strings.ConfirmDeletion_P0, MigrationTool.Strings.CapacityRule)</h3>
+
+@Html.Partial("_Details", Model)
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <button type="submit" class="btn btn-danger">@MigrationTool.Strings.DeleteAction</button>
+    @Html.ActionLink(MigrationTool.Strings.Cancel, "Details", new { id = Model.Id }, new { @class = "btn btn-default" })
+}

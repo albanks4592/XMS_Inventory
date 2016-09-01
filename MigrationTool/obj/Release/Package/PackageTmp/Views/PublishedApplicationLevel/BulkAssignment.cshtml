@@ -1,0 +1,34 @@
+﻿@model IEnumerable<MigrationTool.Models.PublishedApplicationLevel>
+@using MigrationTool.ViewModels
+
+@{
+    ViewBag.Title = "Bulk Assignment";
+    var levels = Model.ToArray();
+}
+
+@Html.Partial("_Breadcrumb", new Breadcrumb(ViewBag.Title, new BreadcrumbItem { LinkText = "Published Application Levels", ControllerName = "PublishedApplicationLevel" }))
+<h2>@ViewBag.Title</h2>
+
+@using (Html.BeginForm())
+{
+    <table class="table table-striped">
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.PublishedApplicationName)</th>
+            <th>@Html.DisplayNameFor(model => model.ApplicationLevel)</th>
+        </tr>
+        @for (int i = 0; i < levels.Length; i++) {
+            <tr>
+                <td>
+                    @Html.HiddenFor(modelItem => levels[i].Id)
+                    @Html.HiddenFor(modelItem => levels[i].PublishedApplicationName)
+                    @Html.DisplayFor(modelItem => levels[i])
+                </td>
+                <td>
+                    @Html.EditorFor(modelItem => levels[i].ApplicationLevel)
+                    @Html.ValidationMessageFor(modelItem => levels[i].ApplicationLevel)
+                </td>
+            </tr>
+        }
+    </table>
+    <button type="submit" class="btn btn-primary">Save</button>
+}

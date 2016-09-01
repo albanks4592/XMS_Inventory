@@ -1,0 +1,98 @@
+﻿@model MigrationTool.Models.Hypervisor
+@using MigrationTool.ViewModels
+
+@{
+    ViewBag.Title = MigrationTool.Strings.CreateAction;
+}
+
+<!-- Header and breadcrumbs -->
+@Html.Partial("_Breadcrumb", new Breadcrumb(ViewBag.Title, new BreadcrumbItem { LinkText = MigrationTool.Strings.HypervisorPlural, ControllerName = "Hypervisor" }))
+
+<h2>@ViewBag.Title</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <!-- Name -->
+    <div class="form-group">
+        @Html.LabelFor(model => model.Name)
+        @Html.EditorFor(model => model.Name)
+        @Html.ValidationMessageFor(model => model.Name)
+    </div>
+
+    <!-- Processor Cores -->
+    <div class="form-group">
+        @Html.LabelFor(model => model.ProcessorCores)
+        @Html.EditorFor(model => model.ProcessorCores)
+        @Html.ValidationMessageFor(model => model.ProcessorCores)
+    </div>
+
+    <!-- Memory -->
+    <div class="form-group">
+        @Html.LabelFor(model => model.Memory)
+        @Html.EditorFor(model => model.Memory)
+        @Html.ValidationMessageFor(model => model.Memory)
+    </div>
+
+    <!-- Hypervisor Group -->
+    <div class="form-group">
+        @Html.LabelFor(model => model.HypervisorGroup_Id, MigrationTool.Strings.HypervisorGroup)
+        @Html.DropDownList(MigrationTool.Strings.HypervisorGroupId, (SelectList)ViewBag.HypervisorGroup_Id_Select, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.HypervisorGroup_Id)
+    </div>
+
+    <!-- Hypervisor Type -->
+    <div class="form-group">
+        @Html.LabelFor(model => model.HypervisorType_Id, MigrationTool.Strings.HypervisorType)
+        @Html.DropDownList(MigrationTool.Strings.HypervisorTypeId, (SelectList)ViewBag.HypervisorType_Id_Select, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.HypervisorType_Id)
+    </div>
+
+    <!-- Hypervisor Workload Profile -->
+    <div class="form-group">
+        @Html.LabelFor(model => model.HypervisorWorkloadProfile_Id, MigrationTool.Strings.HypervisorWorkloadProfile)
+        @Html.DropDownList(MigrationTool.Strings.HypervisorWorkloadProfileId, (SelectList)ViewBag.HypervisorWorkloadProfile_Id_Select, string.Empty, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.HypervisorWorkloadProfile_Id)
+    </div>
+    
+    <div class="well">
+
+        <!-- Inactive -->
+        <div class="form-group">
+            @Html.EditorFor(model => model.Inactive)
+            @Html.ValidationMessageFor(model => model.Inactive)
+        </div>
+        
+        <!-- Inactive Date -->    
+        <div class="form-group">
+            @Html.LabelFor(model => model.InactiveDate)
+            @Html.EditorFor(model => model.InactiveDate)
+            @Html.ValidationMessageFor(model => model.InactiveDate)
+        </div>
+    </div>
+    
+    <button type="submit" class="btn btn-primary">@MigrationTool.Strings.CreateAction</button>
+    @Html.ActionLink(MigrationTool.Strings.Cancel, "Index", null, new { @class = "btn btn-default" })
+}
+
+@section Scripts {
+    <script type="text/javascript">
+        $(function () {
+            configurePickers();
+        });
+
+        function configurePickers() {
+            $(".datetimepicker").each(function () {
+                var $this = $(this);
+                $this.datetimepicker({
+                    useCurrent: false,
+                    useSeconds: false,
+                    showToday: true,
+                    sideBySide: true
+                });
+            });
+        }
+    </script>
+}

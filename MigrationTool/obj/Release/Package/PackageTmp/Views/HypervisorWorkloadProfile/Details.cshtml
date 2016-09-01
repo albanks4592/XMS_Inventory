@@ -1,0 +1,68 @@
+﻿@model MigrationTool.Models.HypervisorWorkloadProfile
+@using MigrationTool.ViewModels
+
+@{
+    ViewBag.Title = "Details";
+}
+
+@helper typeName(int type) {
+    switch (type) {
+        case 0:
+            @:VCPU per Physical Core
+            break;
+            
+        case 1:
+            @:Maximum Virtual Machine Limit
+            break;
+            
+        default:
+            @:None
+            break;
+    }
+}
+
+<!-- Header and breadcrumbs -->
+@Html.Partial("_Breadcrumb", new Breadcrumb(ViewBag.Title, new BreadcrumbItem { LinkText = "Hypervisor Workload Profiles", ControllerName = "HypervisorWorkloadProfile" }))
+@if (User.IsInRole(MigrationTool.Roles.Edit) || User.IsInRole(MigrationTool.Roles.Admin))
+{
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }, new { @class = "btn btn-default btn-lg pull-right" })
+}
+<h2>@ViewBag.Title</h2>
+
+<dl class="dl-horizontal">
+    <dt>@Html.DisplayNameFor(model => model.Name)</dt>
+    <dd>@Html.DisplayFor(model => model.Name)</dd>
+
+    <dt>@Html.DisplayNameFor(model => model.Type)</dt>
+    <dd>@typeName(Model.Type)</dd>
+    @switch (Model.Type)
+    {
+        case 0:
+            <dt>@Html.DisplayNameFor(model => model.VirtualProcessorsPerCore)</dt>
+            <dd>@Html.DisplayFor(model => model.VirtualProcessorsPerCore)</dd>
+           break;
+
+        case 1:
+            <dt>@Html.DisplayNameFor(model => model.MaxVirtualMachines)</dt>
+            <dd>@Html.DisplayFor(model => model.MaxVirtualMachines)</dd>
+           break;
+    }
+</dl>
+
+<h2>@Html.DisplayNameFor(model => model.Hypervisors)</h2>
+@Html.Partial("../Hypervisor/_List", Model.Hypervisors)
+
+<div class="row">
+    @if (User.IsInRole(MigrationTool.Roles.Edit) || User.IsInRole(MigrationTool.Roles.Admin))
+    {
+        <div class="col-md-6">
+            @Html.Partial("_NoteForm", Model)
+        </div>
+    }
+
+    <div class="col-md-6">
+        @Html.Partial("_TagForm", Model)
+    </div>
+</div>
+
+@Html.Partial("_NoteList", Model)

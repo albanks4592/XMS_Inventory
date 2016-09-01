@@ -1,0 +1,27 @@
+﻿@model MigrationTool.Models.PublishedApplicationLevel
+@using MigrationTool.ViewModels
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+@Html.Partial("_Breadcrumb", new Breadcrumb(ViewBag.Title, new BreadcrumbItem { LinkText = "Published Application Levels", ControllerName = "PublishedApplicationLevel" }))
+<h2>@ViewBag.Title</h2>
+
+@using (Html.BeginForm()) {
+    @Html.ValidationSummary(true)
+    <div class="form-group">
+        @Html.HiddenFor(model => model.PublishedApplicationName)
+        @Html.LabelFor(model => model.PublishedApplicationName)
+        @Html.DisplayFor(model => model.PublishedApplicationName)
+    </div>
+    
+    <div class="form-group">
+        @Html.LabelFor(model => model.ApplicationLevel)
+        @Html.EditorFor(model => model.ApplicationLevel)
+        @Html.ValidationMessageFor(model => model.ApplicationLevel)
+    </div>
+    
+    <button type="submit" class="btn btn-primary">Save</button>
+    @Html.ActionLink("Cancel", "Details", new { Id = Model.Id }, new { @class = "btn btn-default" })
+}

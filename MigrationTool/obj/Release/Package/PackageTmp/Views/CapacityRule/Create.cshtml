@@ -1,0 +1,20 @@
+﻿@model MigrationTool.Models.CapacityRule
+@using MigrationTool.ViewModels
+
+@{
+    ViewBag.Title = MigrationTool.Strings.CreateAction;
+}
+
+<!-- Header and breadcrumbs -->
+@Html.Partial("_Breadcrumb", new Breadcrumb(ViewBag.Title, new BreadcrumbItem { LinkText = MigrationTool.Strings.CapacityRulePlural, ControllerName = "CapacityRule" }))
+
+<h2>@ViewBag.Title</h2>
+
+@using (Html.BeginForm())
+{
+    <!-- Form -->
+    @Html.Partial("_Form", Model)
+
+    <button type="submit" class="btn btn-primary">@MigrationTool.Strings.CreateAction</button>
+    @Html.ActionLink(MigrationTool.Strings.Cancel, "Index", null, new { @class = "btn btn-default" })
+}

@@ -1,0 +1,30 @@
+﻿@model IEnumerable<MigrationTool.ViewModels.HypervisorGroupListIndexViewModel>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.Name)</th>
+            <th>@Html.DisplayNameFor(model => model.HypervisorCount)</th>
+            <th>@Html.DisplayNameFor(model => model.VirtualMachineCount)</th>
+            <th>@Html.DisplayNameFor(model => model.UsedCapacityPercent)</th>
+            <th>@Html.DisplayNameFor(model => model.Notes)</th>
+            <th>@Html.DisplayNameFor(model => model.Tags)</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null)
+        {
+            foreach (var item in Model.OrderBy(model => model.Name))
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => item)</td>
+                    <td>@Html.DisplayFor(modelItem => item.HypervisorCount)</td>
+                    <td>@Html.DisplayFor(modelItem => item.VirtualMachineCount)</td>
+                    <td>@Html.Partial("_ProgressBar_VmCapacity", item)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Notes)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Tags)</td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+@Html.Partial("_RecordCount", Model == null ? 0 : Model.Count())

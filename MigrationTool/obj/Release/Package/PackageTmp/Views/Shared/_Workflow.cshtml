@@ -1,0 +1,448 @@
+﻿@model MigrationTool.Models.WorkflowInstance
+@helper PanelType(MigrationTool.Models.WorkflowStepInstance step)
+    {
+        if (!step.Started)
+        {
+    <text>panel-default</text>
+        }
+        else if (!step.Completed)
+        {
+    <text>panel-primary</text>
+        }
+        else
+        {
+            if (step.Skipped)
+            {
+    <text>panel-info</text>
+            }
+            else if ((int)(step.EndTime.Value - step.StartTime.Value).TotalHours > (int)TimeSpan.FromDays(step.EstimatedDuration).TotalHours)
+            {
+    <text>panel-danger</text>
+            }
+            else
+            {
+    <text>panel-success</text>
+            }
+        }
+}
+@{
+    DateTime estimatedDate = DateTime.Now;
+    DateTime now = DateTime.Now;
+}
+<div id="workflowContainer">
+    <h2>@Model.WorkflowDefinition.Name</h2>
+    <h3>
+        Duration Estimate</h3>
+    @using (Ajax.BeginForm("ApplyDurationEstimate", "WorkflowOperation", new AjaxOptions
+    {
+        InsertionMode = InsertionMode.Replace,
+        UpdateTargetId = "workflowContainer",
+        OnComplete = "configurePickers();$(\"[data-toggle='popover']\").popover();"
+    }))
+    {
+        @Html.Hidden("workflowInstanceId", Model.Id)
+        <div class="row">
+            <div class="col-sm-4">
+                @Html.DropDownList("workflowDurationEstimateId", (SelectList)ViewBag.WorkflowDurationEstimate_Id_Select, string.Empty, new { @class = "form-control" })
+            </div>
+            <div class="col-sm-2">
+                <button class="btn btn-default" type="submit">
+                    Apply</button>
+            </div>
+        </div>
+    }
+    <h3>
+        Workflow Summary</h3>
+    @Html.Partial("_WorkflowProgressBar", Model)
+    <h3>
+        Workflow Detail</h3>
+    @foreach (var step in Model.WorkflowStepInstances.OrderBy(x => x.WorkflowStepDefinition.SortOrder))
+    {
+        <div class="panel @PanelType(step)">
+            <div class="panel-heading" data-toggle="collapse" data-target="#@step.Id">
+                @if (step.Started)
+                {
+                    TimeSpan span;
+                    string addon = "";
+                    if (step.Completed)
+                    {
+                        span = step.EndTime.Value - step.StartTime.Value;
+                    }
+                    else
+                    {
+                        span = now - step.StartTime.Value;
+                        addon = " +";
+                    }
+                    <span class="pull-right badge">
+                        @if (step.Skipped)
+                        {
+                            @:Skipped
+                        }
+                        else
+                        {
+                            @Html.DisplayFor(model => span, "TimeSpanDaysHours") @addon
+                        }
+                    </span>
+                }
+                <h3 class="panel-title">
+                    @if (step.Completed)
+                    {
+                        <text><span class="glyphicon glyphicon-check"></span></text>
+                    }
+                    else
+                    {
+                        <text><span class="glyphicon glyphicon-unchecked"></span></text>
+                    }
+                    @step.WorkflowStepDefinition.GroupName: @step.WorkflowStepDefinition.Name
+                </h3>
+            </div>
+            <div class="collapse @if (step.Started && !step.Completed || !step.Started && step.WorkflowStepDefinition.SortOrder == 0) {<text>in</text>}" id="@step.Id">
+                @if (step.WorkflowStepDefinition.Description != null || step.Started && !step.Completed && step.WorkflowStepActivities.Count() == 1 && step.WorkflowStepActivities.First().Notes.Count == 0)
+                {
+                    <div class="panel-body">
+                        @if (step.Started && !step.Completed && step.WorkflowStepActivities.Count() == 1 && step.WorkflowStepActivities.First().Notes.Count == 0)
+                        {
+                            using (Ajax.BeginForm("SkipWorkflowStep", "WorkflowOperation", new AjaxOptions
+                            {
+                                InsertionMode = InsertionMode.Replace,
+                                UpdateTargetId = "workflowContainer",
+                                OnBegin = "$(\"#" + step.Id.ToString() + "_skipStepButton\").prop(\"disabled\", true);",
+                                OnComplete = "configurePickers();$(\"[data-toggle='popover']\").popover();"
+                            }))
+                            {
+                            @Html.Hidden("workflowStepInstanceId", step.Id)
+                            <button class="btn btn-primary btn-lg btn-block" type="submit" id="@(step.Id.ToString())_skipStepButton">Skip This Step</button>
+                            <p>
+                            </p>
+                            }
+                        }
+                        <!-- Step description text -->
+                        @{
+                        if (step.WorkflowStepDefinition.Description != null)
+                        {
+                            string[] lines = step.WorkflowStepDefinition.Description.Split('\n');
+                            foreach (string line in lines)
+                            {
+                            <p>@line</p>
+                            }
+                        }
+                        }
+                    </div>
+                }
+                @using (Ajax.BeginForm("UpdateEstimatedDuration", "WorkflowOperation", new AjaxOptions
+                {
+                    InsertionMode = InsertionMode.Replace,
+                    UpdateTargetId = "workflowContainer",
+                    OnComplete = "configurePickers();$(\"[data-toggle='popover']\").popover();"
+                }))
+                {
+                    int estimatedDuration = step.EstimatedDuration;
+                    @Html.Hidden("workflowStepInstanceId", step.Id)
+                    <table class="table">
+                        @if (step.Skipped)
+                        {
+                            <tr>
+                                <th>Skipped</th>
+                                <td></td>
+                                <td class="text-right">
+                                    <span class="text-muted">@Html.DisplayFor(modelItem => step.CompletedAt, "DateAndTime") by @step.CompletedBy.DisplayName</span>
+                                </td>
+                            </tr>
+                        }
+                        else
+                        {
+                            <!-- Start Time -->
+                            <tr>
+                                @if (step.Started)
+                                {
+                                    <th>
+                                        Started
+                                    </th>
+                                    <td>@Html.DisplayFor(modelItem => step.StartTime, "DateAndTime")
+                                    </td>
+                                    <td class="text-right">
+                                        <span class="text-muted">@Html.DisplayFor(modelItem => step.StartedAt, "DateAndTime")
+                                            by @step.StartedBy.DisplayName</span>
+                                    </td>
+                                }
+                                else
+                                {
+                                    <th>
+                                        Estimated Start Date
+                                    </th>
+                                    <td>@Html.DisplayFor(modelItem => estimatedDate, "DateAndTime")
+                                    </td>
+                                    <td>
+                                    </td>
+                                }
+                            </tr>
+                            <!-- End Time -->
+                            <tr>
+                                @if (step.Completed)
+                                {
+                                    <th>
+                                        Completed
+                                    </th>
+                                    <td>@Html.DisplayFor(modelItem => step.EndTime, "DateAndTime")
+                                    </td>
+                                    <td class="text-right">
+                                        <span class="text-muted">@Html.DisplayFor(modelItem => step.CompletedAt, "DateAndTime")
+                                            by @step.CompletedBy.DisplayName</span>
+                                    </td>
+                                }
+                                else
+                                {
+                                    <th>
+                                        Estimated Completion Date
+                                    </th>
+                                    <td>
+                                        @if (step.Started)
+                                        {
+                                            DateTime temp = step.StartTime.Value.AddDays(step.EstimatedDuration);
+                                            @Html.DisplayFor(modelItem => temp, "DateAndTime")
+                                        }
+                                        else
+                                        {
+                                            DateTime temp = estimatedDate.AddDays(step.EstimatedDuration);
+                                            @Html.DisplayFor(modelItem => temp, "DateAndTime")
+                                        }
+                                    </td>
+                                    <td>
+                                    </td>
+                                }
+                            </tr>
+                            <!-- Estimated Duration -->
+                            <tr>
+                                <th>
+                                    Estimated Duration
+                                </th>
+                                <td>
+                                    <div class="form-group" style="margin-bottom: 0;">
+                                        <div class="input-group">
+                                            @Html.EditorFor(modelItem => estimatedDuration, "Int32-Small")
+                                            <span class="input-group-addon">days </span>
+                                        </div>
+                                        @Html.ValidationMessageFor(modelItem => estimatedDuration)
+                                    </div>
+                                </td>
+                                <td>
+                                    <button type="submit" class="btn btn-sm btn-default">
+                                        Update</button>
+                                </td>
+                            </tr>
+                            
+                            <!-- Actual Duration -->
+                            if (step.Started)
+                            {
+                                TimeSpan duration;
+                                <tr>
+                                    @if (step.Completed)
+                                    {
+                                        duration = step.EndTime.Value - step.StartTime.Value;
+                                    }
+                                    else
+                                    {
+                                        duration = now - step.StartTime.Value;
+                                    }
+                                    <th>
+                                        Actual Duration
+                                    </th>
+                                    <td>@Html.DisplayFor(modelItem => duration, "TimeSpanDaysHours")
+                                    </td>
+                                    <td>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </table>
+                }
+                <div class="panel-body">
+                    @if (step.WorkflowStepActivities.Count() > 0)
+                    {
+                        <h4>Activity</h4>
+                        foreach (var activity in step.WorkflowStepActivities.OrderBy(x => x.StartTime))
+                        {
+                        <div class="panel panel-default">
+                            <div class="panel-heading" data-toggle="collapse" data-target="#@activity.Id">
+                                @{
+                            TimeSpan span;
+                            string addon = "";
+                            if (activity.Completed)
+                            {
+                                span = activity.EndTime.Value - activity.StartTime;
+                            }
+                            else
+                            {
+                                span = now - activity.StartTime;
+                                addon = "+";
+                            }
+                                    <span class="pull-right badge">
+                                        @Html.DisplayFor(model => span, "TimeSpanDaysHours") @addon
+                                    </span>
+                                }
+                                <span class="panel-title">@activity.ResponsibleParty.Name</span>
+                            </div>
+                            <div class="collapse @if (activity.EndTime == null)
+                                                 { <text>in</text> }" id="@activity.Id">
+                                <table class="table">
+                                    <!-- Start Time -->
+                                    <tr>
+                                        <th>
+                                            Started
+                                        </th>
+                                        <td>@Html.DisplayFor(modelItem => activity.StartTime, "DateAndTime")
+                                        </td>
+                                        <td class="text-right">
+                                            <span class="text-muted">@Html.DisplayFor(modelItem => activity.StartedAt, "DateAndTime")
+                                                by @activity.StartedBy.DisplayName</span>
+                                        </td>
+                                    </tr>
+                                    <!-- End Time -->
+                                    @if (activity.Completed)
+                                    {
+                                        <tr>
+                                            <th>
+                                                Completed
+                                            </th>
+                                            <td>@Html.DisplayFor(modelItem => activity.EndTime, "DateAndTime")
+                                            </td>
+                                            <td class="text-right">
+                                                <span class="text-muted">@Html.DisplayFor(modelItem => activity.CompletedAt, "DateAndTime")
+                                                    by @activity.CompletedBy.DisplayName</span>
+                                            </td>
+                                        </tr>
+                                    }
+                                </table>
+                                <div class="panel-body">
+                                    @if (!activity.Completed)
+                                    {
+                                        using (Ajax.BeginForm("CompleteWorkflowStepActivity", "WorkflowOperation", null, new AjaxOptions
+                                        {
+                                            InsertionMode = InsertionMode.Replace,
+                                            UpdateTargetId = "workflowContainer",
+                                            OnBegin = "$(\"button:submit\", \"#UpdateForm_" + activity.Id.ToString() + "\").prop(\"disabled\", true);",
+                                            OnComplete = "configurePickers();$(\"[data-toggle='popover']\").popover();"
+                                        }, new { id = "UpdateForm_" + activity.Id.ToString() }))
+                                        {
+                                        @Html.Hidden("activityId", activity.Id)
+
+                                        <div class="well well-sm">
+                                            <button type="button" class="btn btn-default" data-toggle="collapse" data-target="#@(activity.Id)_completionToggle">Activity Status Update</button>
+                                            <div class="collapse clearfix" id="@(activity.Id)_completionToggle">
+                                                <p>
+                                                </p>
+                                                <label>Update Type</label>
+                                                <div class="form-group">
+                                                    <label class="radio-inline">
+                                                        <input type="radio" name="completesStep" value="false" />
+                                                        Further Action Required
+                                                    </label>
+                                                    <label class="radio-inline">
+                                                        <input type="radio" name="completesStep" value="true" />
+                                                        Step complete
+                                                    </label>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-sm-6">
+                                                        <div class="form-group">
+                                                            <label>Next Responsible Party</label>
+                                                            @Html.DropDownList("responsibleParty_Id", (SelectList)ViewBag.ResponsibleParty_Id_Select, new { @class = "form-control" })
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-6">
+                                                        <div class="form-group">
+                                                            <label>Update Time</label>
+                                                            <div class="input-group date datetimepicker" data-min-date="@activity.StartTime">
+                                                                <input type="text" class="form-control" name="time" />
+                                                                <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span>
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <button type="submit" class="btn btn-default pull-right">Update</button>
+                                            </div>
+                                        </div>
+                                        }
+                                    }
+                                    <p></p>
+                                    @if (!activity.Completed || activity.Notes.Count() > 0)
+                                    {
+                                        <div class="well well-sm">
+                                            <button type="button" class="btn btn-default" data-toggle="collapse" data-target="#@(activity.Id)_noteToggle">Activity Notes</button>
+                                            <div id="@(activity.Id)_noteToggle" class="collapse">
+                                                @if (!activity.Completed)
+                                                {
+                                                    @Html.Partial("_NoteForm_Small", activity)
+                                                }
+                                                else
+                                                {
+                                                    <p>
+                                                    </p>
+                                                }
+                                                @Html.Partial("_NoteList", activity)
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                        }
+                    }
+                    @{
+                    estimatedDate = estimatedDate.AddDays(step.EstimatedDuration);
+                    }
+                    @if (!step.Started && step.WorkflowStepDefinition.SortOrder == 0)
+                    {
+                        using (Ajax.BeginForm("StartWorkflowStep", "WorkflowOperation", null, new AjaxOptions
+                        {
+                            InsertionMode = InsertionMode.Replace,
+                            UpdateTargetId = "workflowContainer",
+                            OnBegin = "$(\"#" + step.Id.ToString() + "_startWorkflowButton\").prop(\"disabled\", true);",
+                            OnComplete = "configurePickers();$(\"[data-toggle='popover']\").popover();"
+                        }, new { id = step.Id.ToString() + "_startWorkflowForm" }))
+                        {
+                            @Html.Hidden("stepId", step.Id)
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>Start Time</label>
+                                        <div class="input-group date datetimepicker">
+                                            <input type="text" class="form-control" name="time" />
+                                            <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <button type="submit" class="btn btn-success btn-block" id="@(step.Id.ToString())_startWorkflowButton">Start</button>
+                                </div>
+                            </div>
+                            <p></p>
+                        }
+                    }
+                    @if (step.Started && !step.Completed || step.Notes.Count() > 0)
+                    {
+                        <div class="well well-sm">
+                            <button class="btn btn-default" data-toggle="collapse" data-target="#@(step.Id)_noteToggle">Workflow Step Notes</button>
+                            <div id="@(step.Id)_noteToggle" class="collapse">
+                                @if (!step.Completed)
+                                {
+                                    @Html.Partial("_NoteForm_Small", step)
+                                }
+                                else
+                                {
+                                    <p>
+                                    </p>
+                                }
+                                @Html.Partial("_NoteList", step)
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    }
+</div>

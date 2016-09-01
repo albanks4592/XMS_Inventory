@@ -1,0 +1,12 @@
+﻿@model MigrationTool.Models.InventoryMachine
+@if (Model != null)
+{
+    if (Model.Inactive)
+    {
+        <s>@Html.ActionLink(Model.Name, "Details", "InventoryMachine", new { Id = Model.Id }, null)</s>
+    }
+    else
+    {
+        @Html.ActionLink(Model.Name, "Details", "InventoryMachine", new { Id = Model.Id }, null)
+    }
+}

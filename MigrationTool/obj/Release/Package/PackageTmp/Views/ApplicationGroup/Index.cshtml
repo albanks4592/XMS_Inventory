@@ -1,0 +1,30 @@
+﻿@model IEnumerable<MigrationTool.Models.ApplicationGroup>
+@using MigrationTool.ViewModels
+
+@{
+    ViewBag.Title = "Index";
+}
+
+@Html.Partial("_Breadcrumb", new Breadcrumb("Application Groups"))
+<h2>Index of Application Groups</h2>
+
+@using (Ajax.BeginForm("FilterIndex", "ApplicationGroup", new AjaxOptions {
+    InsertionMode = InsertionMode.Replace,
+    UpdateTargetId = "applicationGroupList",
+    LoadingElementId = "applicationGroupLoader",
+    OnBegin = "$(\"#applicationGroupLoader .spinner\").spin();",
+    OnComplete = "$(\"#applicationGroupLoader .spinner\").spin(false);"
+})) {
+    @Html.Partial("_StandardFilter")
+}
+
+<p></p>
+@if (User.IsInRole(MigrationTool.Roles.Edit) || User.IsInRole(MigrationTool.Roles.Admin))
+{
+    @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-default" })
+    <p></p>
+}
+@Html.Partial("_Loader", "applicationGroupLoader")
+<div id="applicationGroupList">
+    @Html.Partial("_List", Model)
+</div>

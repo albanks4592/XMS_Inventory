@@ -1,0 +1,36 @@
+﻿@using MigrationTool.ViewModels
+@model IEnumerable<DataStoreCategoryListViewModel>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+@Html.Partial("_Breadcrumb", new Breadcrumb("Data Store Categories"))
+
+@using (Ajax.BeginForm("FilterIndex", "DataStoreCategory", new AjaxOptions
+{
+    InsertionMode = InsertionMode.Replace,
+    UpdateTargetId = "DataStoreCategoryList",
+    LoadingElementId = "DataStoreCategoryLoader",
+    OnBegin = "$(\"#DataStoreCategoryLoader .spinner\").spin();",
+    OnComplete = "$(\"#DataStoreCategoryLoader .spinner\").spin(false);"
+}))
+{
+    @Html.Partial("_StandardFilterNoActive")
+}
+
+
+<p></p>
+@if (User.IsInRole(MigrationTool.Roles.Edit) || User.IsInRole(MigrationTool.Roles.Admin))
+{
+    @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-default" })
+    <p></p>
+}
+@Html.Partial("_Loader", "DataStoreCategoryLoader")
+<div id="DataStoreCategoryList">
+    @Html.Partial("_List", Model)
+    @if (Model == null)
+    {
+        @Html.Partial("_SearchFirst")
+    }
+</div>

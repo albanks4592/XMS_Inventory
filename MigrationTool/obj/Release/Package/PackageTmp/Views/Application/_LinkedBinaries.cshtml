@@ -1,0 +1,32 @@
+﻿@model IEnumerable<MigrationTool.Models.Binary>
+<table class="table table-striped">
+    <tr>
+        <th>@Html.DisplayNameFor(model => model.Name)</th>
+        <th>@Html.DisplayNameFor(model => model.Version)</th>
+        <th>@Html.DisplayNameFor(model => model.Notes)</th>
+        <th>@Html.DisplayNameFor(model => model.TagsMetas)</th>
+        @if (User.IsInRole(MigrationTool.Roles.Edit) || User.IsInRole(MigrationTool.Roles.Admin))
+        {
+            <th></th>
+        }
+    </tr>
+    @if (Model != null)
+    {
+        foreach (var item in Model.OrderBy(a => a.Name))
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item)</td>
+                <td>@Html.DisplayFor(modelItem => item.Version)</td>
+                <td>@Html.DisplayFor(modelItem => item.Notes, "NoteCounts")</td>
+                <td>@Html.DisplayFor(modelItem => item.TagsMetas, "TagList")</td>
+                @if (User.IsInRole(MigrationTool.Roles.Edit) || User.IsInRole(MigrationTool.Roles.Admin))
+                {
+                    <td>
+                        <button class="btn btn-default" type="submit" name="remove" value="@item.Id">Remove</button>
+                    </td>
+                }
+            </tr>
+        }
+    }
+</table>
+@Html.Partial("_RecordCount", Model == null ? 0 : Model.Count())

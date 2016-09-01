@@ -1,0 +1,293 @@
+﻿@model MigrationTool.Models.WorkflowDefinition
+@using MigrationTool.ViewModels
+
+@{
+    ViewBag.Title = "Details";
+    int count = Model.WorkflowInstances.Count();
+    bool canEdit = count == 0;
+}
+
+@Html.Partial("_Breadcrumb", new Breadcrumb(ViewBag.Title, new BreadcrumbItem { LinkText = "Workflow Definitions", ControllerName = "WorkflowDefinition" }))
+@if (!canEdit)
+{
+    string label;
+    if (count == 1)
+    {
+        label = "Business Solution";
+    }
+    else
+    {
+        label = "Business Solutions";
+    }
+    <div class="alert alert-warning">
+        This Workflow is being used by @Html.DisplayFor(model => count, "IntThousands") @(label). Editing will be disabled for certain fields.
+    </div>
+}
+@if (User.IsInRole(MigrationTool.Roles.Edit) || User.IsInRole(MigrationTool.Roles.Admin))
+{
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }, new { @class = "btn btn-default btn-lg pull-right" })
+}
+<h2>@ViewBag.Title</h2>
+
+<dl class="dl-horizontal">
+    <dt>@Html.DisplayNameFor(model => Model.Name)</dt>
+    <dd>@Html.DisplayFor(model =>model.Name)</dd>
+
+    <dt>@Html.DisplayNameFor(model => Model.Description)</dt>
+    <dd>@Html.DisplayFor(model => Model.Description)</dd>
+
+    <dt>@Html.DisplayNameFor(model => Model.DefaultWorkflow)</dt>
+    <dd>@Html.DisplayFor(model => Model.DefaultWorkflow)</dd>
+</dl>
+
+<h2>Steps</h2>
+
+@using (Ajax.BeginForm("ArrangeSteps", new AjaxOptions
+{
+    InsertionMode = InsertionMode.Replace,
+    UpdateTargetId = "workflowStepList"
+}))
+{
+    @Html.Hidden("workflowDefinitionId", Model.Id)
+    <div id="workflowStepList">
+        @Html.Partial("_WorkflowStepDefinitions", Model.WorkflowStepDefinitions)
+    </div>
+    if ((User.IsInRole(MigrationTool.Roles.Edit) || User.IsInRole(MigrationTool.Roles.Admin)) && canEdit)
+    {
+        <button type="button" class="btn btn-default" data-toggle="modal" data-target="#addWorkflowStepDialog" id="addWorkflowStepButton">Add</button>
+    }
+}
+
+<div class="modal fade" id="addWorkflowStepDialog">
+    @using (Ajax.BeginForm("AddWorkflowStep", null, new AjaxOptions
+    {
+        InsertionMode = InsertionMode.Replace,
+        UpdateTargetId = "workflowStepList",
+        HttpMethod = "POST"
+    }, new { id = "addWorkflowStepForm"}))
+    {
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span>&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title">Add Workflow Step</h4>
+                </div>
+                <div class="modal-body">
+                    @{
+                        MigrationTool.Models.WorkflowStepDefinition step = null;
+                    }
+                    @Html.Hidden("workflowDefinitionId", Model.Id)
+                    @Html.ValidationSummary(true)
+                    <div class="form-group">
+                        @Html.LabelFor(model => step.Name)
+                        @Html.EditorFor(model => step.Name)
+                        @Html.ValidationMessageFor(model => step.Name)
+                    </div>
+                    
+                    <div class="form-group">
+                        @Html.LabelFor(model => step.GroupName)
+                        @Html.EditorFor(model => step.GroupName)
+                        @Html.ValidationMessageFor(model => step.GroupName)
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => step.ResponsibleParty_Id, "Responsible Party")
+                        @Html.DropDownListFor(model => step.ResponsibleParty_Id, (SelectList)ViewBag.ResponsibleParty_Id_Select, string.Empty, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => step.ResponsibleParty_Id)
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => step.Description)
+                        @Html.EditorFor(model => step.Description)
+                        @Html.ValidationMessageFor(model => step.Description)
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary" id="addWorkflowStepSubmitButton">Add</button>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<div class="modal fade" id="editWorkflowStepDialog">
+    @using (Ajax.BeginForm("EditWorkflowStep", null, new AjaxOptions
+    {
+        InsertionMode = InsertionMode.Replace,
+        UpdateTargetId = "workflowStepList",
+        HttpMethod = "POST"
+    }, new { id = "editWorkflowStepForm" }))
+    {
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span>&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title">Edit Workflow Step</h4>
+                </div>
+                <div class="modal-body" id="editWorkflowStepInnerForm">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<h2>Duration Estimates</h2>
+
+@using (Ajax.BeginForm("RemoveDurationEstimate", new AjaxOptions
+{
+    InsertionMode = InsertionMode.Replace,
+    UpdateTargetId = "durationEstimateList"
+}))
+{
+    @Html.Hidden("workflowDefinitionId", Model.Id)
+    <div id="durationEstimateList">
+        @Html.Partial("_WorkflowDurationEstimates", Model.WorkflowDurationEstimates)
+    </div>
+    if (User.IsInRole(MigrationTool.Roles.Edit) || User.IsInRole(MigrationTool.Roles.Admin))
+    {
+        <button type="button" class="btn btn-default" data-toggle="modal" data-target="#addDurationEstimateDialog" id="addDurationEstimateButton">Add</button>
+    }
+}
+
+<div class="modal fade" id="addDurationEstimateDialog">
+    @using (Ajax.BeginForm("AddDurationEstimate", null, new AjaxOptions
+    {
+        InsertionMode = InsertionMode.Replace,
+        UpdateTargetId = "durationEstimateList",
+        HttpMethod = "POST"
+    }, new { id = "addDurationEstimateForm" }))
+    {
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span>&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title">Add Duration Estimate</h4>
+                </div>
+                <div class="modal-body" id="addDurationEstimateInnerForm">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<div class="modal fade" id="editDurationEstimateDialog">
+    @using (Ajax.BeginForm("EditDurationEstimate", null, new AjaxOptions
+    {
+        InsertionMode = InsertionMode.Replace,
+        UpdateTargetId = "durationEstimateList",
+        HttpMethod = "POST"
+    }, new { id = "editDurationEstimateForm" }))
+    {
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span>&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title">Edit Duration Estimate</h4>
+                </div>
+                <div class="modal-body" id="editDurationEstimateInnerForm">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<div class="row">
+    <p></p>
+    @if (User.IsInRole(MigrationTool.Roles.Edit) || User.IsInRole(MigrationTool.Roles.Admin))
+    {
+        <div class="col-md-6">
+            @Html.Partial("_NoteForm", Model)
+        </div>
+    }
+    
+    <div class="col-md-6">
+        @Html.Partial("_TagForm", Model)
+    </div>
+</div>
+
+@Html.Partial("_NoteList", Model)
+
+@section Scripts {
+    <script type="text/javascript">
+        $("#addWorkflowStepDialog").on("show.bs.modal", function (e) {
+            $("#addWorkflowStepForm").each(function () {
+                this.reset();
+            });
+        });
+
+        $("#addWorkflowStepForm").submit(function () {
+            $("#addWorkflowStepDialog").modal("hide");
+        });
+
+        $("#editWorkflowStepDialog").on("show.bs.modal", function (e) {
+            if (e.relatedTarget.id) {
+                $("#editWorkflowStepInnerForm").html("");
+                $.ajax({
+                    url: "/WorkflowDefinition/WorkflowStepEditor",
+                    data: {
+                        workflowStepDefinitionId: e.relatedTarget.id
+                    },
+                    success: function (data) {
+                        $("#editWorkflowStepInnerForm").html(data);
+                    }
+                });
+            }
+        });
+
+        $("#editWorkflowStepForm").submit(function () {
+            $("#editWorkflowStepDialog").modal("hide");
+        });
+
+
+
+
+        $("#addDurationEstimateDialog").on("show.bs.modal", function (e) {
+            $("#addDurationEstimateInnerForm").html("");
+            $.ajax({
+                url: "/WorkflowDefinition/DurationEstimateAdder",
+                data: {
+                    workflowDefinitionId: "@Model.Id"
+                },
+                success: function (data) {
+                    $("#addDurationEstimateInnerForm").html(data);
+                }
+            });
+        });
+
+        $("#addDurationEstimateForm").submit(function () {
+            $("#addDurationEstimateDialog").modal("hide");
+        });
+
+        $("#editDurationEstimateDialog").on("show.bs.modal", function (e) {
+            if (e.relatedTarget.id) {
+                $("#editDurationEstimateInnerForm").html("");
+                $.ajax({
+                    url: "/WorkflowDefinition/DurationEstimateEditor",
+                    data: {
+                        workflowDurationEstimateId: e.relatedTarget.id
+                    },
+                    success: function (data) {
+                        $("#editDurationEstimateInnerForm").html(data);
+                    }
+                });
+            }
+        });
+
+        $("#editDurationEstimateForm").submit(function () {
+            $("#editDurationEstimateDialog").modal("hide");
+        });
+    </script>
+}

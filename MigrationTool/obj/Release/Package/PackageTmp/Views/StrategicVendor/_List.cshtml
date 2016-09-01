@@ -1,0 +1,17 @@
+﻿@model IEnumerable<MigrationTool.Models.StrategicVendor>
+<table class="table table-striped">
+    <tr>
+        <th>@Html.DisplayNameFor(model => model.Name)</th>
+        <th>@Html.DisplayNameFor(model => model.Notes)</th>
+        <th>@Html.DisplayNameFor(model => model.TagsMetas)</th>
+    </tr>
+    @foreach (var item in Model.OrderBy(model => model.Name))
+    {
+        <tr>
+            <td>@Html.DisplayFor(modelItem => item)</td>
+            <td>@Html.DisplayFor(modelItem => item.Notes, "NoteCounts")</td>
+            <td>@Html.DisplayFor(modelItem => item.TagsMetas, "TagList")</td>
+        </tr>
+    }
+</table>
+@Html.Partial("_RecordCount", Model == null ? 0 : Model.Count())

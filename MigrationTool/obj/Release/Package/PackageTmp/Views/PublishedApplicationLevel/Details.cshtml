@@ -1,0 +1,45 @@
+﻿@model MigrationTool.ViewModels.PublishedApplicationLevelViewModel
+@using MigrationTool.ViewModels
+
+@{
+    ViewBag.Title = "Details";
+}
+
+@Html.Partial("_Breadcrumb", new Breadcrumb(ViewBag.Title, new BreadcrumbItem { LinkText = "Published Application Levels", ControllerName = "PublishedApplicationLevel" }))
+@if (User.IsInRole(MigrationTool.Roles.Edit) || User.IsInRole(MigrationTool.Roles.Admin))
+{
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Item.Id }, new { @class = "btn btn-default btn-lg pull-right" })
+}
+<h2>@ViewBag.Title</h2>
+
+<dl class="dl-horizontal">
+    <dt>@Html.DisplayNameFor(model => Model.Item.PublishedApplicationName)</dt>
+    <dd>@Html.DisplayFor(model => Model.Item.PublishedApplicationName)</dd>
+
+    <dt>@Html.DisplayNameFor(model => Model.Item.ApplicationLevel)</dt>
+    <dd>@Html.DisplayFor(model => Model.Item.ApplicationLevel)</dd>
+</dl>
+
+<!-- Similar Levels -->
+<h2>Similar Published Application Levels</h2>
+@Html.Partial("_List", Model.Similar)
+
+<!-- Published Applications -->
+<h2>Published Applications</h2>
+@Html.Partial("../PublishedApplication/_List", Model.PublishedApplications)
+
+<div class="row">
+    <p></p>
+    @if (User.IsInRole(MigrationTool.Roles.Edit) || User.IsInRole(MigrationTool.Roles.Admin))
+    {
+        <div class="col-md-6">
+            @Html.Partial("_NoteForm", Model.Item)
+        </div>
+    }
+    
+    <div class="col-md-6">
+        @Html.Partial("_TagForm", Model.Item)
+    </div>
+</div>
+
+@Html.Partial("_NoteList", Model.Item)

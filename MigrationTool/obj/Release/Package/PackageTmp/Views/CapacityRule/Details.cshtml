@@ -1,0 +1,168 @@
+﻿@using MigrationTool.ViewModels
+@model CapacityRuleDetailsViewModel
+
+@{
+    ViewBag.Title = MigrationTool.Strings.DetailsAction;
+}
+
+<!-- Header and breadcrumbs -->
+@Html.Partial("_Breadcrumb", new Breadcrumb(ViewBag.Title, new BreadcrumbItem { LinkText = MigrationTool.Strings.CapacityRulePlural, ControllerName = "CapacityRule" }))
+@if (User.IsInRole(MigrationTool.Roles.Edit) || User.IsInRole(MigrationTool.Roles.Admin))
+{
+    @Html.ActionLink(MigrationTool.Strings.EditAction, "Edit", new { id = Model.Id }, new { @class = "btn btn-default btn-lg pull-right" })
+}
+
+<h2>@ViewBag.Title</h2>
+
+<!-- Details -->
+@Html.Partial("_Details", Model)
+
+<!-- Tab headers -->
+<ul class="nav nav-tabs" role="tablist">
+    <li role="presentation" class="active"><a href="#DetailsTab" role="tab" data-toggle="tab">@MigrationTool.Strings.DetailsAction</a></li>
+    <li role="presentation"><a href="#HypervisorGroupTab" role="tab" data-toggle="tab">@Html.DisplayNameFor(model => model.TotalHypervisorGroupCount) (@Html.DisplayFor(model => model.TotalHypervisorGroupCount))</a></li>
+    <li role="presentation"><a href="#HypervisorTab" role="tab" data-toggle="tab">@Html.DisplayNameFor(model => model.TotalHypervisorCount) (@Html.DisplayFor(model => model.TotalHypervisorCount))</a></li>
+    <li role="presentation"><a href="#DataStoreGroupTab" role="tab" data-toggle="tab">@Html.DisplayNameFor(model => model.TotalDataStoreGroupCount) (@Html.DisplayFor(model => model.TotalDataStoreGroupCount))</a></li>
+    <li role="presentation"><a href="#DataStoreTab" role="tab" data-toggle="tab">@Html.DisplayNameFor(model => model.TotalDataStoreCount) (@Html.DisplayFor(model => model.TotalDataStoreCount))</a></li>
+</ul>
+
+<!-- Tab content -->
+<div class="tab-content">
+    <!-- Details tab -->
+    <div role="tabpanel" class="tab-pane active" id="DetailsTab">
+        <!-- Notes and Tags -->
+        <div class="row">
+            @if (User.IsInRole(MigrationTool.Roles.Edit) || User.IsInRole(MigrationTool.Roles.Admin))
+            {
+                <div class="col-md-6">
+                    @Html.Partial("_NoteDetailsViewModelForm", Model)
+                </div>
+            }
+
+            <div class="col-md-6">
+                @Html.Partial("_TagDetailsViewModelForm", Model)
+            </div>
+
+        </div>
+
+        @Html.Partial("_NoteDetailsViewModelList", Model)
+    </div>
+
+    <!-- Hypervisor Group Tab-->
+    <div role="tabpanel" class="tab-pane" id="HypervisorGroupTab">
+        @Html.Partial("_Loader", "HypervisorGroupListLoader")
+        @using (Ajax.BeginForm("GetHypervisorGroupList", null, new AjaxOptions
+        {
+            InsertionMode = InsertionMode.Replace,
+            UpdateTargetId = "HypervisorGroupList",
+            LoadingElementId = "HypervisorGroupListLoader",
+            OnBegin = "$('#HypervisorGroupListLoader .spinner').spin(true);",
+            OnComplete = "$('#HypervisorGroupListLoader .spinner').spin(false);"
+        }, new { id = "HypervisorGroupListForm" }))
+        {
+            @Html.HiddenFor(model => model.Id)
+        }
+        <div id="HypervisorGroupList"></div>
+    </div>
+
+    <!-- Hypervisor Tab-->
+    <div role="tabpanel" class="tab-pane" id="HypervisorTab">
+        @Html.Partial("_Loader", "HypervisorListLoader")
+        @using (Ajax.BeginForm("GetHypervisorList", null, new AjaxOptions
+        {
+            InsertionMode = InsertionMode.Replace,
+            UpdateTargetId = "HypervisorList",
+            LoadingElementId = "HypervisorListLoader",
+            OnBegin = "$('#HypervisorListLoader .spinner').spin(true);",
+            OnComplete = "$('#HypervisorListLoader .spinner').spin(false);"
+        }, new { id = "HypervisorListForm" }))
+        {
+            @Html.HiddenFor(model => model.Id)
+        }
+        <div id="HypervisorList"></div>
+    </div>
+
+    <!-- Data Store Group Tab-->
+    <div role="tabpanel" class="tab-pane" id="DataStoreGroupTab">
+        @Html.Partial("_Loader", "DataStoreGroupListLoader")
+        @using (Ajax.BeginForm("GetDataStoreGroupList", null, new AjaxOptions
+        {
+            InsertionMode = InsertionMode.Replace,
+            UpdateTargetId = "DataStoreGroupList",
+            LoadingElementId = "DataStoreGroupListLoader",
+            OnBegin = "$('#DataStoreGroupListLoader .spinner').spin(true);",
+            OnComplete = "$('#DataStoreGroupListLoader .spinner').spin(false);"
+        }, new { id = "DataStoreGroupListForm" }))
+        {
+            @Html.HiddenFor(model => model.Id)
+        }
+        <div id="DataStoreGroupList"></div>
+    </div>
+
+    <!-- Data Store Tab-->
+    <div role="tabpanel" class="tab-pane" id="DataStoreTab">
+        @Html.Partial("_Loader", "DataStoreListLoader")
+        @using (Ajax.BeginForm("GetDataStoreList", null, new AjaxOptions
+        {
+            InsertionMode = InsertionMode.Replace,
+            UpdateTargetId = "DataStoreList",
+            LoadingElementId = "DataStoreListLoader",
+            OnBegin = "$('#DataStoreListLoader .spinner').spin(true);",
+            OnComplete = "$('#DataStoreListLoader .spinner').spin(false);"
+        }, new { id = "DataStoreListForm" }))
+        {
+            @Html.HiddenFor(model => model.Id)
+        }
+        <div id="DataStoreList"></div>
+    </div>
+</div>
+
+@section Scripts {
+    <script type="text/javascript">
+        // Track what has already been loaded.
+        var hypervisorGroupListLoaded = false;
+        var hypervisorListLoaded = false;
+        var dataStoreGroupListLoaded = false;
+        var dataStoreListLoaded = false;
+
+        // Event handler for switching tabs.
+        $('a[data-toggle="tab"]').on('show.bs.tab', function (e) {
+            // Tab about to become active.
+            var target = $(e.target).attr('href');
+
+            switch (target) {
+                // HypervisorGroups
+                case '#HypervisorGroupTab':
+                    if (!hypervisorGroupListLoaded) {
+                        hypervisorGroupListLoaded = true;
+                        $('form#HypervisorGroupListForm').submit();
+                    }
+                    break;
+
+                // Hypervisors
+                case '#HypervisorTab':
+                    if (!hypervisorListLoaded) {
+                        hypervisorListLoaded = true;
+                        $('form#HypervisorListForm').submit();
+                    }
+                    break;
+
+                // DataStoreGroups
+                case '#DataStoreGroupTab':
+                    if (!dataStoreGroupListLoaded) {
+                        dataStoreGroupListLoaded = true;
+                        $('form#DataStoreGroupListForm').submit();
+                    }
+                    break;
+
+                // DataStores
+                case '#DataStoreTab':
+                    if (!dataStoreListLoaded) {
+                        dataStoreListLoaded = true;
+                        $('form#DataStoreListForm').submit();
+                    }
+                    break;
+            }
+        });
+    </script>
+}

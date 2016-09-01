@@ -1,0 +1,14 @@
+﻿@model MigrationTool.Models.WorkflowDurationEstimateDetail
+
+@Html.HiddenFor(model => model.Id)
+@Html.HiddenFor(model => model.WorkflowStepDefinition_Id)
+@Html.HiddenFor(model => model.WorkflowDurationEstimate_Id)
+
+<div class="form-group">
+    @Html.Label(Model.WorkflowStepDefinition.Name)
+    <div class="input-group">
+        @Html.EditorFor(model => model.EstimatedDuration)
+        <span class="input-group-addon">days</span>
+    </div>
+    @Html.ValidationMessageFor(model => model.EstimatedDuration)
+</div>

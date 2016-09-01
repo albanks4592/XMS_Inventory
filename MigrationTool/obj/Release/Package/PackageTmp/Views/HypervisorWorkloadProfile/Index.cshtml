@@ -1,0 +1,30 @@
+﻿@model IEnumerable<MigrationTool.Models.HypervisorWorkloadProfile>
+@using MigrationTool.ViewModels
+
+@{
+    ViewBag.Title = "Index";
+}
+
+@Html.Partial("_Breadcrumb", new Breadcrumb("Hypervisor Workload Profiles"))
+
+@using (Ajax.BeginForm("FilterIndex", "HypervisorWorkloadProfile", new AjaxOptions {
+    InsertionMode = InsertionMode.Replace,
+    UpdateTargetId = "HypervisorWorkloadProfileList",
+    LoadingElementId = "HypervisorWorkloadProfileLoader",
+    OnBegin = "$(\"#HypervisorWorkloadProfileLoader .spinner\").spin();",
+    OnComplete = "$(\"#HypervisorWorkloadProfileLoader .spinner\").spin(false);"
+})) {
+    @Html.Partial("_StandardFilterNoActive")
+}
+
+
+<p></p>
+@if (User.IsInRole(MigrationTool.Roles.Edit) || User.IsInRole(MigrationTool.Roles.Admin))
+{
+    @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-default" })
+    <p></p>
+}
+@Html.Partial("_Loader", "HypervisorWorkloadProfileLoader")
+<div id="HypervisorWorkloadProfileList">
+    @Html.Partial("_List", Model)
+</div>

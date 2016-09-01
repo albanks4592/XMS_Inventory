@@ -1,0 +1,26 @@
+﻿@model IEnumerable<MigrationTool.Models.Binary>
+<table class="table table-striped">
+    <tr>
+        <th>@Html.DisplayNameFor(model => model.Name)</th>
+        <th>@Html.DisplayNameFor(model => model.Version)</th>
+    </tr>
+    @foreach (var item in Model.OrderBy(x => x.Name))
+    {
+        <tr>
+            <td>
+                <div class="radio">
+                    <label>
+                        <input type="radio" name="selectedBinary" id="@item.Id" value="@item.Id" />
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </label>
+                </div>
+            </td>
+            <td>
+                <div class="radio">
+                    @Html.DisplayFor(modelItem => item.Version)
+                </div>
+            </td>
+        </tr>
+    }
+</table>
+@Html.Partial("_RecordCount", Model == null ? 0 : Model.Count())

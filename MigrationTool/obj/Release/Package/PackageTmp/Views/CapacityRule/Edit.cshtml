@@ -1,0 +1,25 @@
+﻿@model MigrationTool.Models.CapacityRule
+@using MigrationTool.ViewModels
+
+@{ 
+    ViewBag.Title = MigrationTool.Strings.EditAction;
+}
+
+<!-- Header and breadcrumbs -->
+@Html.Partial("_Breadcrumb", new Breadcrumb(ViewBag.Title, new BreadcrumbItem { LinkText = MigrationTool.Strings.CapacityRulePlural, ControllerName = "CapacityRule"}))
+<h2>@ViewBag.Title</h2>
+
+@using (Html.BeginForm())
+{
+    <!-- Form -->
+    @Html.Partial("_Form", Model)
+
+    <button type="submit" class="btn btn-primary">@MigrationTool.Strings.Save</button>
+    @Html.ActionLink(MigrationTool.Strings.Cancel, "Details", new { id = Model.Id }, new { @class = "btn btn-default" })
+    if (User.IsInRole(MigrationTool.Roles.Admin))
+    {
+        <div class="pull-right">
+            @Html.ActionLink(MigrationTool.Strings.DeleteAction, "Delete", new { id = Model.Id }, new { @class = "btn btn-danger" })
+        </div>
+    }
+}

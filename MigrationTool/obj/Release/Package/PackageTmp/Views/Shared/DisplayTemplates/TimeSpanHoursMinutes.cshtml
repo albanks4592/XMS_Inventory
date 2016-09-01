@@ -1,0 +1,5 @@
+﻿@model TimeSpan
+@{
+    int hours = (int)Math.Floor(Model.TotalHours);
+}
+@Html.DisplayFor(model => hours, "IntThousands")h @(Model.Minutes)m

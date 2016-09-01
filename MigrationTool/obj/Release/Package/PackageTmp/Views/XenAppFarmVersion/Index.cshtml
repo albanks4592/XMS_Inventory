@@ -1,0 +1,30 @@
+﻿@model IEnumerable<MigrationTool.Models.XenAppFarmVersion>
+@using MigrationTool.ViewModels
+
+@{
+    ViewBag.Title = "Index";
+}
+
+@Html.Partial("_Breadcrumb", new Breadcrumb("XenApp Farm Versions"))
+
+@using (Ajax.BeginForm("FilterIndex", "XenAppFarmVersion", new AjaxOptions {
+    InsertionMode = InsertionMode.Replace,
+    UpdateTargetId = "XenAppFarmVersionList",
+    LoadingElementId = "XenAppFarmVersionLoader",
+    OnBegin = "$(\"#XenAppFarmVersionLoader .spinner\").spin();",
+    OnComplete = "$(\"#XenAppFarmVersionLoader .spinner\").spin(false);"
+})) {
+    @Html.Partial("_StandardFilterNoActive")
+}
+
+
+<p></p>
+@if (User.IsInRole(MigrationTool.Roles.Edit) || User.IsInRole(MigrationTool.Roles.Admin))
+{
+    @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-default" })
+    <p></p>
+}
+@Html.Partial("_Loader", "XenAppFarmVersionLoader")
+<div id="XenAppFarmVersionList">
+    @Html.Partial("_List", Model)
+</div>

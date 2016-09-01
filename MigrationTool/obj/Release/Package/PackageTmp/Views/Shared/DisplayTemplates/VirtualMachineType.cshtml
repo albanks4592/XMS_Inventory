@@ -1,0 +1,5 @@
+﻿@model MigrationTool.Models.VirtualMachineType
+@if (Model != null)
+{
+    @Html.ActionLink(Model.Name, "Details", "VirtualMachineType", new { Id = Model.Id }, null)
+}

@@ -1,0 +1,21 @@
+﻿.dl-horizontal dt {
+    width: 225px;
+}
+
+.dl-horizontal dd {
+    margin-left: 245px;
+}
+
+.nav-tabs {
+    margin-bottom: 15px;
+}
+
+.radio-no-input {
+    padding-top: 7px;
+    padding-bottom: 7px;
+}
+
+.radio-with-input {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}

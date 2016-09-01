@@ -1,0 +1,12 @@
+﻿@model MigrationTool.Models.XenDesktopCatalog
+@if (Model != null)
+{
+    if (Model.Inactive)
+    {
+        <s>@Html.ActionLink(Model.Name, "Details", "XenDesktopCatalog", new { id = Model.Id }, null)</s>
+    }
+    else
+    {
+        @Html.ActionLink(Model.Name, "Details", "XenDesktopCatalog", new { id = Model.Id }, null)
+    }
+}

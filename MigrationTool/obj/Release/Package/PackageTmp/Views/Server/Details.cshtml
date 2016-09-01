@@ -1,0 +1,69 @@
+﻿@model MigrationTool.Models.XenAppServer
+@using MigrationTool.ViewModels
+
+@{
+    ViewBag.Title = "Details";
+}
+
+@Html.Partial("_Breadcrumb", new Breadcrumb(ViewBag.Title, new BreadcrumbItem { LinkText = "Servers", ControllerName = "Server" }))
+@if (User.IsInRole(MigrationTool.Roles.Edit) || User.IsInRole(MigrationTool.Roles.Admin))
+{
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }, new { @class = "btn btn-default btn-lg pull-right" })
+}
+<h2>@ViewBag.Title</h2>
+
+<dl class="dl-horizontal">
+    <dt>@Html.DisplayNameFor(model => model.Name)</dt>
+    <dd>@Html.DisplayFor(model => model.Name)</dd>
+
+    <dt>@Html.DisplayNameFor(model => model.XenAppServerRole.Name)</dt>
+    <dd>@Html.DisplayFor(model => model.XenAppServerRole)</dd>
+
+    <dt>@Html.DisplayNameFor(model => model.XenAppFarm)</dt>
+    <dd>@Html.DisplayFor(model => model.XenAppFarm)</dd>
+
+    <dt>@Html.DisplayNameFor(model => model.XenAppFarmFolder)</dt>
+    <dd>@Html.DisplayFor(model => model.XenAppFarmFolder)</dd>
+
+    <dt>@Html.DisplayNameFor(model => model.VirtualMachineType.Name)</dt>
+    <dd>@Html.DisplayFor(model => model.VirtualMachineType)</dd>
+
+    <dt>@Html.DisplayNameFor(model => model.CreatedDate)</dt>
+    <dd>@Html.DisplayFor(model => model.CreatedDate)</dd>
+
+    <dt>@Html.DisplayNameFor(model => model.LastUpdated)</dt>
+    <dd>@Html.DisplayFor(model => model.LastUpdated)</dd>
+
+    <dt>@Html.DisplayNameFor(model => model.OS)</dt>
+    <dd>@Html.DisplayFor(model => model.OS)</dd>
+
+    <dt>@Html.DisplayNameFor(model => model.Manufacturer)</dt>
+    <dd>@Html.DisplayFor(model => model.Manufacturer)</dd>
+    
+    <dt>@Html.DisplayNameFor(model => model.ipAddress)</dt>
+    <dd>@Html.DisplayFor(model => model.ipAddress)</dd>
+    
+    <dt>@Html.DisplayNameFor(model => model.Inactive)</dt>
+    <dd>@Html.DisplayFor(model => model.Inactive)</dd>
+
+    @if (Model.Inactive && Model.InactiveDate != null)
+    {
+        <dt>@Html.DisplayNameFor(model => model.InactiveDate)</dt>
+        <dd>@Html.DisplayFor(model => model.InactiveDate)</dd>
+    }
+</dl>
+
+<div class="row">
+    @if (User.IsInRole(MigrationTool.Roles.Edit) || User.IsInRole(MigrationTool.Roles.Admin))
+    {
+        <div class="col-md-6">
+            @Html.Partial("_NoteForm", Model)
+        </div>
+    }
+
+    <div class="col-md-6">
+        @Html.Partial("_TagForm", Model)
+    </div>
+</div>
+
+@Html.Partial("_NoteList", Model)

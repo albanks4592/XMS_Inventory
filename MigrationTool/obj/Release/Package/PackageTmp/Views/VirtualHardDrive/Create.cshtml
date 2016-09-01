@@ -1,0 +1,46 @@
+﻿@model MigrationTool.Models.VirtualHardDrive
+@using MigrationTool.ViewModels
+@{
+    ViewBag.Title = "Create";
+}
+
+@Html.Partial("_Breadcrumb", new Breadcrumb(ViewBag.Title, new BreadcrumbItem { LinkText = "Virtual Hard Drives", ControllerName = "VirtualHardDrive" }))
+<h2>@ViewBag.Title</h2>
+
+@using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Name)
+        @Html.EditorFor(model => model.Name)
+        @Html.ValidationMessageFor(model => model.Name)
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.DataStore_Id, "Data Store")
+        @Html.DropDownList("DataStore_Id", (SelectList)ViewBag.DataStore_Id_Select, string.Empty, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.DataStore_Id)
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Provisioned)
+        @Html.EditorFor(model => model.Provisioned)
+        @Html.ValidationMessageFor(model => model.Provisioned)
+    </div>
+    
+    <div class="form-group">
+        @Html.LabelFor(model => model.Capacity)
+        @Html.EditorFor(model => model.Capacity)
+        @Html.ValidationMessageFor(model => model.Capacity)
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.FreeSpace)
+        @Html.EditorFor(model => model.FreeSpace)
+        @Html.ValidationMessageFor(model => model.FreeSpace)
+    </div>
+
+    <button type="submit" class="btn btn-primary">Create</button>
+    @Html.ActionLink("Cancel", "Index", null, new { @class = "btn btn-default" });
+}

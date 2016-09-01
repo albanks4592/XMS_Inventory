@@ -1,0 +1,30 @@
+﻿@model IEnumerable<MigrationTool.Models.ApplicationVersion>
+@using MigrationTool.ViewModels
+
+@{
+    ViewBag.Title = "Index";
+}
+
+@Html.Partial("_Breadcrumb", new Breadcrumb("Application Versions"))
+
+@using (Ajax.BeginForm("FilterIndex", "ApplicationVersion", new AjaxOptions {
+    InsertionMode = InsertionMode.Replace,
+    UpdateTargetId = "applicationVersionList",
+    LoadingElementId = "applicationVersionLoader",
+    OnBegin = "$(\"#applicationVersionLoader .spinner\").spin();",
+    OnComplete = "$(\"#applicationVersionLoader .spinner\").spin(false); $(\"#filterTextBox\").focus();"
+})) {
+    @Html.Partial("_StandardFilter")
+}
+
+
+<p></p>
+@if (User.IsInRole(MigrationTool.Roles.Edit) || User.IsInRole(MigrationTool.Roles.Admin))
+{
+    @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-default" })
+    <p></p>
+}
+@Html.Partial("_Loader", "applicationVersionLoader")
+<div id="applicationVersionList">
+    @Html.Partial("_List", Model)
+</div>

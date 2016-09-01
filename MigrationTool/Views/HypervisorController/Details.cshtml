@@ -1,0 +1,87 @@
+﻿@using MigrationTool.ViewModels
+@model HypervisorControllerDetailsViewModel
+
+@{
+    ViewBag.Title = MigrationTool.Strings.DetailsAction;
+}
+
+<!-- Header and breadcrumbs -->
+@Html.Partial("_Breadcrumb", new Breadcrumb(ViewBag.Title, new BreadcrumbItem { LinkText = MigrationTool.Strings.HypervisorControllerPlural, ControllerName = "HypervisorController" }))
+@if (User.IsInRole(MigrationTool.Roles.Edit) || User.IsInRole(MigrationTool.Roles.Admin))
+{
+    @Html.ActionLink(MigrationTool.Strings.EditAction, "Edit", new { id = Model.Id }, new { @class = "btn btn-default btn-lg pull-right" })
+}
+
+<h2>@ViewBag.Title</h2>
+
+<!-- Details -->
+@Html.Partial("_Details", Model)
+
+<!-- Tab headers -->
+<ul class="nav nav-tabs" role="tablist">
+    <li role="presentation" class="active"><a href="#DetailsTab" role="tab" data-toggle="tab">@MigrationTool.Strings.DetailsAction</a></li>
+    <li role="presentation"><a href="#HypervisorGroupTab" role="tab" data-toggle="tab">@Html.DisplayNameFor(model => model.TotalHypervisorGroupCount) (@Html.DisplayFor(model => model.TotalHypervisorGroupCount))</a></li>
+</ul>
+
+<!-- Tab content -->
+<div class="tab-content">
+    <!-- Details tab -->
+    <div role="tabpanel" class="tab-pane active" id="DetailsTab">
+        <!-- Notes and Tags -->
+        <div class="row">
+            @if (User.IsInRole(MigrationTool.Roles.Edit) || User.IsInRole(MigrationTool.Roles.Admin))
+            {
+                <div class="col-md-6">
+                    @Html.Partial("_NoteDetailsViewModelForm", Model)
+                </div>
+            }
+
+            <div class="col-md-6">
+                @Html.Partial("_TagDetailsViewModelForm", Model)
+            </div>
+
+        </div>
+
+        @Html.Partial("_NoteDetailsViewModelList", Model)
+    </div>
+
+    <!-- Hypervisor Group Tab-->
+    <div role="tabpanel" class="tab-pane" id="HypervisorGroupTab">
+        @Html.Partial("_Loader", "HypervisorGroupListLoader")
+        @using (Ajax.BeginForm("GetHypervisorGroupList", null, new AjaxOptions
+        {
+            InsertionMode = InsertionMode.Replace,
+            UpdateTargetId = "HypervisorGroupList",
+            LoadingElementId = "HypervisorGroupListLoader",
+            OnBegin = "$('#HypervisorGroupListLoader .spinner').spin(true);",
+            OnComplete = "$('#HypervisorGroupListLoader .spinner').spin(false);"
+        }, new {id = "HypervisorGroupListForm"}))
+        {
+            @Html.HiddenFor(model => model.Id)
+        }
+        <div id="HypervisorGroupList"></div>
+    </div>
+</div>
+
+@section Scripts {
+    <script type="text/javascript">
+        // Track what has already been loaded.
+        var hypervisorGroupListLoaded = false;
+
+        // Event handler for switching tabs.
+        $('a[data-toggle="tab"]').on('show.bs.tab', function (e) {
+            // Tab about to become active.
+            var target = $(e.target).attr('href');
+
+            switch (target) {
+                // HypervisorGroups
+                case '#HypervisorGroupTab':
+                    if (!hypervisorGroupListLoaded) {
+                        hypervisorGroupListLoaded = true;
+                        $('form#HypervisorGroupListForm').submit();
+                    }
+                    break;
+            }
+        });
+    </script>
+}

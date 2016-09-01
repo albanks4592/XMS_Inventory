@@ -1,0 +1,53 @@
+﻿@model IEnumerable<MigrationTool.ViewModels.StorageDashboardViewModel.DataStoreGroupContainer>
+
+<table class="table table-condensed">
+    <thead>
+        <tr>
+            <th class="col-sm-2">Cluster/Data Store</th>
+            <th class="col-xs-1">Capacity</th>
+            <th class="col-xs-1">Free Space</th>
+            <th class="col-xs-1">Virtual Machines</th>
+            <th>Usage</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null) {
+            foreach (var dataStoreGroup in Model)
+            {
+                <tr>
+                    <td>
+                        @if (dataStoreGroup.DataStores.Count() > 0)
+                        {
+                            <button type="button" class="btn btn-link btn-xs" data-toggle="collapse" data-target=".@(dataStoreGroup.ViewModel.Id)-@(dataStoreGroup.Id)" id="@(dataStoreGroup.ViewModel.Id)-@(dataStoreGroup.Id)_CollapseButton">
+                                <span class="glyphicon glyphicon-plus"></span>
+                            </button>
+                        }
+                        else
+                        {
+                            <button type="button" style="visibility:hidden;" class="btn btn-link btn-xs" data-toggle="collapse" data-target=".@(dataStoreGroup.ViewModel.Id)-@(dataStoreGroup.Id)" id="@(dataStoreGroup.ViewModel.Id)-@(dataStoreGroup.Id)_CollapseButton">
+                                <span class="glyphicon glyphicon-plus"></span>
+                            </button>
+                        }
+                        @Html.DisplayFor(model => dataStoreGroup.ViewModel)
+                    </td>
+                    <td>@Html.DisplayFor(model => dataStoreGroup.ViewModel.Capacity, "MemoryGB")</td>
+                    <td>@Html.DisplayFor(model => dataStoreGroup.ViewModel.FreeSpace, "MemoryGB")</td>
+                    <td>@Html.DisplayFor(model => dataStoreGroup.ViewModel.ActiveVirtualMachineCount)</td>
+                    <td>@Html.Partial("_ProgressBar_VmCapacity", dataStoreGroup.ViewModel)</td>
+                </tr>
+
+                foreach (var dataStore in dataStoreGroup.DataStores)
+                {
+                    <tr class="@(dataStoreGroup.ViewModel.Id)-@(dataStoreGroup.Id) info collapse collapse-content" data-collapse-button="@(dataStoreGroup.ViewModel.Id)-@(dataStoreGroup.Id)_CollapseButton">
+                        <td>@Html.DisplayFor(model => dataStore)</td>
+                        <td>@Html.DisplayFor(model => dataStore.Capacity, "MemoryGB")</td>
+                        <td>@Html.DisplayFor(model => dataStore.FreeSpace, "MemoryGB")</td>
+                        <td>@Html.DisplayFor(model => dataStore.ActiveVirtualMachineCount)</td>
+                        <td>@Html.Partial("_ProgressBar_VmCapacity", dataStore)</td>
+                    </tr>
+                }
+            }
+        }
+    </tbody>
+</table>
+@Html.Partial("_RecordCount", Model == null ? 0 : Model.Count())

@@ -1,0 +1,30 @@
+﻿@model IEnumerable<MigrationTool.Models.XenAppServerRole>
+@using MigrationTool.ViewModels
+
+@{
+    ViewBag.Title = "Index";
+}
+
+@Html.Partial("_Breadcrumb", new Breadcrumb("XenApp Server Roles"))
+
+@using (Ajax.BeginForm("FilterIndex", "XenAppServerRole", new AjaxOptions {
+    InsertionMode = InsertionMode.Replace,
+    UpdateTargetId = "XenAppServerRoleList",
+    LoadingElementId = "XenAppServerRoleLoader",
+    OnBegin = "$(\"#XenAppServerRoleLoader .spinner\").spin();",
+    OnComplete = "$(\"#XenAppServerRoleLoader .spinner\").spin(false);"
+})) {
+    @Html.Partial("_StandardFilterNoActive")
+}
+
+
+<p></p>
+@if (User.IsInRole(MigrationTool.Roles.Edit) || User.IsInRole(MigrationTool.Roles.Admin))
+{
+    @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-default" })
+    <p></p>
+}
+@Html.Partial("_Loader", "XenAppServerRoleLoader")
+<div id="XenAppServerRoleList">
+    @Html.Partial("_List", Model)
+</div>

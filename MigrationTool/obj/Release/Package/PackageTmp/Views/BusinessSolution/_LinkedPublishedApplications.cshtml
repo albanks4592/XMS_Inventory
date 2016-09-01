@@ -1,0 +1,43 @@
+﻿@model IEnumerable<MigrationTool.Models.PublishedApplication>
+<table class="table table-striped">
+    <tr>
+        @if (User.IsInRole(MigrationTool.Roles.Edit) || User.IsInRole(MigrationTool.Roles.Admin))
+        {
+            <th></th>
+        }
+        <th>
+            @Html.DisplayNameFor(model => model.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.XenAppFarm.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.XenAppFarmFolder)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Notes)
+        </th>
+    </tr>
+
+    @foreach (var item in Model.OrderBy(x => x.Name)) {
+        <tr>
+            @if (User.IsInRole(MigrationTool.Roles.Edit) || User.IsInRole(MigrationTool.Roles.Admin))
+            {
+                <td><input type="checkbox" name="removeLinkedPublishedApplications" id="@item.Id" value="@item.Id" /></td>
+            }
+            <td>
+                @Html.DisplayFor(modelItem => item)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.XenAppFarm)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.XenAppFarmFolder)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Notes, "NoteCounts")
+            </td>
+        </tr>
+    }
+</table>
+@Html.Partial("_RecordCount", Model == null ? 0 : Model.Count())

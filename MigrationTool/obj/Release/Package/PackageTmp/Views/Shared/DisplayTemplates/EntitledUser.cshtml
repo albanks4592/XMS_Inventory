@@ -1,0 +1,12 @@
+﻿@model MigrationTool.Models.EntitledUser
+@if (Model != null)
+{
+    if (Model.Inactive)
+    {
+        <s>@Html.ActionLink(Model.Username, "Details", "EntitledUser", new { id = Model.Id }, null)</s>
+    }
+    else
+    {
+        @Html.ActionLink(Model.Username, "Details", "EntitledUser", new { id = Model.Id }, null)
+    }
+}

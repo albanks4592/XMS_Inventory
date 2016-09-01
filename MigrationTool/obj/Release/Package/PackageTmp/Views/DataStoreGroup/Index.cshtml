@@ -1,0 +1,37 @@
+﻿@using MigrationTool.ViewModels
+@model IEnumerable<DataStoreGroupListIndexViewModel>
+
+@{
+    ViewBag.Title = MigrationTool.Strings.IndexAction;
+}
+
+@Html.Partial("_Breadcrumb", new Breadcrumb(MigrationTool.Strings.DataStoreGroupPlural))
+
+<h2>@string.Format(MigrationTool.Strings.IndexOf_P0, MigrationTool.Strings.DataStoreGroupPlural)</h2>
+
+@using (Ajax.BeginForm("FilterIndex", "DataStoreGroup", new AjaxOptions
+{
+    InsertionMode = InsertionMode.Replace,
+    UpdateTargetId = "DataStoreGroupList",
+    LoadingElementId = "DataStoreGroupLoader",
+    OnBegin = "$(\"#DataStoreGroupLoader .spinner\").spin();",
+    OnComplete = "$(\"#DataStoreGroupLoader .spinner\").spin(false);"
+}))
+{
+    @Html.Partial("_StandardFilter")
+}
+
+<p></p>
+@if (User.IsInRole(MigrationTool.Roles.Edit) || User.IsInRole(MigrationTool.Roles.Admin))
+{
+    @Html.ActionLink(MigrationTool.Strings.CreateNew, "Create", null, new { @class = "btn btn-default" })
+    <p></p>
+}
+@Html.Partial("_Loader", "DataStoreGroupLoader")
+<div id="DataStoreGroupList">
+    @Html.Partial("_ListIndex", Model)
+    @if (Model == null)
+    {
+        @Html.Partial("_SearchFirst")
+    }
+</div>

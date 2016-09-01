@@ -1,0 +1,479 @@
+﻿@model MigrationTool.Models.WorkflowInstance
+@{
+    var groups = Model.WorkflowStepInstances.GroupBy(x => x.WorkflowStepDefinition.GroupName).OrderBy(x => x.Min(y => y.WorkflowStepDefinition.SortOrder));
+    int stepCount = Model.WorkflowStepInstances.Count();
+    int dotCount = stepCount + groups.Count() + 1;
+    double percent = 1 / (double)dotCount * 100;
+
+    DateTime now = DateTime.Now;
+
+        // Start circle helpers
+    @helper StartCircleType(MigrationTool.Models.WorkflowInstance instance)
+    {
+        if (instance.Started)
+        {
+            // Check overdue
+            TimeSpan estimatedDuration = TimeSpan.FromDays(instance.WorkflowStepInstances.Where(x => !x.Skipped).Sum(x => x.EstimatedDuration));
+            var steps = instance.WorkflowStepInstances.Where(x => !x.Skipped).ToList();
+            DateTime now = DateTime.Now;
+            TimeSpan actualDuration = TimeSpan.FromSeconds(0);
+            foreach (var step in steps)
+            {
+                actualDuration += step.GetActualDuration(now);
+            }
+
+            if (instance.Completed)
+            {
+                if ((int)actualDuration.TotalHours > (int)estimatedDuration.TotalHours)
+                {
+                    @:wf-circle-danger    
+                }
+                else
+                {
+                    // Not overdue
+                    @:wf-circle-success
+                }
+            }
+            else
+            {
+                TimeSpan estimatedCompletionDuration = actualDuration + TimeSpan.FromDays(instance.WorkflowStepInstances.Where(x => x.StartTime == null).Sum(x => x.EstimatedDuration));
+                if ((int)estimatedCompletionDuration.TotalHours > (int)estimatedDuration.TotalHours)
+                {
+                    @:wf-circle-warning    
+                }
+                else
+                {
+                    // Not overdue
+                    @:wf-circle-success
+                }
+            }
+        }
+    }
+    
+    @helper StartCircleGlyphicon(MigrationTool.Models.WorkflowInstance instance)
+    {
+        <text>glyphicon-play</text>
+    }
+    
+    @helper StartCirclePopover(MigrationTool.Models.WorkflowInstance instance)
+    {
+            DateTime temp;
+            System.Text.StringBuilder popover = new System.Text.StringBuilder();
+
+            if (instance.Started)
+            {
+                temp = instance.StartTime.Value;
+                popover.Append("Started ").Append(Html.DisplayFor(model => temp, "DateAndTime"));
+
+                TimeSpan estimatedDuration = TimeSpan.FromDays(instance.WorkflowStepInstances.Where(x => !x.Skipped).Sum(x => x.EstimatedDuration));
+                var steps = instance.WorkflowStepInstances.Where(x => !x.Skipped).ToList();
+                DateTime now = DateTime.Now;
+                TimeSpan actualDuration = TimeSpan.FromSeconds(0);
+                foreach (var step in steps)
+                {
+                    actualDuration += step.GetActualDuration(now);
+                }
+
+                popover.Append("\n\nTarget Duration ").Append(estimatedDuration.TotalDays).Append("d");
+
+                temp = instance.StartTime.Value + estimatedDuration;
+                popover.Append("\nTarget Completion ").Append(Html.DisplayFor(model => temp, "DateAndTime"));
+                
+                if (instance.Completed)
+                {
+                    // Summary of actual time
+                    popover.Append("\n\nActual Duration ").Append(Html.DisplayFor(model => actualDuration, "TimeSpanDaysHours"));
+
+                    temp = instance.EndTime.Value;
+                    popover.Append("\nCompleted ").Append(Html.DisplayFor(model => temp, "DateAndTime"));
+                    
+                    if ((int)actualDuration.TotalHours > (int)estimatedDuration.TotalHours)
+                    {
+                        TimeSpan difference = actualDuration - estimatedDuration;
+                        popover.Append("\nOverdue by ").Append(Html.DisplayFor(model => difference, "TimeSpanDaysHours"));
+                    }
+                }
+                else
+                {
+                    // Summary of time so far and estimated completion
+                    popover.Append("\n\nElapsed Time ").Append(Html.DisplayFor(model => actualDuration, "TimeSpanDaysHours"));
+
+                    TimeSpan estimatedCompletionDuration = actualDuration + TimeSpan.FromDays(instance.WorkflowStepInstances.Where(x => x.StartTime == null).Sum(x => x.EstimatedDuration));
+                    popover.Append("\nEstimated Duration ").Append(Html.DisplayFor(model => estimatedCompletionDuration, "TimeSpanDaysHours"));
+
+                    if ((int)estimatedCompletionDuration.TotalHours > (int)estimatedDuration.TotalHours)
+                    {
+                        TimeSpan difference = estimatedCompletionDuration - estimatedDuration;
+                        popover.Append("\nEstimated Overage ").Append(Html.DisplayFor(model => difference, "TimeSpanDaysHours"));
+                    }
+
+                    temp = instance.StartTime.Value + estimatedCompletionDuration;
+                    popover.Append("\nEstimated Completion ").Append(Html.DisplayFor(model => temp, "DateAndTime"));
+
+                    int stepsLeft = instance.WorkflowStepInstances.Where(x => x.EndTime == null).Count();
+                    popover.Append("\n\nSteps Remaining ").Append(stepsLeft);
+                }
+            }
+            else
+            {
+                popover.Append("Not Started");
+            }
+        
+        @popover.ToString()
+    }
+    
+        // Group circle helpers
+    @helper GroupCircleType(IGrouping<string, MigrationTool.Models.WorkflowStepInstance> group)
+    {
+        if (group.All(x => x.Skipped))
+        {
+            // All skipped
+            @:wf-circle-info
+        }
+        else
+        {
+            bool allFinished = group.All(x => x.EndTime != null);
+            if (allFinished || group.OrderBy(x => x.WorkflowStepDefinition.SortOrder).First().Started)
+            {
+                // All finished, or at least first started
+
+                // Check overdue
+                TimeSpan estimatedDuration = TimeSpan.FromDays(group.Where(x => !x.Skipped).Sum(x => x.EstimatedDuration));
+                var steps = group.Where(x => !x.Skipped).ToList();
+                DateTime now = DateTime.Now;
+                TimeSpan actualDuration = TimeSpan.FromSeconds(0);
+                foreach (var step in steps)
+                {
+                    actualDuration += step.GetActualDuration(now);
+                }
+
+                if (allFinished)
+                {
+                    if ((int)actualDuration.TotalHours > (int)estimatedDuration.TotalHours)
+                    {
+                        @:wf-circle-danger    
+                    }
+                    else
+                    {
+                        // Not overdue
+                        @:wf-circle-success
+                    }
+                }
+                else
+                {
+                    TimeSpan estimatedCompletionDuration = actualDuration + TimeSpan.FromDays(group.Where(x => x.StartTime == null).Sum(x => x.EstimatedDuration));
+                    if ((int)estimatedCompletionDuration.TotalHours > (int)estimatedDuration.TotalHours)
+                    {
+                        @:wf-circle-warning    
+                    }
+                    else
+                    {
+                        // Not overdue
+                        @:wf-circle-success
+                    }
+                }
+            }
+        }
+    }
+    
+    @helper GroupCircleGlyphicon(IGrouping<string, MigrationTool.Models.WorkflowStepInstance> group)
+        {
+            if (!group.All(x => x.EndTime != null))
+            {
+                // Not all finished
+            <text>glyphicon-tasks</text>
+            }
+            else if (!group.All(x => x.Skipped))
+            {
+                // All finished, not all skipped
+            <text>glyphicon-ok</text>
+            }
+    }
+    
+    @helper GroupCirclePopover(IGrouping<string, MigrationTool.Models.WorkflowStepInstance> group)
+        {
+            DateTime temp;
+            System.Text.StringBuilder popover = new System.Text.StringBuilder();
+
+            if (group.All(x => x.Skipped))
+            {
+                popover.Append("Skipped");
+            }
+            else
+            {
+                var first = group.OrderBy(x => x.WorkflowStepDefinition.SortOrder).First();
+                if (!first.Started)
+                {
+                    popover.Append("Not Started");
+                }
+                else
+                {
+                    temp = first.StartTime.Value;
+                    popover.Append("Started ").Append(Html.DisplayFor(model => temp, "DateAndTime"));
+
+                    TimeSpan estimatedDuration = TimeSpan.FromDays(group.Where(x => !x.Skipped).Sum(x => x.EstimatedDuration));
+                    var steps = group.Where(x => !x.Skipped).ToList();
+                    DateTime now = DateTime.Now;
+                    TimeSpan actualDuration = TimeSpan.FromSeconds(0);
+                    foreach (var step in steps)
+                    {
+                        actualDuration += step.GetActualDuration(now);
+                    }
+
+                    popover.Append("\n\nTarget Duration ").Append(estimatedDuration.TotalDays).Append("d");
+
+                    temp = first.StartTime.Value + estimatedDuration;
+                    popover.Append("\nTarget Completion ").Append(Html.DisplayFor(model => temp, "DateAndTime"));
+
+                    var last = group.OrderBy(x => x.WorkflowStepDefinition.SortOrder).Last();
+                    if (last.Completed)
+                    {
+                        // Summary of actual time
+                        popover.Append("\n\nActual Duration ").Append(Html.DisplayFor(model => actualDuration, "TimeSpanDaysHours"));
+                        popover.Append("\nCompleted ").Append(last.EndTime.ToString());
+
+                        if ((int)actualDuration.TotalHours > (int)estimatedDuration.TotalHours)
+                        {
+                            TimeSpan difference = actualDuration - estimatedDuration;
+                            popover.Append("\nOverdue by ").Append(Html.DisplayFor(model => difference, "TimeSpanDaysHours"));
+                        }
+                    }
+                    else
+                    {
+                        // Summary of time so far and estimated completion
+                        popover.Append("\n\nElapsed Time ").Append(Html.DisplayFor(model => actualDuration, "TimeSpanDaysHours"));
+
+                        TimeSpan estimatedCompletionDuration = actualDuration + TimeSpan.FromDays(group.Where(x => x.StartTime == null).Sum(x => x.EstimatedDuration));
+                        popover.Append("\nEstimated Duration ").Append(Html.DisplayFor(model => estimatedCompletionDuration, "TimeSpanDaysHours"));
+
+                        if ((int)estimatedCompletionDuration.TotalHours > (int)estimatedDuration.TotalHours)
+                        {
+                            TimeSpan difference = estimatedCompletionDuration - estimatedDuration;
+                            popover.Append("\nEstimated Overage ").Append(Html.DisplayFor(model => difference, "TimeSpanDaysHours"));
+                        }
+
+                        temp = first.StartTime.Value + estimatedCompletionDuration;
+                        popover.Append("\nEstimated Completion ").Append(Html.DisplayFor(model => temp, "DateAndTime"));
+
+                        int stepsLeft = group.Where(x => x.EndTime == null).Count();
+                        popover.Append("\n\nSteps Remaining ").Append(stepsLeft);
+                    }
+                }
+
+            }
+        
+        @popover.ToString()
+    }
+    
+    @helper GroupConnectorType(IGrouping<string, MigrationTool.Models.WorkflowStepInstance> group)
+        {
+            if (group.OrderBy(x => x.WorkflowStepDefinition.SortOrder).First().Started)
+            {
+            @:wf-connector-active
+        }
+            else
+            {
+            @:wf-connector-inactive
+        }
+    }
+    
+        // Detail circle helpers
+    @helper DetailCircleType(MigrationTool.Models.WorkflowStepInstance step)
+        {
+            if (step.Started)
+            {
+                if (step.Skipped)
+                {
+                <text>wf-circle-info</text>
+                }
+                else
+                {
+                    if (step.GetProgressPercentage(DateTime.Now) > 100)
+                    {
+                    <text>wf-circle-danger</text>
+                    }
+                    else
+                    {
+                        if (step.Completed)
+                        {
+                        <text>wf-circle-success</text>
+                        }
+                        else
+                        {
+                        <text>wf-circle-active</text>
+                        }
+                    }
+                }
+            }
+    }
+    
+    @helper DetailCircleGlyphicon(MigrationTool.Models.WorkflowStepInstance step)
+        {
+            if (step.Started && !step.Skipped)
+            {
+                if (step.Completed)
+                {
+            <text>glyphicon-ok</text>
+                }
+                else
+                {
+            <text>glyphicon-map-marker</text>
+                }
+            }
+    }
+    
+    @helper DetailCirclePopover(MigrationTool.Models.WorkflowStepInstance step)
+        {
+            DateTime temp;
+            System.Text.StringBuilder popover = new System.Text.StringBuilder();
+
+            if (step.Started)
+            {
+                if (step.Skipped)
+                {
+                    popover.Append("Skipped");
+                }
+                else
+                {
+                    temp = step.StartTime.Value;
+                    popover.Append("Started ").Append(Html.DisplayFor(model => temp, "DateAndTime"));
+
+                    DateTime now = DateTime.Now;
+                    TimeSpan estimatedDuration = TimeSpan.FromDays(step.EstimatedDuration);
+                    TimeSpan actualDuration = step.GetActualDuration(now);
+
+                    popover.Append("\n\nTarget Duration ").Append(estimatedDuration.TotalDays).Append("d");
+
+                    temp = step.StartTime.Value + estimatedDuration;
+                    popover.Append("\nTarget Completion ").Append(Html.DisplayFor(model => temp, "DateAndTime"));
+
+                    if (step.Completed)
+                    {
+                        // Summary of actual time
+                        popover.Append("\n\nActual Duration ").Append(Html.DisplayFor(model => actualDuration, "TimeSpanDaysHours"));
+
+                        temp = step.EndTime.Value;
+                        popover.Append("\nCompleted ").Append(Html.DisplayFor(model => temp, "DateAndTime"));
+                    }
+                    else
+                    {
+                        // Summary of time so far and estimated completion
+                        popover.Append("\n\nElapsed Time ").Append(Html.DisplayFor(model => actualDuration, "TimeSpanDaysHours"));
+                    }
+
+                    if ((int)actualDuration.TotalHours > (int)estimatedDuration.TotalHours)
+                    {
+                        TimeSpan difference = actualDuration - estimatedDuration;
+                        popover.Append("\nOverdue by ").Append(Html.DisplayFor(model => difference, "TimeSpanDaysHours"));
+                    }
+                }
+            }
+            else
+            {
+                popover.Append("Not Started");
+            }
+        
+        @popover.ToString()
+    }
+    
+    @helper DetailConnectorType(MigrationTool.Models.WorkflowStepInstance step)
+        {
+            if (step.Started)
+            {
+            @:wf-connector-active
+        }
+            else
+            {
+            @:wf-connector-inactive
+        }
+    }
+    
+        // End circle helpers
+    @helper EndCircleType(MigrationTool.Models.WorkflowInstance instance)
+        {
+            if (instance.Completed)
+            {
+            <text>wf-circle-success</text>
+            }
+    }
+    
+    @helper EndCircleGlyphicon(MigrationTool.Models.WorkflowInstance instance)
+        {
+        <text>glyphicon-flag</text>
+    }
+    
+    @helper EndCirclePopover(MigrationTool.Models.WorkflowInstance instance)
+        {
+            System.Text.StringBuilder popover = new System.Text.StringBuilder();
+
+            if (instance.Completed)
+            {
+                popover.Append("Completed ").Append(instance.EndTime.ToString());
+            }
+            else
+            {
+                popover.Append("Not Completed");
+            }
+        
+        @popover.ToString()
+    }
+    
+    @helper EndConnectorType(MigrationTool.Models.WorkflowInstance instance)
+        {
+            if (instance.Completed)
+            {
+            @:wf-connector-active
+        }
+            else
+            {
+            @:wf-connector-inactive
+        }
+    }
+}
+
+<div class="wf-progress-bar clearfix">
+    <!-- Start circle -->
+    <div class="wf-circle wf-circle-group @StartCircleType(Model)" data-toggle="popover" data-placement="top" data-content="@StartCirclePopover(Model)" title="@Model.WorkflowDefinition.Name" data-trigger="hover">
+        <div>
+            <span class="glyphicon @StartCircleGlyphicon(Model)"></span>
+        </div>
+    </div>
+    
+    <div class="wf-floaters">
+        @foreach (var group in groups)
+        {
+            <!-- Group Circle -->
+            <div style="width: @(percent)%;">
+                <div class="wf-connector @GroupConnectorType(group)"></div>
+                <div class="wf-circle wf-circle-group @GroupCircleType(group)" data-toggle="popover" data-placement="top" data-content="@GroupCirclePopover(group)" title="@Model.WorkflowDefinition.Name: @group.Key" data-trigger="hover">
+                    <div>
+                        <span class="glyphicon @GroupCircleGlyphicon(group)"></span>
+                    </div>
+                </div>
+            </div>
+            
+            foreach (var step in group.OrderBy(x => x.WorkflowStepDefinition.SortOrder))
+            {
+                <!-- Detail circle -->
+                <div style="width: @(percent)%;">
+                    <div class="wf-connector @DetailConnectorType(step)"></div>
+                    <div class="wf-circle wf-circle-detail @DetailCircleType(step)" data-toggle="popover" data-placement="top" data-content="@DetailCirclePopover(step)" title="@group.Key: @step.WorkflowStepDefinition.Name" data-trigger="hover">
+                        <div>
+                            <span class="glyphicon @DetailCircleGlyphicon(step)"></span>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+
+        <!-- End circle -->
+        <div style="width: @(percent)%;">
+            <div class="wf-connector @EndConnectorType(Model)"></div>
+            <div class="wf-circle wf-circle-group @EndCircleType(Model)" data-toggle="popover" data-placement="left" data-content="@EndCirclePopover(Model)" title="@Model.WorkflowDefinition.Name" data-trigger="hover">
+                <div>
+                    <span class="glyphicon @EndCircleGlyphicon(Model)"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

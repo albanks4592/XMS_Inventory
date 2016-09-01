@@ -1,0 +1,23 @@
+﻿@model MigrationTool.Models.Application
+@if (Model.ClarityEntry != null)
+{
+    <dl>
+        <dt>@Html.DisplayNameFor(model => Model.ClarityEntry)</dt>
+        <dd>@Html.DisplayFor(model => Model.ClarityEntry)</dd>
+    </dl>
+    
+    if (User.IsInRole(MigrationTool.Roles.Edit) || User.IsInRole(MigrationTool.Roles.Admin))
+    {
+        <button type="button" class="btn btn-default" data-toggle="modal" data-target="#removeClarityEntryLinkConfirmDialog">Remove Link</button>
+    }
+}
+else
+{
+    <h3>None</h3>
+    
+    if (User.IsInRole(MigrationTool.Roles.Edit) || User.IsInRole(MigrationTool.Roles.Admin))
+    {
+        <button type="button" class="btn btn-default" data-toggle="modal" data-target="#linkClarityEntryDialog">Link</button>
+        <button type="button" class="btn btn-default" data-toggle="modal" data-target="#newApplicationVersionDialog">New</button>
+    }
+}

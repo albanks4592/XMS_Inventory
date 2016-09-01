@@ -1,0 +1,47 @@
+﻿@model MigrationTool.Models.IHasTags
+@{
+    string qualifiedEntitySetName = Model.EntityKey.EntityContainerName + "." + Model.EntityKey.EntitySetName;
+}
+<div class = "panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">Tags</h3>
+    </div>
+    <div class="panel-body">
+        @if (User.IsInRole(MigrationTool.Roles.Edit) || User.IsInRole(MigrationTool.Roles.Admin))
+        {
+            using (Ajax.BeginForm("UpdateTags", "Tag", null, new AjaxOptions
+            {
+                InsertionMode = InsertionMode.Replace,
+                UpdateTargetId = Model.Id.ToString() + "_tagsContainer",
+                OnBegin = "$(\"#" + Model.Id.ToString() + "_tagsFormAddButton\").prop(\"disabled\", true);$(\"button:submit\", \"#" + Model.Id.ToString() + "_tagsContainer\").prop(\"disabled\", true);",
+                OnComplete = "$(\"#" + Model.Id.ToString() + "_tagsForm\")[0].reset();$(\"#" + Model.Id.ToString() + "_tagsFormTextBox\").focus();$(\"#" + Model.Id.ToString() + "_tagsFormAddButton\").prop(\"disabled\", false);$(\"button:submit\", \"#" + Model.Id.ToString() + "_tagsContainer\").prop(\"disabled\", false);$(\"#" + Model.Id.ToString() + "_tagsForm .select2-tagselect\").trigger(\"change\");"
+            }, new { id = Model.Id.ToString() + "_tagsForm" }))
+            {
+                string tags = "";
+                @Html.HiddenFor(model => Model.Id)
+                @Html.HiddenFor(model => qualifiedEntitySetName);
+                <div class="form-group">
+                    <div class="input-group">
+                        @{Html.RenderAction("GetTagSelect", "Tag");}
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" type="submit" id="@(Model.Id.ToString())_tagsFormAddButton">Add</button>
+                        </span>
+                    </div>
+                    <p class="help-block">Separate multiple tags with a comma.</p>
+                </div>
+            }
+        }
+        @using (Ajax.BeginForm("RemoveTag", "Tag", new AjaxOptions
+        {
+            InsertionMode = InsertionMode.Replace,
+            UpdateTargetId = Model.Id.ToString() + "_tagsContainer",
+            OnBegin = "$(\"#" + Model.Id.ToString() + "_tagsFormAddButton\").prop(\"disabled\", true);$(\"button:submit\", \"#" + Model.Id.ToString() + "_tagsContainer\").prop(\"disabled\", true);",
+            OnComplete = "$(\"#" + Model.Id.ToString() + "_tagsFormAddButton\").prop(\"disabled\", false);$(\"button:submit\", \"#" + Model.Id.ToString() + "_tagsContainer\").prop(\"disabled\", false);"
+        }))
+        {
+            @Html.HiddenFor(model => Model.Id)
+            @Html.HiddenFor(model => qualifiedEntitySetName);
+            <div id="@(Model.Id.ToString())_tagsContainer">@Html.Partial("_TagList", Model.TagsMetas)</div>
+        }
+    </div>
+</div>

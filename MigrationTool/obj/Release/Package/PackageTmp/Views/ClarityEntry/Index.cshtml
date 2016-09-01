@@ -1,0 +1,30 @@
+﻿@model IEnumerable<MigrationTool.Models.ClarityEntry>
+@using MigrationTool.ViewModels
+
+@{
+    ViewBag.Title = "Index";
+}
+
+@Html.Partial("_Breadcrumb", new Breadcrumb("Clarity Entries"))
+<h2>Index of Clarity Entries</h2>
+
+@using (Ajax.BeginForm("FilterIndex", "ClarityEntry", new AjaxOptions {
+    InsertionMode = InsertionMode.Replace,
+    UpdateTargetId = "ClarityEntryList",
+    LoadingElementId = "ClarityEntryLoader",
+    OnBegin = "$(\"#ClarityEntryLoader .spinner\").spin();",
+    OnComplete = "$(\"#ClarityEntryLoader .spinner\").spin(false);"
+})) {
+    @Html.Partial("_StandardFilter")
+}
+
+<p></p>
+@if (User.IsInRole(MigrationTool.Roles.Edit) || User.IsInRole(MigrationTool.Roles.Admin))
+{
+    @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-default" })
+    <p></p>
+}
+@Html.Partial("_Loader", "ClarityEntryLoader")
+<div id="ClarityEntryList">
+    @Html.Partial("_List", Model)
+</div>

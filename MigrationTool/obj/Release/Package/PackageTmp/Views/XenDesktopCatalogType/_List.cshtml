@@ -1,0 +1,23 @@
+﻿@model IEnumerable<MigrationTool.Models.XenDesktopCatalogType>
+<table class="table table-striped">
+    <tr>
+        <th>@Html.DisplayNameFor(model => model.Name)</th>
+        <th>@Html.DisplayNameFor(model => model.Billable)</th>
+        <th>@Html.DisplayNameFor(model => model.ReportForPxQ)</th>
+        <th>@Html.DisplayNameFor(model => model.CatalogLevel)</th>
+        <th>@Html.DisplayNameFor(model => model.Notes)</th>
+        <th>@Html.DisplayNameFor(model => model.TagsMetas)</th>
+    </tr>
+    @foreach (var item in Model.OrderBy(model => model.Name))
+    {
+        <tr>
+            <td>@Html.DisplayFor(modelItem => item)</td>
+            <td>@Html.DisplayFor(modelItem => item.Billable)</td>
+            <td>@Html.DisplayFor(modelItem => item.ReportForPxQ)</td>
+            <td>@Html.DisplayFor(modelItem => item.CatalogLevel)</td>
+            <td>@Html.DisplayFor(modelItem => item.Notes, "NoteCounts")</td>
+            <td>@Html.DisplayFor(modelItem => item.TagsMetas, "TagList")</td>
+        </tr>
+    }
+</table>
+@Html.Partial("_RecordCount", Model == null ? 0 : Model.Count())

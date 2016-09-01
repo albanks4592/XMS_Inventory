@@ -1,0 +1,20 @@
+﻿@model MigrationTool.Models.XenAppFarmFolder
+@if (Model != null)
+{
+    IEnumerable<MigrationTool.Models.XenAppFarmFolder> tree = Model.PathFromRoot();
+    foreach (var item in tree)
+    {
+        if (item.Inactive)
+        {
+            <s>@Html.ActionLink(item.Name, "Details", "XenAppFarmFolder", new { Id = item.Id }, null)</s>
+        }
+        else
+        {
+            @Html.ActionLink(item.Name, "Details", "XenAppFarmFolder", new { Id = item.Id }, null)
+        }
+        if (item != Model)
+        {
+            <text>/</text>
+        }
+    }
+}
