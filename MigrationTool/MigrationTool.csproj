@@ -193,8 +193,6 @@
       <DependentUpon>Model1.edmx</DependentUpon>
     </Compile>
     <Compile Include="Roles.cs" />
-    <Compile Include="ViewModels\Breadcrumb.cs" />
-    <Compile Include="ViewModels\BreadcrumbItem.cs" />
     <Compile Include="ViewModels\DataStoreGroupDetailsViewModel.cs" />
     <Compile Include="ViewModels\DataStoreGroupListIndexViewModel.cs" />
     <Compile Include="ViewModels\Invoicing\BrokerDesktopGroupData.cs" />
