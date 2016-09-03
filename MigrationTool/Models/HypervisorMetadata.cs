@@ -1,8 +1,4 @@
-﻿//------------------------------------------------------------------------------
-// <copyright file="HypervisorMetadata.cs" company="Novartis">
-//      Copyright (c) Novartis AG
-// </copyright>
-//------------------------------------------------------------------------------
+﻿
 
 namespace MigrationTool.Models
 {

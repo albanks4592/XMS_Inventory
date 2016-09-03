@@ -1,8 +1,4 @@
-﻿//------------------------------------------------------------------------------
-// <copyright file="HypervisorControllerDetailsViewModel.cs" company="Novartis">
-//      Copyright (c) Novartis AG
-// </copyright>
-//------------------------------------------------------------------------------
+﻿
 
 namespace MigrationTool.ViewModels
 {

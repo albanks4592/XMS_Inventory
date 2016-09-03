@@ -1,8 +1,4 @@
-﻿//------------------------------------------------------------------------------
-// <copyright file="DataStoreGroup.cs" company="Novartis">
-//      Copyright (c) Novartis AG
-// </copyright>
-//------------------------------------------------------------------------------
+﻿
 
 namespace MigrationTool.Models
 {

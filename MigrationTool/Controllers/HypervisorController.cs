@@ -1,9 +1,4 @@
-﻿//------------------------------------------------------------------------------
-// <copyright file="HypervisorController.cs" company="Novartis">
-//      Copyright (c) Novartis AG
-// </copyright>
-//------------------------------------------------------------------------------
-
+﻿
 namespace MigrationTool.Controllers
 {
     using System;

@@ -1,8 +1,4 @@
-﻿//------------------------------------------------------------------------------
-// <copyright file="HypervisorGroupController.cs" company="Novartis">
-//      Copyright (c) Novartis AG
-// </copyright>
-//------------------------------------------------------------------------------
+﻿
 
 namespace MigrationTool.Controllers
 {

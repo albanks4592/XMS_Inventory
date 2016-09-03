@@ -1,8 +1,4 @@
-﻿//------------------------------------------------------------------------------
-// <copyright file="DataStoreGroupReferenceViewModel.cs" company="Novartis">
-//      Copyright (c) Novartis AG
-// </copyright>
-//------------------------------------------------------------------------------
+﻿
 
 namespace MigrationTool.ViewModels
 {

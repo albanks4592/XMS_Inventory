@@ -1,8 +1,4 @@
-﻿//------------------------------------------------------------------------------
-// <copyright file="HypervisorGroupListNutanixViewModel.cs" company="Novartis">
-//      Copyright (c) Novartis AG
-// </copyright>
-//------------------------------------------------------------------------------
+﻿
 
 namespace MigrationTool.ViewModels
 {
